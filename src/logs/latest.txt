@@ -1,0 +1,209 @@
+Waiting for logs. Press CTRL + C to stop
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method task_log_get
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method migration_get_in_progress_by_host_and_node
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+ERROR: Unsupproted parsing of conductor message with method object_class_action
+----------------------- Service info --------------------------
+ID: 5   Created at: 2015-08-27T08:42:35.000000
+Host: node-3     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
+----------------------- Service info --------------------------
+ID: 6   Created at: 2015-08-27T08:42:42.000000
+Host: node-2     Disabled: False
+Binary: nova-compute   Topic: compute
+--------------------------------------------------------------
