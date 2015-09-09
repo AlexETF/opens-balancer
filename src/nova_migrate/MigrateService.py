@@ -84,8 +84,7 @@ class MigrationThread(Thread):
         Thread.__init__(self)
         self.__server_id = server_id
         self.__migrate_service = migrate_service
-        self.__live_block_migration = live_block_migration
-
+        
     def run(self):
         try:
             sess = self.__migrate_service.auth_service.get_session()
