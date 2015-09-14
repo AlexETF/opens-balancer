@@ -5,8 +5,9 @@ import sys
 from keystoneclient import session
 from keystoneclient.auth.identity import v3
 from novaclient.v2 import client
-from rabbitmq_parse import RabbitMQMessageService
-from nova_migrate import AuthService, MigrateService
+from services.auth_service import AuthService
+from services.migrate_service import MigrateService
+from services.rabbitmq_message_service import RabbitMQMessageService
 
 global num_messages
 global rabbitmq_service
@@ -34,8 +35,9 @@ auth_service = AuthService(keystone_url=keystone_url,
 rabbitmq_service = RabbitMQMessageService(auth_service)
 
 rabbitmq_service.initialize()
+# rabbitmq_service.check_overload()
 
-parameters = pika.URLParameters('amqp://nova:vBbTF24k@10.20.0.3:5672/%2F')
+parameters = pika.URLParameters('amqp://nova:QNQdh54r@10.20.0.3:5672/%2F')
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 channel.exchange_declare(exchange=exchange_name, type='topic')
