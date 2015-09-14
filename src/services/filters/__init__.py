@@ -20,6 +20,18 @@ class BaseFilter(object):
         """
         return 0
 
+    def weight_host_without_vm(self, host, vm):
+        """ Return Weight of host based on his parameter without vm running on host
+            Override this in a subclass.
+        """
+        return 0
+
+    def weight_host_with_vm(self, host, vm):
+        """ Return Weight of host based on his parameter if vm runs on host
+            Override this in a subclass.
+        """
+        return 0
+
     def get_weight(self, host):
         """ Return Weight parameter
             Override this in a subclass.

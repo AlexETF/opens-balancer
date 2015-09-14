@@ -28,6 +28,17 @@ class DiskFilter(filters.BaseFilter):
         """ Return Weight of host based on his parameter """
         return host.local_gb_used * self.disk_weight
 
+    def weight_host_without_vm(self, host, vm):
+        if vm.id in host.vm_instances.keys():
+            disk_gb = vm.disk_gb + vm.ephemeral_gb
+            return (host.local_gb_used - disk_gb) * self.disk_weight
+        else:
+            return host.local_gb_used * self.disk_weight
+
+    def weight_host_with_vm(self, host, vm):
+        disk_gb = vm.disk_gb + vm.ephemeral_gb
+        return (host.local_gb_used + disk_gb) * self.disk_weight
+
     def get_weight(self, host):
         """ Return Weight parameter """
         return self.disk_weight

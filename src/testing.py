@@ -1,42 +1,46 @@
-import sys
-import os
-import operator
 from time import sleep
-from novaclient.v2 import client
-import json
-from keystoneclient import session
-from keystoneclient.auth.identity import v3
-from services.filters import core_filter
+import random
+from config import credentials
+from services.auth_service import AuthService
+from services.migrate_service import MigrateService
+from novaclient.v2 import Client
+from threading import Timer
 
-# keystone_url = "http://172.16.0.2:5000/v3"
-# username = "admin"
-# password = "admin"
-# user_domain_name = "default"
-# project_name = "admin"
-# project_domain_name = "default"
-#
-# auth = v3.Password(auth_url = keystone_url,
-#                            username = username,
-#                            password = password,
-#                            user_domain_name = user_domain_name,
-#                            project_name = project_name,
-#                            project_domain_name = project_domain_name)
-# sess = session.Session(auth = auth)
-#
-# nova = client.Client(session = sess)
-#
-# hosts = nova.hosts.list()
-# for host in hosts:
-#     print(host.to_dict())
-#
-# hypervisors = nova.hypervisors.list()
-# for i in hypervisors:
-#     print(i.to_dict())
-state = 'resize_prep'
+start_interval  = 10   #interval (10min)
+delete_interval = 12   #interval (12min)
+max_instances = 10
 
-states = ['resize_prep', 'resize_migrating', 'resize_migrated', 'resize_finish']
 
-if state in states:
-    print 'Tu sam'
-else:
-    print 'Nisam tu'
+keystone_url = credentials.keystone_cfg['service_url']
+username = credentials.keystone_cfg['username']
+password = credentials.keystone_cfg['password']
+user_domain_name = credentials.keystone_cfg['user_domain_name']
+project_name = credentials.keystone_cfg['project_name']
+project_domain_name =  credentials.keystone_cfg['project_domain_name']
+
+auth_service = AuthService(keystone_url=keystone_url,
+                           username=username,
+                           password = password,
+                           user_domain_name = user_domain_name,
+                           project_name=project_name,
+                           project_domain_name=project_domain_name)
+
+def start_instances():
+   """Your CODE HERE"""
+   client = Client(session = auth_service.get_session())
+   servers  = client.servers.list()
+   print('Starting %d' % random.randrange(len(servers)))
+   Timer(start_interval, start_instances).start()
+
+def delete_instances():
+    """Your CODE HERE"""
+    client = Client(session = auth_service.get_session())
+    servers  = client.servers.list()
+    print('Deleting %d' % random.randrange(len(servers)))
+    Timer(delete_interval, delete_instances).start()
+
+
+
+
+Timer(start_interval, start_instances).start()
+Timer(delete_interval, delete_instances).start()

@@ -1,10 +1,6 @@
 
 import pika
-import json
-import sys
-from keystoneclient import session
-from keystoneclient.auth.identity import v3
-from novaclient.v2 import client
+from config import credentials
 from services.auth_service import AuthService
 from services.migrate_service import MigrateService
 from services.rabbitmq_message_service import RabbitMQMessageService
@@ -12,18 +8,14 @@ from services.rabbitmq_message_service import RabbitMQMessageService
 global num_messages
 global rabbitmq_service
 
-keystone_url = "http://172.16.0.2:5000/v3"
-username = "admin"
-password = "admin"
-user_domain_name = "default"
-project_name = "admin"
-project_domain_name = "default"
-
-exchange_name = 'nova'
-queue_name = 'nova_listening_queue'
-binding_key = '#'
-
 num_messages = 0
+
+keystone_url = credentials.keystone_cfg['service_url']
+username = credentials.keystone_cfg['username']
+password = credentials.keystone_cfg['password']
+user_domain_name = credentials.keystone_cfg['user_domain_name']
+project_name = credentials.keystone_cfg['project_name']
+project_domain_name =  credentials.keystone_cfg['project_domain_name']
 
 auth_service = AuthService(keystone_url=keystone_url,
                            username=username,
@@ -33,11 +25,25 @@ auth_service = AuthService(keystone_url=keystone_url,
                            project_domain_name=project_domain_name)
 
 rabbitmq_service = RabbitMQMessageService(auth_service)
-
 rabbitmq_service.initialize()
-# rabbitmq_service.check_overload()
 
-parameters = pika.URLParameters('amqp://nova:QNQdh54r@10.20.0.3:5672/%2F')
+
+rabbitmq_username = credentials.rabbitmq_cfg['username']
+rabbitmq_password = credentials.rabbitmq_cfg['password']
+rabbitmq_endpoint = credentials.rabbitmq_cfg['server_endpoint']
+rabbitmq_port  = credentials.rabbitmq_cfg['port']
+rabbitmq_vhost = credentials.rabbitmq_cfg['virtual_host']
+
+exchange_name = credentials.rabbitmq_cfg['listening_options']['exchange_name']
+queue_name = credentials.rabbitmq_cfg['listening_options']['my_queue_name']
+binding_key = credentials.rabbitmq_cfg['listening_options']['binding_key']
+
+rabbitmq_credentials = pika.PlainCredentials(username = rabbitmq_username, password = rabbitmq_password)
+parameters = pika.ConnectionParameters(host = rabbitmq_endpoint,
+                                       port = rabbitmq_port,
+                                       virtual_host = rabbitmq_vhost,
+                                       credentials  = rabbitmq_credentials)
+
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 channel.exchange_declare(exchange=exchange_name, type='topic')
@@ -56,4 +62,8 @@ channel.basic_consume(callback, queue=queue_name, no_ack=True)
 
 print "Waiting for logs. Press CTRL + C to stop"
 
-channel.start_consuming()
+try:
+    channel.start_consuming()
+except KeyboardInterrupt:
+    connection.close()
+    print('Program exited ...')

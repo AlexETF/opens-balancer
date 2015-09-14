@@ -11,7 +11,7 @@ class CoreFilter(filters.BaseFilter):
         """Return True if it passes the filter, False otherwise. """
         free_vcpus = host.vcpus - host.vcpus_used
         required_vcpus = vm.vcpus
-        if  required_vcpus >= free_vcpus:
+        if  required_vcpus > free_vcpus:
             # print to LOG file ERROR
             return False
         return True
@@ -19,13 +19,22 @@ class CoreFilter(filters.BaseFilter):
     def overloaded(self, host):
         """ Return True is host is overloaded, False otherwise """
         free_vcpus = host.vcpus - host.vcpus_used
-        if free_vcpus > 0:
+        if free_vcpus >= 0:
             return False
         return True
 
     def weight_host(self, host):
         """ Return Weight of host based on his parameter """
         return host.vcpus_used * self.vcpu_weight
+
+    def weight_host_without_vm(self, host, vm):
+        if vm.id in host.vm_instances.keys():
+            return (host.vcpus_used - vm.vcpus) * self.vcpu_weight
+        else:
+            return host.vcpus_used * self.vcpu_weight
+
+    def weight_host_with_vm(self, host, vm):
+        return (host.vcpus_used + vm.vcpus) * self.vcpu_weight
 
     def get_weight(self):
         """ Return Weight parameter """

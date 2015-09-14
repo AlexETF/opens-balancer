@@ -147,56 +147,51 @@ class RabbitMQMessageService(object):
         if self.__check_overload == False or len(self.__compute_nodes) == 0:
             return
         else:
-            print 'INFO: Checking hosts overload'
-            nodes = self.__get_hosts_ordered()
-            not_overloaded = nodes[0]
-            overloaded = nodes[1]
-            if len(not_overloaded) == 0:
-                print 'INFO: All hosts are overloaded'
+            print 'INFO: Sorting hosts overload'
+            hosts = self.__get_hosts_ordered()
+            node = None
+            print('INFO: Searching for the most overloaded host')
+            for host in hosts:
+                if host.is_free_to_migrate_instance():
+                    node = host
+                    print('INFO: Found host %s' % (host.hypervisor_hostname))
+                    break
+                print('INFO: Skipping host %s , it has miggrating instances' % host.hypervisor_hostname)
+            if node == None:
+                print('INFO: Not available host')
                 self.__check_overload = False
                 return
-            if len(overloaded) > 0:
-                node = None
-                print('INFO: Searching for the most overloaded host')
-                for host in overloaded:
-                    if host.num_migrating_instances() == 0:
-                        node = host
-                        print('INFO: Found overloaded host %s' % (host.hypervisor_hostname))
-                        break
-                    print('INFO: Skipping host %s , it has miggrating instances' % host.hypervisor_hostname)
-                if node == None:
-                    print('INFO: Not available overloaded host')
-                    self.__check_overload = False
-                    return
-                for vm in node.vm_instances.values():
-                    if vm.state == 'active' and vm.new_task_state == None and vm.old_task_state == None:
-                        # TO DO: Dodati za vrijeme migracije jos
-                        print('INFO: Found instance to miggrate %s' % vm.display_name)
-                        for available_node in not_overloaded:
-                            passes = True
-                            for filt in self.__filters.values():
-                                passes = passes and filt.filter_one(host = available_node, vm = vm)
-                            if passes:
-                                self.__migrate_service.schedule_migrate(vm.id, node)
-                                self.__check_overload = False
-                                return
-                            print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
+            hosts.sort(key = operator.attrgetter('metrics_weight'))
+            for vm in node.vm_instances.values():
+                if vm.state == 'active' and vm.new_task_state == None and vm.old_task_state == None:
+                    # TO DO: Dodati za vrijeme migracije jos
+                    print('INFO: Found instance to miggrate %s' % vm.display_name)
+                    for available_node in hosts:
+                        if available_node.id == node.id:
+                            print 'INFO: Reached the same host, exit'
+                            break
+                        passes = True
+                        weight_with = 0
+                        weight_without = 0
+                        for filt in self.__filters.values():
+                            passes = passes and filt.filter_one(host = available_node, vm = vm)
+                            weight_with += filt.weight_host_with_vm(host = available_node, vm = vm)
+                            weight_without += filt.weight_host_without_vm(host = node, vm = vm)
+                        print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
+                        if passes and weight_without >= weight_with:
+                            self.__migrate_service.schedule_migrate(vm.id, node)
+                            self.__check_overload = False
+                            return
+                        print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
             self.__check_overload = False
 
 
     def __get_hosts_ordered(self):
         if len(self.__compute_nodes) < 2:
-            return None
-        overloaded = []
-        not_overloaded = []
-        for node in self.__compute_nodes.values():
-            if node.overloaded == True:
-                overloaded.append(node)
-            else:
-                not_overloaded.append(node)
-        overloaded.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
-        not_overloaded.sort(key = operator.attrgetter('metrics_weight'))
-        return (not_overloaded, overloaded)
+            return []
+        hosts = self.__compute_nodes.values()
+        hosts.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
+        return hosts
 
     @property
     def migrate_service(self):
@@ -296,9 +291,6 @@ class RabbitMQMessageService(object):
 
             self.__services[service_id] = service_obj
 
-        else:
-            print('ERROR: Unsupproted parsing of conductor message with method %s' % parsed_json['method'])
-            return
 
     def __parse_notification_info_message(self, message):
         parsed_json = message
@@ -350,7 +342,7 @@ class RabbitMQMessageService(object):
     def __process_nova_vm_status(self, vm_instance, status):
         if status == 'VERIFY_RESIZE':
             self.__migrate_service.schedule_confirm(vm_instance.id)
-        else:
+        elif status != 'DELETED':
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
@@ -359,6 +351,8 @@ class RabbitMQMessageService(object):
         print 'INFO: Check vm state'
 
         if vm_instance.state == 'building':
+            if vm_instance.compute_node is not None:
+                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
 
         elif vm_instance.state == 'active':
@@ -438,6 +432,13 @@ class ComputeNode(object):
             del self.vm_instances[vm_id]
             instance.compute_node = None
         return instance
+
+    def is_free_to_migrate_instance(self):
+        states = ['resize_prep', 'resize_migrating', 'resize_migrated', 'resize_finish', 'migrating', 'deleting']
+        for vm in self.vm_instances.values():
+            if vm.new_task_state in states:
+                return False
+        return True
 
     def num_migrating_instances(self):
         num = 0
