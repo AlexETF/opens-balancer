@@ -3,7 +3,7 @@ import pika
 from config import credentials
 from services.auth_service import AuthService
 from services.migrate_service import MigrateService
-from services.rabbitmq_message_service import RabbitMQMessageService
+from services.rabbitmq_message_service import RabbitMQMessageService, Service
 
 global num_messages
 global rabbitmq_service
@@ -17,15 +17,16 @@ user_domain_name = credentials.keystone_cfg['user_domain_name']
 project_name = credentials.keystone_cfg['project_name']
 project_domain_name =  credentials.keystone_cfg['project_domain_name']
 
-auth_service = AuthService(keystone_url=keystone_url,
-                           username=username,
+auth_service = AuthService(keystone_url = keystone_url,
+                           username = username,
                            password = password,
                            user_domain_name = user_domain_name,
-                           project_name=project_name,
-                           project_domain_name=project_domain_name)
+                           project_name = project_name,
+                           project_domain_name = project_domain_name)
 
 rabbitmq_service = RabbitMQMessageService(auth_service)
 rabbitmq_service.initialize()
+rabbitmq_service.start_periodic_check()
 
 
 rabbitmq_username = credentials.rabbitmq_cfg['username']
@@ -56,6 +57,7 @@ def callback(ch, method, properties, body):
     rabbitmq_service.parse_message(routing_key = method.routing_key, message = body)
     rabbitmq_service.check_overload()
     rabbitmq_service.print_short_info()
+    # rabbitmq_service.print_all_info()
 
 
 channel.basic_consume(callback, queue=queue_name, no_ack=True)

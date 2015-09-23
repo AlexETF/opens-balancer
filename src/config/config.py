@@ -13,3 +13,7 @@ weights = {
            'ram'  : 0.01,
            'disk' : 1.0
           }
+
+periodic_check_interval = 3        #enter time in minutes
+
+migrate_time = 1                   #enter time in minutes

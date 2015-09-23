@@ -1,11 +1,11 @@
-
-import sys
 import json
 import os
 import operator
+from time import time
+from config import config
 from novaclient.v2 import Client
 from services.migrate_service import MigrateService
-from threading import Lock
+from threading import Lock, Timer
 from services.filters import core_filter, ram_filter, disk_filter
 
 class RabbitMQMessageService(object):
@@ -25,14 +25,39 @@ class RabbitMQMessageService(object):
 
         #   Variable that indicates if this service needs to check for overload
         self.__check_overload = False
+        self.__task = None
+        self.__lock = Lock()
 
+    def stop_periodic_check(self):
+        if self.__task != None:
+            print('INFO: Canceled periodic check')
+            self.__task.cancel()
+            self.__task = None
+
+    def start_periodic_check(self):
+        self.stop_periodic_check()
+        self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
+        self.__task.setDaemon(True)
+        self.__task.start()
+        print('INFO: Scheduled periodic check for %d' % config.periodic_check_interval)
 
     def initialize(self):
+        self.__lock.acquire()
+        print os.linesep
         print("INFO: Initializing RabbitMQMessageService")
         client = Client(session=self.__auth_service.get_session())
+        print("INFO: Collecting information about compute nodes")
         hypervisors  = client.hypervisors.list(detailed=True)
         print('INFO: Collecting information about services')
         services = client.services.list()
+        print("INFO: Collecting information about VMs")
+        servers  = client.servers.list(detailed=True)
+        print('INFO: Processing collected data')
+
+        init_services = {}
+        init_compute_nodes = {}
+        init_vm_instances = {}
+
         for service in services:
             service_node = Service()
             service_node.id = service.id
@@ -42,9 +67,8 @@ class RabbitMQMessageService(object):
             service_node.host = service.host
             service_node.topic = service.binary
 
-            self.__services[service_node.id] = service_node
+            init_services[service_node.id] = service_node
 
-        print("INFO: Collecting information about compute nodes")
         for hypervisor in hypervisors:
             node = ComputeNode()
             node.id = hypervisor.id
@@ -63,47 +87,66 @@ class RabbitMQMessageService(object):
             node.vcpus = hypervisor.vcpus
             node.vcpus_used = hypervisor.vcpus_used
 
-            self.__calculate_node_overload_and_weight(node)
-            self.__compute_nodes[node.id] = node
+            node.state = hypervisor.state
+            node.status = hypervisor.status
 
-        print("INFO: Collecting information about VMs")
-        servers  = client.servers.list(detailed=True)
+            self.__calculate_node_overload_and_weight(node)
+            init_compute_nodes[node.id] = node
+
         for server in servers:
             server = server.to_dict()
-            vm_instance = VMInstance()
-            vm_instance.id = server['id']
-            vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
-            vm_instance.created_at = server['OS-SRV-USG:launched_at']
-            vm_instance.display_name = server['name']
-            vm_instance.host = server['OS-EXT-SRV-ATTR:host']
-            vm_instance.hostname = server['name']
-            vm_instance.state = server['OS-EXT-STS:vm_state']
-            vm_instance.tenant_id = server['tenant_id']
-            vm_instance.user_id = server['user_id']
+            vm_id = server['id']
+            if vm_id in self.__vm_instances.keys():
+                vm_instance = self.__vm_instances[vm_id]
+                vm_instance.hostname = server['name']
+                vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
+                vm_instance.new_task_state = server['OS-EXT-STS:task_state']
+                vm_instance.state = server['OS-EXT-STS:vm_state']
+                vm_instance.host = server['OS-EXT-SRV-ATTR:host']
+                vm_instance.hostname = server['name']
+            else:
+                vm_instance = VMInstance()
+                vm_instance.id = vm_id
+                vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
+                vm_instance.created_at = server['OS-SRV-USG:launched_at']
+                vm_instance.display_name = server['name']
+                vm_instance.host = server['OS-EXT-SRV-ATTR:host']
+                vm_instance.hostname = server['name']
+                vm_instance.new_task_state = server['OS-EXT-STS:task_state']
+                vm_instance.state = server['OS-EXT-STS:vm_state']
+                vm_instance.tenant_id = server['tenant_id']
+                vm_instance.user_id = server['user_id']
 
-            vm_instance.instance_flavor_id = server['flavor']['id']
-            flavor = client.flavors.get(flavor = vm_instance.instance_flavor_id)
-            flavor = flavor.to_dict()
-            vm_instance.instance_flavor = flavor['name']
-            vm_instance.disk_gb = flavor['disk']
-            vm_instance.ephemeral_gb = flavor['OS-FLV-EXT-DATA:ephemeral']
-            vm_instance.vcpus = flavor['vcpus']
-            vm_instance.memory_mb = flavor['ram']
+                vm_instance.instance_flavor_id = server['flavor']['id']
+                flavor = client.flavors.get(flavor = vm_instance.instance_flavor_id)
+                flavor = flavor.to_dict()
+                vm_instance.instance_flavor = flavor['name']
+                vm_instance.disk_gb = flavor['disk']
+                vm_instance.ephemeral_gb = flavor['OS-FLV-EXT-DATA:ephemeral']
+                vm_instance.vcpus = flavor['vcpus']
+                vm_instance.memory_mb = flavor['ram']
 
-            image_meta = client.images.get(image = server['image']['id'])
-            image_meta = image_meta.to_dict()
-            vm_instance.image_meta.min_disk = image_meta['minDisk']
-            vm_instance.image_meta.min_ram = image_meta['minRam']
+                image_meta = client.images.get(image = server['image']['id'])
+                image_meta = image_meta.to_dict()
+                vm_instance.image_meta.min_disk = image_meta['minDisk']
+                vm_instance.image_meta.min_ram = image_meta['minRam']
 
-            self.__vm_instances[vm_instance.id] = vm_instance
+            init_vm_instances[vm_instance.id] = vm_instance
 
-            status = server['status']
-            self.__process_nova_vm_status(vm_instance = vm_instance, status = status)
+        # self.__lock.acquire()
 
+        self.__services = init_services
+        self.__compute_nodes = init_compute_nodes
+        self.__vm_instances = init_vm_instances
+        for instance in self.__vm_instances.values():
+            self.__process_vm_instance(vm_instance = instance)
         self.__check_overload = True
+
+        self.__lock.release()
 
 
     def parse_message(self, routing_key, message):
+        self.__lock.acquire()
         #remove wrapper oslo.message in json
         message = json.loads(message)
         while 'oslo.message' in message:
@@ -114,6 +157,7 @@ class RabbitMQMessageService(object):
         elif routing_key == 'notifications.info':
             self.__parse_notification_info_message(message)
 
+        self.__lock.release()
 
     def find_service_by_host(self, host):
         for service in self.__services.values():
@@ -144,7 +188,9 @@ class RabbitMQMessageService(object):
         return False
 
     def check_overload(self):
+        self.__lock.acquire()
         if self.__check_overload == False or len(self.__compute_nodes) == 0:
+            self.__lock.release()
             return
         else:
             print 'INFO: Sorting hosts overload'
@@ -152,7 +198,7 @@ class RabbitMQMessageService(object):
             node = None
             print('INFO: Searching for the most overloaded host')
             for host in hosts:
-                if host.is_free_to_migrate_instance():
+                if host.is_running() and host.is_free_to_migrate_instances():
                     node = host
                     print('INFO: Found host %s' % (host.hypervisor_hostname))
                     break
@@ -160,16 +206,20 @@ class RabbitMQMessageService(object):
             if node == None:
                 print('INFO: Not available host')
                 self.__check_overload = False
+                self.__lock.release()
                 return
             hosts.sort(key = operator.attrgetter('metrics_weight'))
             for vm in node.vm_instances.values():
-                if vm.state == 'active' and vm.new_task_state == None and vm.old_task_state == None:
+                mig_time = vm.last_migrate_time
+                if vm.is_ready_for_migrating() and (mig_time == None or (time() - mig_time > config.migrate_time * 60)):
                     # TO DO: Dodati za vrijeme migracije jos
                     print('INFO: Found instance to miggrate %s' % vm.display_name)
                     for available_node in hosts:
                         if available_node.id == node.id:
                             print 'INFO: Reached the same host, exit'
                             break
+                        if not available_node.is_running():
+                            continue
                         passes = True
                         weight_with = 0
                         weight_without = 0
@@ -179,11 +229,14 @@ class RabbitMQMessageService(object):
                             weight_without += filt.weight_host_without_vm(host = node, vm = vm)
                         print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
                         if passes and weight_without >= weight_with:
+                            print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
                             self.__migrate_service.schedule_migrate(vm.id, node)
                             self.__check_overload = False
+                            self.__lock.release()
                             return
                         print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
             self.__check_overload = False
+            self.__lock.release()
 
 
     def __get_hosts_ordered(self):
@@ -225,11 +278,11 @@ class RabbitMQMessageService(object):
             service.print_info()
 
     def print_short_info(self):
-        # print('Total number of compute nodes: %d' % len(self.__compute_nodes))
-        # print('Total number of services: %d' % len(self.__services))
-        print('Total number of vms: %d' % len(self.__vm_instances))
+        # print('Total compute nodes: %d' % len(self.__compute_nodes))
+        # print('Total services: %d' % len(self.__services))
+        print('Total vms: %d' % len(self.__vm_instances))
         for node in self.__compute_nodes.values():
-            print('Number of active vms on node %s: %d ' % (node.hypervisor_hostname, len(node.vm_instances)))
+            print('Node %s: %d State: %s, %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
 
     def __calculate_node_overload_and_weight(self, node):
         weight = 0
@@ -291,7 +344,6 @@ class RabbitMQMessageService(object):
 
             self.__services[service_id] = service_obj
 
-
     def __parse_notification_info_message(self, message):
         parsed_json = message
         event_type = parsed_json['event_type']
@@ -335,64 +387,54 @@ class RabbitMQMessageService(object):
 
             self.__vm_instances[vm_id] = vm_instance
 
-            self.__process_rabbitmq_vm_state(vm_instance)
+            self.__process_vm_instance(vm_instance)
 
             vm_instance.print_info()
 
-    def __process_nova_vm_status(self, vm_instance, status):
-        if status == 'VERIFY_RESIZE':
+    def __process_vm_instance(self, vm_instance):
+        self.__check_overload == True
+
+        if vm_instance.is_building():
+            if vm_instance.compute_node is not None:
+                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
+            self.add_vm_instance_to_node(vm_instance)
+
+        elif vm_instance.needs_to_verify_migrate():
             self.__migrate_service.schedule_confirm(vm_instance.id)
-        elif status != 'DELETED':
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
 
-    def __process_rabbitmq_vm_state(self, vm_instance):
-        print 'INFO: Check vm state'
-
-        if vm_instance.state == 'building':
+        elif vm_instance.is_active():
+            if vm_instance.is_migrating():
+                vm_instance.last_migrate_time = time()
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
 
-        elif vm_instance.state == 'active':
-
-            if vm_instance.new_task_state == None:
-                if vm_instance.old_task_state == 'resize_finish':
-                    self.__migrate_service.schedule_confirm(vm_instance.id)
-                elif vm_instance.old_task_state == 'migrating':
-                    if vm_instance.compute_node is not None:
-                        vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-                    self.add_vm_instance_to_node(vm_instance)
-                else:
-                    if vm_instance.compute_node is not None:
-                        vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-                    self.add_vm_instance_to_node(vm_instance)
-
-            elif vm_instance.new_task_state == 'resize_finish':
-                if vm_instance.old_task_state == 'resize_migrated':
-                    if vm_instance.compute_node is not None:
-                        vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-                    self.add_vm_instance_to_node(vm_instance)
-
-        elif vm_instance.state == 'resized':
-            if vm_instance.new_task_state == None and vm_instance.old_task_state == 'resize_finish':
-                self.__migrate_service.schedule_confirm(vm_instance.id)
-                if vm_instance.compute_node is not None:
-                    vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-                self.add_vm_instance_to_node(vm_instance)
-
-        elif vm_instance.state == 'deleted':
+        elif vm_instance.is_deleted():
             if vm_instance.id in self.__vm_instances.keys():
                 del self.__vm_instances[vm_instance.id]
                 if vm_instance.compute_node is not None:
                     vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
 
-        elif vm_instance.state == 'error':
+        elif vm_instance.is_in_error_state():
             print('INFO: Instance %s is in error state' % (vm_instance.display_name))
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
+        else:
+            if vm_instance.compute_node is not None:
+                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
+            self.add_vm_instance_to_node(vm_instance)
+
+    def __periodic_check(self):
+        self.initialize()
+        self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
+        self.__task.setDaemon(True)
+        self.__task.start()
+        print os.linesep
+        print('INFO: Scheduled periodic check for %d' % config.periodic_check_interval)
 
 #
 #   Class that holds system information about servers running
@@ -421,9 +463,21 @@ class ComputeNode(object):
 
         self.vm_instances = {}
 
+        self.state = None   #up and down
+        self.status = None  #enabled and disabled
+
         self.overloaded = None
         self.metrics_weight = None
 
+    def are_data_synced(self):
+        if len(self.vm_instances) == self.running_vms:
+            return True
+        return False
+
+    def is_running(self):
+        if self.state == 'up' and self.status == 'enabled':
+            return True
+        return False
 
     def remove_from_vm_instances(self, vm_id):
         instance = None
@@ -433,18 +487,16 @@ class ComputeNode(object):
             instance.compute_node = None
         return instance
 
-    def is_free_to_migrate_instance(self):
-        states = ['resize_prep', 'resize_migrating', 'resize_migrated', 'resize_finish', 'migrating', 'deleting']
+    def is_free_to_migrate_instances(self):
         for vm in self.vm_instances.values():
-            if vm.new_task_state in states:
+            if vm.is_migrating():
                 return False
         return True
 
     def num_migrating_instances(self):
         num = 0
-        states = ['resize_prep', 'resize_migrating', 'resize_migrated', 'resize_finish', 'migrating']
         for vm in self.vm_instances.values():
-            if vm.new_task_state in states:
+            if vm.is_migrating():
                 num += 1
         return num
 
@@ -459,6 +511,7 @@ class ComputeNode(object):
         print('Total VCPU-s: %r VCPU-s used: %r' % (self.vcpus, self.vcpus_used))
         print('Number of Running VM-s: %r' % (self.running_vms))
         print('----------------------------------------------------------------------------')
+
 
 
 class Service(object):
@@ -509,7 +562,7 @@ class VMInstance(object):
         self.user_id = ''
 
         self.compute_node = None
-
+        self.last_migrate_time = None
     #
     #   Method that will check if vm instance is overloaded
     #   If overload is detected vm needs to be migrated to another
@@ -518,6 +571,48 @@ class VMInstance(object):
     def check_for_overload(self):
         print('TO DO: Not yet implemented !')
 
+    def is_active(self):
+        if self.state == 'active':
+            return True
+
+    def is_building(self):
+        states = ['scheduling', 'networking', 'block_device_mapping', 'spawning']
+        if self.state == 'building':
+            return True
+        elif self.new_task_state in states:
+            return True
+        else:
+            return False
+
+    def is_migrating(self):
+        states = ['resize_prep', 'resize_migrating', 'resize_migrated', 'resize_finish', 'migrating']
+        if self.state == 'resized':
+            return True
+        elif self.new_task_state in states:
+            return True
+        else:
+            return False
+
+    def needs_to_verify_migrate(self):
+        if self.state == 'resized' and self.new_task_state == None:
+            return True
+        else:
+            return False
+
+    def is_in_error_state(self):
+        if  self.state == 'error':
+            return True
+        return False
+
+    def is_deleted(self):
+        if self.state == 'deleted':
+            return True
+        return False
+
+    def is_ready_for_migrating(self):
+        if self.is_active() and self.new_task_state == None:
+            return True
+        return False
 
     def print_info(self):
         print('     *******************************************************************************')
