@@ -39,7 +39,8 @@ class RabbitMQMessageService(object):
         self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
-        print('INFO: Scheduled periodic check for %d' % config.periodic_check_interval)
+        print os.linesep
+        print('INFO: Scheduled periodic check for %d min' % config.periodic_check_interval)
 
     def initialize(self):
         self.__lock.acquire()
@@ -198,11 +199,11 @@ class RabbitMQMessageService(object):
             node = None
             print('INFO: Searching for the most overloaded host')
             for host in hosts:
-                if host.is_running() and host.is_free_to_migrate_instances():
+                if host.is_free_to_migrate_instances():
                     node = host
                     print('INFO: Found host %s' % (host.hypervisor_hostname))
                     break
-                print('INFO: Skipping host %s , it has miggrating instances' % host.hypervisor_hostname)
+                print('INFO: Skipping host %s , it has migrating instances' % host.hypervisor_hostname)
             if node == None:
                 print('INFO: Not available host')
                 self.__check_overload = False
@@ -211,15 +212,12 @@ class RabbitMQMessageService(object):
             hosts.sort(key = operator.attrgetter('metrics_weight'))
             for vm in node.vm_instances.values():
                 mig_time = vm.last_migrate_time
-                if vm.is_ready_for_migrating() and (mig_time == None or (time() - mig_time > config.migrate_time * 60)):
-                    # TO DO: Dodati za vrijeme migracije jos
-                    print('INFO: Found instance to miggrate %s' % vm.display_name)
+                if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > config.migrate_time * 60)):
+                    print('INFO: Found instance to migrate %s' % vm.display_name)
                     for available_node in hosts:
                         if available_node.id == node.id:
                             print 'INFO: Reached the same host, exit'
                             break
-                        if not available_node.is_running():
-                            continue
                         passes = True
                         weight_with = 0
                         weight_without = 0
@@ -229,12 +227,17 @@ class RabbitMQMessageService(object):
                             weight_without += filt.weight_host_without_vm(host = node, vm = vm)
                         print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
                         if passes and weight_without >= weight_with:
-                            print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
-                            self.__migrate_service.schedule_migrate(vm.id, node)
+                            if self.__migrate_service.schedule_migrate(vm.id, node):
+                                print('INFO: Scheduled migrate ... ')
+                            else:
+                                print('INFO: Failed to schedule migrate ...')
                             self.__check_overload = False
                             self.__lock.release()
                             return
-                        print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
+                        if not passes:
+                            print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
+                        if not weight_without >= weight_with:
+                            print('INFO: Migration will have no effect')
             self.__check_overload = False
             self.__lock.release()
 
@@ -242,7 +245,10 @@ class RabbitMQMessageService(object):
     def __get_hosts_ordered(self):
         if len(self.__compute_nodes) < 2:
             return []
-        hosts = self.__compute_nodes.values()
+        hosts = []
+        for node in self.__compute_nodes.values():
+            if node.is_running() and node.are_data_synced():
+                hosts.append(node)
         hosts.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
         return hosts
 
@@ -389,10 +395,9 @@ class RabbitMQMessageService(object):
 
             self.__process_vm_instance(vm_instance)
 
-            vm_instance.print_info()
+            # vm_instance.print_info()
 
     def __process_vm_instance(self, vm_instance):
-        self.__check_overload == True
 
         if vm_instance.is_building():
             if vm_instance.compute_node is not None:
@@ -434,7 +439,7 @@ class RabbitMQMessageService(object):
         self.__task.setDaemon(True)
         self.__task.start()
         print os.linesep
-        print('INFO: Scheduled periodic check for %d' % config.periodic_check_interval)
+        print('INFO: Scheduled periodic check for %d min' % config.periodic_check_interval)
 
 #
 #   Class that holds system information about servers running
@@ -596,8 +601,7 @@ class VMInstance(object):
     def needs_to_verify_migrate(self):
         if self.state == 'resized' and self.new_task_state == None:
             return True
-        else:
-            return False
+        return False
 
     def is_in_error_state(self):
         if  self.state == 'error':

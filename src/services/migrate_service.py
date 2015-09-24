@@ -9,8 +9,8 @@ class MigrateService(object):
 
     def __init__(self, auth_service):
         self.__lock = Lock()
-        self.__running_tasks_dict = {}
-        self.__confirm_migration_task_dict = {}
+        self.__migrating_tasks = []
+        self.__confirm_tasks = []
         self.__auth_service = auth_service
 
     @property
@@ -18,12 +18,12 @@ class MigrateService(object):
         return self.__auth_service
 
     def __check_if_task_exists(self, server_id):
-        if server_id in self.__running_tasks_dict.keys():
+        if server_id in self.__migrating_tasks:
             return  True
         return False
 
     def __check_if_confirm_task_exists(self, server_id):
-        if server_id in self.__confirm_migration_task_dict.keys():
+        if server_id in self.__confirm_tasks:
             return  True
         return False
     #
@@ -33,24 +33,25 @@ class MigrateService(object):
     #
     def task_done(self,server_id):
         self.__lock.acquire()
-        if server_id in self.__running_tasks_dict.keys() == True:
-            del self.__running_tasks_dict[server_id]
+        if server_id in self.__migrating_tasks:
+            self.__migrating_tasks.remove(server_id)
         self.__lock.release()
 
     def confirm_task_done(self,server_id):
         self.__lock.acquire()
-        if server_id in self.__confirm_migration_task_dict.keys():
-            del self.__confirm_migration_task_dict[server_id]
+        if server_id in self.__confirm_tasks:
+            self.__confirm_tasks.remove(server_id)
         self.__lock.release()
 
     def schedule_migrate(self, server_id, node):
         self.__lock.acquire()
         if self.__check_if_task_exists(server_id) == True:
+            print('INFO: Already exits migrating task')
             self.__lock.release()
             return False
         else:
             worker = MigrationThread(server_id = server_id, migrate_service = self)
-            self.__running_tasks_dict[server_id] = node
+            self.__migrating_tasks.append(server_id)
             worker.setDaemon(True)
             worker.start()
             self.__lock.release()
@@ -59,11 +60,12 @@ class MigrateService(object):
     def schedule_live_migration(self, server_id, node):
         self.__lock.acquire()
         if self.__check_if_task_exists(server_id) == True:
+            print('INFO: Already exits migrating task')
             self.__lock.release()
             return False
         else:
             worker = LiveBlockMigrationThread(server_id = server_id, host = node.host, migrate_service = self)
-            self.__running_tasks_dict[server_id] = node
+            self.__migrating_tasks.append(server_id)
             worker.setDaemon(True)
             worker.start()
             self.__lock.release()
@@ -71,15 +73,17 @@ class MigrateService(object):
 
     def schedule_confirm(self, server_id):
         self.__lock.acquire()
-        if self.__check_if_confirm_task_exists(server_id):
+        if self.__check_if_confirm_task_exists(server_id) == True:
+            print('INFO: Already exits confirm task')
             self.__lock.release()
             return False
-        worker = ConfirmThread(server_id = server_id, migrate_service = self)
-        worker.setDaemon(True)
-        worker.start()
-        self.__confirm_migration_task_dict[server_id] = worker
-        self.__lock.release()
-        return True
+        else:
+            worker = ConfirmThread(server_id = server_id, migrate_service = self)
+            self.__confirm_tasks.append(server_id)
+            worker.setDaemon(True)
+            worker.start()
+            self.__lock.release()
+            return True
 
 #
 #   Worker thread for migrating instance
@@ -144,8 +148,9 @@ class ConfirmThread(Thread):
                 sess = self.__migrate_service.auth_service.get_session()
                 nova_client = client.Client(session = sess)
                 server = nova_client.servers.find(id = self.__server_id)
-                nova_client.servers.confirm_resize(server = server)
-                print('INFO: Confirmed migration of server %s ID: %s' % (server.name, server.id))
+                if server.status == 'VERIFY_RESIZE':
+                    nova_client.servers.confirm_resize(server = server)
+                    print('INFO: Confirmed migration of server %s ID: %s' % (server.name, server.id))
                 self.__migrate_service.task_done(self.__server_id)
                 self.__migrate_service.confirm_task_done(self.__server_id)
             except Exception as e:

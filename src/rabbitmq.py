@@ -27,7 +27,7 @@ auth_service = AuthService(keystone_url = keystone_url,
 rabbitmq_service = RabbitMQMessageService(auth_service)
 rabbitmq_service.initialize()
 rabbitmq_service.start_periodic_check()
-
+rabbitmq_service.check_overload()
 
 rabbitmq_username = credentials.rabbitmq_cfg['username']
 rabbitmq_password = credentials.rabbitmq_cfg['password']
