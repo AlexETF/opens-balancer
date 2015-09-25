@@ -102,3 +102,4 @@ while True:
         break
 
 print('Finished ...')
+sys.exit(0)

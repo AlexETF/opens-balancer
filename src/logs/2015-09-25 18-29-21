@@ -1,0 +1,5 @@
+2015-09-25 18:29:21,961| INFO: Initializing RabbitMQMessageService
+2015-09-25 18:29:21,992| INFO: Collecting information about compute nodes
+2015-09-25 18:29:29,515| INFO: Collecting information about services
+2015-09-25 18:29:30,496| INFO: Collecting information about VMs
+2015-09-25 18:29:32,280| INFO: Processing collected data

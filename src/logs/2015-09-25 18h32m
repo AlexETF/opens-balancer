@@ -1,0 +1,35 @@
+2015-09-25 18:32:29,786| INFO: Initializing RabbitMQMessageService
+2015-09-25 18:32:29,802| INFO: Collecting information about compute nodes
+2015-09-25 18:32:34,000| INFO: Collecting information about services
+2015-09-25 18:32:34,894| INFO: Collecting information about VMs
+2015-09-25 18:32:36,150| INFO: Processing collected data
+2015-09-25 18:32:38,086| DEBUG: Instance random 01443192445.08 State: active
+2015-09-25 18:32:38,088| INFO: Scheduled periodic check for 3 min
+2015-09-25 18:32:38,723| DEBUG: Sorting hosts overload
+2015-09-25 18:32:38,723| DEBUG: Searching for the most overloaded host
+2015-09-25 18:32:38,723| DEBUG: Found host node-3.domain.tld
+2015-09-25 18:32:38,723| DEBUG: Found instance to migrate random 01443192445.08
+2015-09-25 18:32:38,724| DEBUG: Migration will have no effect
+2015-09-25 18:32:38,726| INFO: Reached the same host, exit
+2015-09-25 18:32:38,726| INFO: Total vms: 1
+2015-09-25 18:32:38,726| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:38,726| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,463| INFO: Total vms: 1
+2015-09-25 18:32:39,466| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,466| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,502| INFO: Total vms: 1
+2015-09-25 18:32:39,503| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,503| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,551| INFO: Total vms: 1
+2015-09-25 18:32:39,551| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,552| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,578| INFO: Total vms: 1
+2015-09-25 18:32:39,578| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,578| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,720| INFO: Total vms: 1
+2015-09-25 18:32:39,720| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,720| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:39,828| INFO: Total vms: 1
+2015-09-25 18:32:39,829| INFO: Node node-3.domain.tld: 1 State: up, enabled
+2015-09-25 18:32:39,829| INFO: Node node-2.domain.tld: 0 State: up, enabled
+2015-09-25 18:32:44,640| INFO: Connection closed

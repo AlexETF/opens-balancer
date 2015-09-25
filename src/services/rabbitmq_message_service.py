@@ -2,6 +2,7 @@ import json
 import os
 import operator
 from time import time
+import logging
 from config import config
 from novaclient.v2 import Client
 from services.migrate_service import MigrateService
@@ -10,12 +11,12 @@ from services.filters import core_filter, ram_filter, disk_filter
 
 class RabbitMQMessageService(object):
 
-    def __init__(self, auth_service):
+    def __init__(self, auth_service, logger = None):
         self.__compute_nodes = {}
         self.__vm_instances = {}
         self.__services = {}
         self.__auth_service = auth_service
-        self.__migrate_service = MigrateService(auth_service)
+        self.__migrate_service = MigrateService(auth_service = auth_service, logger = logger)
 
         #   Filters used for filtering hosts
         self.__filters = {'ram'  : ram_filter.RamFilter(),
@@ -27,10 +28,12 @@ class RabbitMQMessageService(object):
         self.__check_overload = False
         self.__task = None
         self.__lock = Lock()
+        # Logger object
+        self.logger = logger or logging.getLogger(__name__)
 
     def stop_periodic_check(self):
         if self.__task != None:
-            print('INFO: Canceled periodic check')
+            self.logger.info('Periodic collectiong of data canceled')
             self.__task.cancel()
             self.__task = None
 
@@ -39,21 +42,20 @@ class RabbitMQMessageService(object):
         self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
-        print os.linesep
-        print('INFO: Scheduled periodic check for %d min' % config.periodic_check_interval)
+        self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
 
     def initialize(self):
         self.__lock.acquire()
         print os.linesep
-        print("INFO: Initializing RabbitMQMessageService")
+        self.logger.info('Initializing RabbitMQMessageService')
         client = Client(session=self.__auth_service.get_session())
-        print("INFO: Collecting information about compute nodes")
+        self.logger.info('Collecting information about compute nodes')
         hypervisors  = client.hypervisors.list(detailed=True)
-        print('INFO: Collecting information about services')
+        self.logger.info('Collecting information about services')
         services = client.services.list()
-        print("INFO: Collecting information about VMs")
+        self.logger.info('Collecting information about VMs')
         servers  = client.servers.list(detailed=True)
-        print('INFO: Processing collected data')
+        self.logger.info('Processing collected data')
 
         init_services = {}
         init_compute_nodes = {}
@@ -134,8 +136,6 @@ class RabbitMQMessageService(object):
 
             init_vm_instances[vm_instance.id] = vm_instance
 
-        # self.__lock.acquire()
-
         self.__services = init_services
         self.__compute_nodes = init_compute_nodes
         self.__vm_instances = init_vm_instances
@@ -194,18 +194,18 @@ class RabbitMQMessageService(object):
             self.__lock.release()
             return
         else:
-            print 'INFO: Sorting hosts overload'
+            self.logger.debug('Sorting hosts overload')
             hosts = self.__get_hosts_ordered()
             node = None
-            print('INFO: Searching for the most overloaded host')
+            self.logger.debug('Searching for the most overloaded host')
             for host in hosts:
                 if host.is_free_to_migrate_instances():
                     node = host
-                    print('INFO: Found host %s' % (host.hypervisor_hostname))
+                    self.logger.debug('Found host %s' % (host.hypervisor_hostname))
                     break
-                print('INFO: Skipping host %s , it has migrating instances' % host.hypervisor_hostname)
+                self.logger.debug('Skipping host %s , it has migrating instances' % host.hypervisor_hostname)
             if node == None:
-                print('INFO: Not available host')
+                self.logger.info('Not available host')
                 self.__check_overload = False
                 self.__lock.release()
                 return
@@ -213,10 +213,10 @@ class RabbitMQMessageService(object):
             for vm in node.vm_instances.values():
                 mig_time = vm.last_migrate_time
                 if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > config.migrate_time * 60)):
-                    print('INFO: Found instance to migrate %s' % vm.display_name)
+                    self.logger.debug('Found instance to migrate %s' % vm.display_name)
                     for available_node in hosts:
                         if available_node.id == node.id:
-                            print 'INFO: Reached the same host, exit'
+                            self.logger.info('Reached the same host, exit')
                             break
                         passes = True
                         weight_with = 0
@@ -225,19 +225,19 @@ class RabbitMQMessageService(object):
                             passes = passes and filt.filter_one(host = available_node, vm = vm)
                             weight_with += filt.weight_host_with_vm(host = available_node, vm = vm)
                             weight_without += filt.weight_host_without_vm(host = node, vm = vm)
-                        print('Weight with: %r Weight without: %r' % (weight_with, weight_without))
                         if passes and weight_without >= weight_with:
+                            self.logger.info('Weight with: %r Weight without: %r' % (weight_with, weight_without))
                             if self.__migrate_service.schedule_migrate(vm.id, node):
-                                print('INFO: Scheduled migrate ... ')
+                                self.logger.debug('Scheduled migrate')
                             else:
-                                print('INFO: Failed to schedule migrate ...')
+                                self.logger.debug('Failed to schedule migrate')
                             self.__check_overload = False
                             self.__lock.release()
                             return
                         if not passes:
-                            print("INFO: Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
+                            self.logger.debug("Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
                         if not weight_without >= weight_with:
-                            print('INFO: Migration will have no effect')
+                            self.logger.debug('Migration will have no effect')
             self.__check_overload = False
             self.__lock.release()
 
@@ -286,9 +286,9 @@ class RabbitMQMessageService(object):
     def print_short_info(self):
         # print('Total compute nodes: %d' % len(self.__compute_nodes))
         # print('Total services: %d' % len(self.__services))
-        print('Total vms: %d' % len(self.__vm_instances))
+        self.logger.info('Total vms: %d' % len(self.__vm_instances))
         for node in self.__compute_nodes.values():
-            print('Node %s: %d State: %s, %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
+            self.logger.info('Node %s: %d State: %s, %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
 
     def __calculate_node_overload_and_weight(self, node):
         weight = 0
@@ -398,7 +398,8 @@ class RabbitMQMessageService(object):
             # vm_instance.print_info()
 
     def __process_vm_instance(self, vm_instance):
-
+        self.logger.debug('Instance %s State: %s' % (vm_instance.display_name, vm_instance.state))
+        
         if vm_instance.is_building():
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
@@ -411,8 +412,10 @@ class RabbitMQMessageService(object):
             self.add_vm_instance_to_node(vm_instance)
 
         elif vm_instance.is_active():
-            if vm_instance.is_migrating():
+            if vm_instance.is_verified_migrate():
                 vm_instance.last_migrate_time = time()
+                self.__migrate_service.confirm_task_done(vm_instance.id)
+
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
@@ -424,7 +427,7 @@ class RabbitMQMessageService(object):
                     vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
 
         elif vm_instance.is_in_error_state():
-            print('INFO: Instance %s is in error state' % (vm_instance.display_name))
+            self.logger.info('Instance %s is in error state' % (vm_instance.display_name))
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
@@ -439,7 +442,7 @@ class RabbitMQMessageService(object):
         self.__task.setDaemon(True)
         self.__task.start()
         print os.linesep
-        print('INFO: Scheduled periodic check for %d min' % config.periodic_check_interval)
+        self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
 
 #
 #   Class that holds system information about servers running
@@ -600,6 +603,11 @@ class VMInstance(object):
 
     def needs_to_verify_migrate(self):
         if self.state == 'resized' and self.new_task_state == None:
+            return True
+        return False
+
+    def is_verified_migrate(self):
+        if self.state == 'active' and self.old_state == 'resized':
             return True
         return False
 
