@@ -25,8 +25,7 @@ def setup_logging():
     """ Method for configuring application logger options """
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    # Add the log message handler to the logger
-    log_filename = config.log_directory + str(strftime("%Y-%m-%d %Hh%Mm%Ss", localtime()))
+    log_filename = config.log_directory + str(strftime("%Y-%m-%d %Hh%Mm%Ss", localtime())) + '.log'
     max_bytes = config.log_max_bytes
     backup_count = config.log_backup_count
     handler = logging.handlers.RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
@@ -84,7 +83,8 @@ def main():
 
     channel.basic_consume(callback, queue=queue_name, no_ack=True)
 
-    print "Waiting for messages. Check the log files for information. Press CTRL + C to stop"
+    print('Waiting for messages. Check the log files in directory %s for information.' % config.log_directory)
+    print('Press CTRL + C to stop')
 
     try:
         channel.start_consuming()

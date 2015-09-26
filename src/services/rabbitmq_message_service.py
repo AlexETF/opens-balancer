@@ -46,7 +46,6 @@ class RabbitMQMessageService(object):
 
     def initialize(self):
         self.__lock.acquire()
-        print os.linesep
         self.logger.info('Initializing RabbitMQMessageService')
         client = Client(session=self.__auth_service.get_session())
         self.logger.info('Collecting information about compute nodes')
@@ -249,7 +248,10 @@ class RabbitMQMessageService(object):
         for node in self.__compute_nodes.values():
             if node.is_running() and node.are_data_synced():
                 hosts.append(node)
-        hosts.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
+        if len(hosts) > 1:
+            hosts.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
+        else:
+            hosts = []
         return hosts
 
     @property
@@ -331,8 +333,6 @@ class RabbitMQMessageService(object):
 
             self.__check_overload = True
 
-            node.print_info()
-
         elif method == 'service_update':
             parsed_json = message
             service_dict = parsed_json.get('args', {}).get('service', {})
@@ -395,17 +395,11 @@ class RabbitMQMessageService(object):
 
             self.__process_vm_instance(vm_instance)
 
-            # vm_instance.print_info()
-
     def __process_vm_instance(self, vm_instance):
         self.logger.debug('Instance %s State: %s' % (vm_instance.display_name, vm_instance.state))
-        
-        if vm_instance.is_building():
-            if vm_instance.compute_node is not None:
-                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-            self.add_vm_instance_to_node(vm_instance)
+        self.logger.debug('New task: %s Old task: %s' % (vm_instance.new_task_state, vm_instance.old_task_state))
 
-        elif vm_instance.needs_to_verify_migrate():
+        if vm_instance.needs_to_verify_migrate():
             self.__migrate_service.schedule_confirm(vm_instance.id)
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
@@ -441,7 +435,6 @@ class RabbitMQMessageService(object):
         self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
-        print os.linesep
         self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
 
 #
@@ -509,7 +502,6 @@ class ComputeNode(object):
         return num
 
     def print_info(self):
-        print os.linesep
         print('----------------------------------------------------------------------------')
         print('ID: %r   Project name: %r    Created at: %s' % (self.id, self.project_name, self.created_at))
         print('Host IP: %s  Service ID: %r' % (self.host_ip, self.service_id))
