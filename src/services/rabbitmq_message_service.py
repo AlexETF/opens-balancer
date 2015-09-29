@@ -1,4 +1,5 @@
 import json
+import sys
 import os
 import operator
 from time import time
@@ -8,6 +9,7 @@ from novaclient.v2 import Client
 from services.migrate_service import MigrateService
 from threading import Lock, Timer
 from services.filters import core_filter, ram_filter, disk_filter
+from novaclient.exceptions import from_response
 
 class RabbitMQMessageService(object):
 
@@ -19,9 +21,9 @@ class RabbitMQMessageService(object):
         self.__migrate_service = MigrateService(auth_service = auth_service, logger = logger)
 
         #   Filters used for filtering hosts
-        self.__filters = {'ram'  : ram_filter.RamFilter(),
-                          'vcpu' : core_filter.CoreFilter(),
-                          'disk' : disk_filter.DiskFilter()
+        self.__filters = {'ram'  : ram_filter.RamFilter(logger = logger),
+                          'vcpu' : core_filter.CoreFilter(logger = logger),
+                          'disk' : disk_filter.DiskFilter(logger = logger)
                          }
 
         #   Variable that indicates if this service needs to check for overload
@@ -39,58 +41,71 @@ class RabbitMQMessageService(object):
 
     def start_periodic_check(self):
         self.stop_periodic_check()
-        self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
+        self.__task = Timer(config.periodic_check_interval, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
         self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
 
     def initialize(self):
         self.__lock.acquire()
-        self.logger.info('Initializing RabbitMQMessageService')
-        client = Client(session=self.__auth_service.get_session())
-        self.logger.info('Collecting information about compute nodes')
-        hypervisors  = client.hypervisors.list(detailed=True)
-        self.logger.info('Collecting information about services')
-        services = client.services.list()
-        self.logger.info('Collecting information about VMs')
-        servers  = client.servers.list(detailed=True)
-        self.logger.info('Processing collected data')
+        try:
+            self.logger.info('Initializing RabbitMQMessageService')
+            client = Client(session=self.__auth_service.get_session())
+            self.logger.info('Collecting information about compute nodes')
+            hypervisors  = client.hypervisors.list(detailed=True)
+            self.logger.info('Collecting information about services')
+            services = client.services.list()
+            self.logger.info('Collecting information about VMs')
+            servers  = client.servers.list(detailed=True)
+            self.logger.info('Processing collected data')
+        except from_response as e:
+            self.logger.error('Failed to collect data, request requires authentification (HTTP 401)')
+            self.logger.exception(e)
+            self.__lock.release()
+            return False
+        except Exception as e:
+            self.logger.exception(e)
+            self.__lock.release()
+            return False
+
 
         init_services = {}
         init_compute_nodes = {}
         init_vm_instances = {}
 
         for service in services:
+            service = service.to_dict()
             service_node = Service()
-            service_node.id = service.id
-            service_node.binary = service.binary
-            service_node.created_at = service.updated_at
-            service_node.disabled = service.status
-            service_node.host = service.host
-            service_node.topic = service.binary
+            service_node.id = service['id']
+            service_node.binary = service['binary']
+            service_node.created_at = service['updated_at']
+            service_node.disabled = service['status']
+            service_node.host = service['host']
+            service_node.topic = service['binary']
 
             init_services[service_node.id] = service_node
 
         for hypervisor in hypervisors:
+            hypervisor = hypervisor.to_dict()
             node = ComputeNode()
-            node.id = hypervisor.id
-            node.free_disk_gb = hypervisor.free_disk_gb
-            node.free_ram_mb = hypervisor.free_ram_mb
-            node.host_ip = hypervisor.host_ip
-            node.hypervisor_hostname = hypervisor.hypervisor_hostname
-            node.hypervisor_type = hypervisor.hypervisor_type
-            node.local_gb = hypervisor.local_gb
-            node.local_gb_used = hypervisor.local_gb_used
-            node.memory_mb = hypervisor.memory_mb
-            node.memory_mb_used = hypervisor.memory_mb_used
-            node.running_vms = hypervisor.running_vms
-            node.service_id = hypervisor.service['id']
-            node.host = hypervisor.service['host']
-            node.vcpus = hypervisor.vcpus
-            node.vcpus_used = hypervisor.vcpus_used
+            node.id = hypervisor['id']
+            node.free_disk_gb = hypervisor['free_disk_gb']
+            node.free_ram_mb = hypervisor['free_ram_mb']
+            node.host_ip = hypervisor['host_ip']
+            node.hypervisor_hostname = hypervisor['hypervisor_hostname']
+            node.hypervisor_type = hypervisor['hypervisor_type']
+            node.local_gb = hypervisor['local_gb']
+            node.local_gb_used = hypervisor['local_gb_used']
+            node.memory_mb = hypervisor['memory_mb']
+            node.memory_mb_used = hypervisor['memory_mb_used']
+            node.running_vms = hypervisor['running_vms']
+            node.service_id = hypervisor['service']['id']
+            node.host = hypervisor['service']['host']
+            node.vcpus = hypervisor['vcpus']
+            node.vcpus_used = hypervisor['vcpus_used']
 
-            node.state = hypervisor.state
-            node.status = hypervisor.status
+            node.state = hypervisor['state']
+            node.status = hypervisor['status']
 
             self.__calculate_node_overload_and_weight(node)
             init_compute_nodes[node.id] = node
@@ -140,10 +155,11 @@ class RabbitMQMessageService(object):
         self.__vm_instances = init_vm_instances
         for instance in self.__vm_instances.values():
             self.__process_vm_instance(vm_instance = instance)
-        self.__check_overload = True
 
+        self.__check_overload = True
         self.__lock.release()
 
+        return True
 
     def parse_message(self, routing_key, message):
         self.__lock.acquire()
@@ -211,11 +227,11 @@ class RabbitMQMessageService(object):
             hosts.sort(key = operator.attrgetter('metrics_weight'))
             for vm in node.vm_instances.values():
                 mig_time = vm.last_migrate_time
-                if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > config.migrate_time * 60)):
+                if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > config.migrate_time)):
                     self.logger.debug('Found instance to migrate %s' % vm.display_name)
                     for available_node in hosts:
-                        if available_node.id == node.id:
-                            self.logger.info('Reached the same host, exit')
+                        if available_node.id == node.id or available_node.metrics_weight == node.metrics_weight:
+                            self.logger.debug('Not available host')
                             break
                         passes = True
                         weight_with = 0
@@ -229,7 +245,7 @@ class RabbitMQMessageService(object):
                             if self.__migrate_service.schedule_migrate(vm.id, node):
                                 self.logger.debug('Scheduled migrate')
                             else:
-                                self.logger.debug('Failed to schedule migrate')
+                                self.logger.debug('Failed to schedule migrate, task already exists')
                             self.__check_overload = False
                             self.__lock.release()
                             return
@@ -421,10 +437,12 @@ class RabbitMQMessageService(object):
                     vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
 
         elif vm_instance.is_in_error_state():
-            self.logger.info('Instance %s is in error state' % (vm_instance.display_name))
+            self.logger.warning('Instance %s is in error state' % (vm_instance.display_name))
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
             self.add_vm_instance_to_node(vm_instance)
+            if vm_instance.compute_node is None:
+                self.logger.warning('Instance %s is not spawned on any node' % (vm_instance.display_name))
         else:
             if vm_instance.compute_node is not None:
                 vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)

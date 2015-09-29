@@ -99,8 +99,8 @@ class MigrationThread(Thread):
             self.logger.info('Scheduled migration of server %s ID: %s' % (server.name, server.id))
 
         except Exception as e:
-            print e
             self.logger.error('Failed to migrate server ID: %s' % (self.__server_id))
+            self.logger.exception(e)
             self.__migrate_service.task_done(self.__server_id)
 
 
@@ -127,8 +127,8 @@ class LiveBlockMigrationThread(Thread):
                 self.logger.info('Scheduled live migration of server %s ID: %s' % (server.name, server.id))
                 self.__migrate_service.task_done(self.__server_id)
             except Exception as e:
-                print e
                 self.logger.error('Failed live migration of server ID: %s' % (self.__server_id))
+                self.logger.exception(e)
                 self.__migrate_service.task_done(self.__server_id)
 
 
@@ -152,6 +152,6 @@ class ConfirmThread(Thread):
                     self.logger.info('Confirmed migration of server %s ID: %s' % (server.name, server.id))
                     self.__migrate_service.task_done(self.__server_id)
             except Exception as e:
-                print e
                 self.logger.error('Failed to confirm migration server ID: %s' % (self.__server_id))
+                self.logger.exception(e)
                 self.__migrate_service.task_done(self.__server_id)

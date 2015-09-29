@@ -1,12 +1,12 @@
 
-import pika
+import pika, sys
 import logging, logging.handlers
 from time import gmtime, strftime, localtime
 from config import credentials
 from config import config
 from services.auth_service import AuthService
 from services.migrate_service import MigrateService
-from services.rabbitmq_message_service import RabbitMQMessageService, Service
+from services.rabbitmq_message_service import RabbitMQMessageService
 
 
 global rabbitmq_service
@@ -56,7 +56,11 @@ def main():
                                project_domain_name = project_domain_name)
 
     rabbitmq_service = RabbitMQMessageService(auth_service = auth_service, logger = logger)
-    rabbitmq_service.initialize()
+
+    if rabbitmq_service.initialize() == False:
+        print('Failed to authenticate, check the log file for more details')
+        sys.exit(1)
+
     rabbitmq_service.start_periodic_check()
 
     rabbitmq_username = credentials.rabbitmq_cfg['username']

@@ -14,9 +14,9 @@ weights = {
            'disk' : 1.0
           }
 
-periodic_check_interval = 3        # enter time in minutes
+periodic_check_interval = 3 * 60        # enter time in sec
 
-migrate_time = 1                   # enter time in minutes
+migrate_time = 1 * 60                   # enter time in sec
 
 log_directory = './logs/'               # path to log files directory
 log_max_bytes = 100 * 1024 * 1024       # 100MB limit size for log file

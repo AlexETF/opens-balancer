@@ -6,6 +6,11 @@ from services.auth_service import AuthService
 from novaclient.v2 import Client
 
 def main():
+
+    flavor_name = 'm1.micro'
+    image_name = 'TestVM'
+    availability_zone = 'nova'
+
     DEFAULT = 2
 
     if len(sys.argv) < 2:
@@ -35,10 +40,10 @@ def main():
 
     print('Authenticating, waiting server to respond')
     client = Client(session = auth_service.get_session())
-    print('Getting desired flavor')
-    flavor = client.flavors.find(ram = 64)
-    print('Getting desired image')
-    image = client.images.find(name = 'TestVM')
+    print('Getting desired flavor %s' % flavor_name)
+    flavor = client.flavors.find(name = flavor_name)
+    print('Getting desired image %s' % image_name)
+    image = client.images.find(name = image_name)
     print('Getting network list')
     networks = client.networks.list()
     print('Creating nic with network id %s' % networks[0].id)
@@ -52,7 +57,7 @@ def main():
                                         image = image.id,
                                         flavor = flavor.id,
                                         nics = nics,
-                                        availability_zone='nova')
+                                        availability_zone = availability_zone)
 
     print 'Finished ...'
 

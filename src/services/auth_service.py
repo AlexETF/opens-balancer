@@ -1,10 +1,11 @@
+import logging
 from keystoneclient import session
 from keystoneclient.auth.identity import v3
 
 class AuthService(object):
 
     def __init__(self, keystone_url, username, password,
-    user_domain_name, project_name, project_domain_name):
+    user_domain_name, project_name, project_domain_name, logger = None):
         self.keystone_url = keystone_url
         self.username = username
         self.password = password
@@ -12,6 +13,8 @@ class AuthService(object):
         self.project_name = project_name
         self.project_domain_name = project_domain_name
         self.session = None
+
+        self.logger = logger or logging.getLogger(__name__)
 
     def get_session(self):
         self.auth = v3.Password(auth_url = self.keystone_url,

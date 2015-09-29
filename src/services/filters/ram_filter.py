@@ -1,19 +1,22 @@
+import logging
 from config import config
 from services import filters
 
 
 class RamFilter(filters.BaseFilter):
 
-    def __init__(self):
+    def __init__(self, logger = None):
         filters.BaseFilter.__init__(self)
         self.ram_weight = config.weights.get('ram', 1)
+        self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
         """Return True if it passes the filter, False otherwise. """
         free_ram_mb = host.free_ram_mb
         required_ram_mb = vm.memory_mb
         if required_ram_mb > free_ram_mb:
-            # print ERROR to log file
+            self.logger.error("Host %s doesn't have enough RAM memory. Required %d MB, available %d MB"
+                              % (host.hypervisor_hostname, required_ram_mb, free_ram_mb))
             return False
         return True
 

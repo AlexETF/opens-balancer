@@ -6,22 +6,29 @@ from services.auth_service import AuthService
 from novaclient.v2 import Client
 from threading import Timer
 
-
 start_interval  = 10 * 60   #interval (10min)
 delete_interval = 15 * 60   #interval (15min)
+
+deviation = 60
+
+flavor_name = 'm1.micro'
+image_name = 'TestVM'
+availability_zone = 'nova'
 max_instances = 7
 
 def start_timer_start():
-    timer = Timer(start_interval, start_instances)
+    start_time  = random.gauss(start_interval, deviation)
+    timer = Timer(start_time, start_instances)
     timer.setDaemon(True)
     timer.start()
-    print('Scheduled start timer task %d min' % (start_interval/60))
+    print('Scheduled start timer task %d sec' % (start_time))
 
 def start_timer_delete():
-    timer = Timer(delete_interval, delete_instances)
+    delete_time = random.gauss(delete_interval, deviation)
+    timer = Timer(delete_time, delete_instances)
     timer.setDaemon(True)
     timer.start()
-    print('Scheduled delete timer task %d min' % (delete_interval/60))
+    print('Scheduled delete timer task %d sec' % (delete_time))
 
 keystone_url = credentials.keystone_cfg['service_url']
 username = credentials.keystone_cfg['username']
@@ -39,10 +46,10 @@ auth_service = AuthService(keystone_url=keystone_url,
 
 print('Authenticating, waiting server to respond')
 client = Client(session = auth_service.get_session())
-print('Getting desired flavor')
-flavor = client.flavors.find(ram = 64)
-print('Getting desired image')
-image = client.images.find(name = 'TestVM')
+print('Getting desired flavor %s' % flavor_name)
+flavor = client.flavors.find(name = flavor_name)
+print('Getting desired image %s' % image_name)
+image = client.images.find(name = image_name)
 print('Getting network list')
 networks = client.networks.list()
 print('Creating nic')
@@ -64,7 +71,7 @@ def start_instances():
                                       image = image.id,
                                       flavor = flavor.id,
                                       nics = nics,
-                                      availability_zone='nova')
+                                      availability_zone = availability_zone)
    start_timer_start()
 
 def delete_instances():

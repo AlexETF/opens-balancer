@@ -1,19 +1,22 @@
+import logging
 from config import config
 from services import filters
 
 
 class DiskFilter(filters.BaseFilter):
 
-    def __init__(self):
+    def __init__(self, logger = None):
         filters.BaseFilter.__init__(self)
         self.disk_weight = config.weights.get('disk', 1)
+        self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
         """ Return True if it passes the filter, False otherwise. """
         free_disk_gb = host.free_disk_gb
         required_disk_gb = vm.disk_gb + vm.ephemeral_gb
         if required_disk_gb > free_disk_gb:
-            # print ERROR to LOG file
+            self.logger.error("Host %s doesn't have enough disk space. Required %d GB, available %d GB"
+                              % (host.hypervisor_hostname, required_disk_gb, free_disk_gb))
             return False
         return True
 

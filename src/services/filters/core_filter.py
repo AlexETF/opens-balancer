@@ -1,18 +1,21 @@
+import logging
 from config import config
 from services import filters
 
 class CoreFilter(filters.BaseFilter):
 
-    def __init__(self):
+    def __init__(self, logger = None):
         filters.BaseFilter.__init__(self)
         self.vcpu_weight = config.weights.get('vcpu', 1)
+        self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
         """Return True if it passes the filter, False otherwise. """
         free_vcpus = host.vcpus - host.vcpus_used
         required_vcpus = vm.vcpus
         if  required_vcpus > free_vcpus:
-            # print to LOG file ERROR
+            self.logger.error("Host %s doesn't have enough VCPU-s. Required %d VCPU, available %d VCPU"
+                              % (host.hypervisor_hostname, required_vcpus, free_vcpus))
             return False
         return True
 
