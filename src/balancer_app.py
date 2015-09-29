@@ -29,7 +29,7 @@ def setup_logging():
     max_bytes = config.log_max_bytes
     backup_count = config.log_backup_count
     handler = logging.handlers.RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
-    formatter = logging.Formatter('%(asctime)s| %(levelname)s: %(message)s')
+    formatter = logging.Formatter('%(asctime)s|%(levelname)s| %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 

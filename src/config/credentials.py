@@ -5,7 +5,7 @@
 #
 
 keystone_cfg =  {
-                'service_url' : 'http://172.16.0.2:5000/v3',
+                'service_url' : 'http://172.16.0.4:5000/v3',
                 'username' : 'admin',
                 'password' : 'admin',
                 'user_domain_name' : 'default',
@@ -17,7 +17,7 @@ rabbitmq_cfg =  {
                 'server_endpoint' : '10.20.0.3',
                 'port'      :  5672,
                 'username'  : 'nova',
-                'password'  : 'VDkpaSEW',
+                'password'  : '8wA2Krqg',
                 'virtual_host' : '/',
                 'listening_options' : {
                                         'exchange_name' : 'nova',

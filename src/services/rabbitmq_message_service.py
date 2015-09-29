@@ -120,7 +120,6 @@ class RabbitMQMessageService(object):
                 vm_instance.new_task_state = server['OS-EXT-STS:task_state']
                 vm_instance.state = server['OS-EXT-STS:vm_state']
                 vm_instance.host = server['OS-EXT-SRV-ATTR:host']
-                vm_instance.hostname = server['name']
             else:
                 vm_instance = VMInstance()
                 vm_instance.id = vm_id

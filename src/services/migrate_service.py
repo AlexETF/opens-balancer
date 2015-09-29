@@ -6,6 +6,8 @@ from keystoneclient import session
 from threading import Thread
 from threading import Lock
 
+CONFIRM_RESIZE_STATE = 'VERIFY_RESIZE'
+
 class MigrateService(object):
 
     def __init__(self, auth_service, logger = None):
@@ -147,7 +149,7 @@ class ConfirmThread(Thread):
                 sess = self.__migrate_service.auth_service.get_session()
                 nova_client = client.Client(session = sess)
                 server = nova_client.servers.find(id = self.__server_id)
-                if server.status == 'VERIFY_RESIZE':
+                if server.status == CONFIRM_RESIZE_STATE:
                     nova_client.servers.confirm_resize(server = server)
                     self.logger.info('Confirmed migration of server %s ID: %s' % (server.name, server.id))
                     self.__migrate_service.task_done(self.__server_id)

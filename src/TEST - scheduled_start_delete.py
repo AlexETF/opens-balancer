@@ -6,6 +6,8 @@ from services.auth_service import AuthService
 from novaclient.v2 import Client
 from threading import Timer
 
+""" Configure paramteres """
+
 start_interval  = 10 * 60   #interval (10min)
 delete_interval = 15 * 60   #interval (15min)
 
@@ -14,7 +16,11 @@ deviation = 60
 flavor_name = 'm1.micro'
 image_name = 'TestVM'
 availability_zone = 'nova'
+host_to_start_instances = 'node-5'
+host_to_delete_instances = 'node-4'
+
 max_instances = 7
+
 
 def start_timer_start():
     start_time  = random.gauss(start_interval, deviation)
@@ -71,37 +77,37 @@ def start_instances():
                                       image = image.id,
                                       flavor = flavor.id,
                                       nics = nics,
-                                      availability_zone = availability_zone)
+                                      availability_zone = availability_zone + ':' + host_to_start_instances)
    start_timer_start()
+
 
 def delete_instances():
     """ Scheduled task for deleting random number of instances """
     client = Client(session = auth_service.get_session())
-    servers  = client.servers.list()
+    servers = client.servers.list()
+    filtered_servers = []
+    for server in servers:
+        if server.to_dict()['OS-EXT-SRV-ATTR:host'] == host_to_delete_instances:
+            filtered_servers.append(server)
+    servers = filtered_servers
     num_of_instances = len(servers)
     if num_of_instances == 0:
         print('INFO: No servers to delete')
         start_timer_delete()
         return
-    error_state = False
-    for server in servers:
-        if server.status == 'ERROR':
-            print('INFO: Deleting server %s' % server.name)
-            client.servers.delete(server)
-            servers.remove(server)
-            error_state = True
-    if not error_state:
-        index = random.randrange(num_of_instances + 1)
-        if index == num_of_instances:
-            index = index - 1
-        print('INFO: Number of servers to delete %d ' % (index))
-        for i in range(index):
-            print('INFO: Deleting server %s' % servers[i].name)
-            client.servers.delete(servers[i])
+    index = random.randrange(num_of_instances + 1)
+    if index == num_of_instances:
+        index = index - 1
+    print('INFO: Number of servers to delete %d ' % (index))
+    for i in range(index):
+        print('INFO: Deleting server %s' % servers[i].name)
+        client.servers.delete(servers[i])
+
     start_timer_delete()
 
 start_timer_start()
 start_timer_delete()
+
 
 while True:
     command = raw_input()
