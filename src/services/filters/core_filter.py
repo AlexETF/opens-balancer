@@ -28,16 +28,19 @@ class CoreFilter(filters.BaseFilter):
 
     def weight_host(self, host):
         """ Return Weight of host based on his parameter """
-        return host.vcpus_used * self.vcpu_weight
+        core_ratio = (host.vcpus_used * 100.0) / host.vcpus
+        return core_ratio * self.vcpu_weight
 
     def weight_host_without_vm(self, host, vm):
         if vm.id in host.vm_instances.keys():
-            return (host.vcpus_used - vm.vcpus) * self.vcpu_weight
+            core_ratio = ((host.vcpus_used - vm.vcpus) * 100.0) / host.vcpus
         else:
-            return host.vcpus_used * self.vcpu_weight
+            core_ration = (host.vcpus_used * 100.0) / host.vcpus
+        return core_ratio * self.vcpu_weight
 
     def weight_host_with_vm(self, host, vm):
-        return (host.vcpus_used + vm.vcpus) * self.vcpu_weight
+        core_ratio = ((host.vcpus_used + vm.vcpus) * 100.0) / host.vcpus
+        return core_ratio * self.vcpu_weight
 
     def get_weight(self):
         """ Return Weight parameter """

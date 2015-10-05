@@ -1,7 +1,7 @@
 
 import pika, sys
-import logging, logging.handlers
-from time import gmtime, strftime, localtime
+import logging
+from logger import logger
 from config import credentials
 from config import config
 from services.auth_service import AuthService
@@ -17,23 +17,16 @@ def callback(ch, method, properties, body):
 
     rabbitmq_service.parse_message(routing_key = method.routing_key, message = body)
     rabbitmq_service.check_overload()
-    rabbitmq_service.print_short_info()
+    #rabbitmq_service.print_short_info()
     # rabbitmq_service.print_all_info()
 
 
 def setup_logging():
     """ Method for configuring application logger options """
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    log_filename = config.log_directory + str(strftime("%Y-%m-%d %Hh%Mm%Ss", localtime())) + '.log'
-    max_bytes = config.log_max_bytes
-    backup_count = config.log_backup_count
-    handler = logging.handlers.RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
-    formatter = logging.Formatter('%(asctime)s|%(levelname)s| %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    logging.setLoggerClass(logger.CloudLogger)
+    my_logger = logging.getLogger(__name__)
 
-    return logger
+    return my_logger
 
 def main():
     """ Main method """
@@ -47,13 +40,15 @@ def main():
     user_domain_name = credentials.keystone_cfg['user_domain_name']
     project_name = credentials.keystone_cfg['project_name']
     project_domain_name =  credentials.keystone_cfg['project_domain_name']
+    version = credentials.keystone_cfg['nova_api_version']
 
     auth_service = AuthService(keystone_url = keystone_url,
                                username = username,
                                password = password,
                                user_domain_name = user_domain_name,
                                project_name = project_name,
-                               project_domain_name = project_domain_name)
+                               project_domain_name = project_domain_name,
+                               nova_api_version = version)
 
     rabbitmq_service = RabbitMQMessageService(auth_service = auth_service, logger = logger)
 
@@ -61,6 +56,7 @@ def main():
         print('Failed to authenticate, check the log file for more details')
         sys.exit(1)
 
+    rabbitmq_service.check_overload()
     rabbitmq_service.start_periodic_check()
 
     rabbitmq_username = credentials.rabbitmq_cfg['username']

@@ -1,0 +1,935 @@
+2015-10-03 14:35:23,450|1032|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 14:35:23,533|1115|SYS_INFO|Collecting information about compute nodes
+2015-10-03 14:35:26,473|4055|SYS_INFO|Collecting information about services
+2015-10-03 14:35:27,540|5122|SYS_INFO|Collecting information about VMs
+2015-10-03 14:35:30,157|7739|SYS_INFO|Processing collected data
+2015-10-03 14:36:32,861|70444|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:36:32,861|70444|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,861|70444|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: None
+2015-10-03 14:36:32,862|70444|SYS_INFO|Instance: random-1, 1443784076.13 State: active
+2015-10-03 14:36:32,862|70444|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,862|70444|VM_INFO|Host: node-4 Name: random-1, 1443784076.13 State: active New_task: None
+2015-10-03 14:36:32,862|70444|SYS_INFO|Instance: random 01443771998.4 State: active
+2015-10-03 14:36:32,864|70446|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,864|70446|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 14:36:32,864|70446|SYS_INFO|Instance: random 01443772221.06 State: active
+2015-10-03 14:36:32,864|70446|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,864|70446|VM_INFO|Host: node-4 Name: random 01443772221.06 State: active New_task: None
+2015-10-03 14:36:32,865|70447|SYS_INFO|Instance: random-0, 1443783433.09 State: active
+2015-10-03 14:36:32,865|70447|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,865|70447|VM_INFO|Host: node-2 Name: random-0, 1443783433.09 State: active New_task: None
+2015-10-03 14:36:32,865|70447|SYS_INFO|Instance: random-2, 1443782088.4 State: active
+2015-10-03 14:36:32,865|70447|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:32,865|70447|VM_INFO|Host: node-2 Name: random-2, 1443782088.4 State: active New_task: None
+2015-10-03 14:36:32,865|70447|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:36:32,865|70447|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:32,865|70447|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:32,865|70447|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:36:32,868|70450|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 14:36:33,404|70986|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:33,404|70986|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:33,404|70986|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:36:33,404|70986|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:36:33,404|70986|SYS_INFO|Not available host
+2015-10-03 14:36:33,404|70986|SYS_INFO|Found instance to migrate random-0, 1443783433.09
+2015-10-03 14:36:33,404|70986|SYS_INFO|Not available host
+2015-10-03 14:36:33,404|70986|SYS_INFO|Found instance to migrate random-2, 1443782088.4
+2015-10-03 14:36:33,405|70987|SYS_INFO|Not available host
+2015-10-03 14:36:35,686|73268|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:36:35,686|73268|SYS_INFO|New task: None Old task: scheduling
+2015-10-03 14:36:35,687|73269|VM_INFO|Host: None Name: random-3, 1443875774.05 State: building New_task: None
+2015-10-03 14:36:36,612|74194|SYS_INFO|Instance: random-1, 1443875738.56 State: building
+2015-10-03 14:36:36,612|74194|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:36:36,612|74194|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: building New_task: spawning
+2015-10-03 14:36:38,345|75927|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:36:38,345|75927|SYS_INFO|New task: None Old task: None
+2015-10-03 14:36:38,346|75928|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: None
+2015-10-03 14:36:38,427|76009|SYS_INFO|Instance: random-2, 1443875748.84 State: building
+2015-10-03 14:36:38,427|76009|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:36:38,427|76009|VM_INFO|Host: node-4 Name: random-2, 1443875748.84 State: building New_task: spawning
+2015-10-03 14:36:38,839|76421|TOTAL_VMS|Total: 9 vms
+2015-10-03 14:36:38,841|76423|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:38,841|76423|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:38,841|76423|NODE_INFO|node-4.domain.tld: 6 State: up enabled
+2015-10-03 14:36:38,841|76423|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:38,841|76423|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:38,842|76424|SYS_INFO|Not available host
+2015-10-03 14:36:39,674|77256|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:36:39,674|77256|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:36:39,674|77256|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: networking
+2015-10-03 14:36:39,767|77349|TOTAL_VMS|Total: 9 vms
+2015-10-03 14:36:39,767|77349|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:39,769|77351|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:39,769|77351|NODE_INFO|node-4.domain.tld: 6 State: up enabled
+2015-10-03 14:36:39,769|77351|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:39,769|77351|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:39,769|77351|SYS_INFO|Not available host
+2015-10-03 14:36:40,868|78450|TOTAL_VMS|Total: 9 vms
+2015-10-03 14:36:40,868|78450|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:40,868|78450|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:40,868|78450|NODE_INFO|node-4.domain.tld: 6 State: up enabled
+2015-10-03 14:36:40,868|78450|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:40,868|78450|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:40,868|78450|SYS_INFO|Not available host
+2015-10-03 14:36:55,036|92618|SYS_INFO|Instance: random-0, 1443875730.74 State: active
+2015-10-03 14:36:55,036|92618|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:36:55,036|92618|VM_INFO|Host: node-4 Name: random-0, 1443875730.74 State: active New_task: None
+2015-10-03 14:36:56,582|94164|TOTAL_VMS|Total: 10 vms
+2015-10-03 14:36:56,582|94164|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:56,582|94164|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:56,582|94164|NODE_INFO|node-4.domain.tld: 7 State: up enabled
+2015-10-03 14:36:56,584|94166|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:56,584|94166|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:56,584|94166|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:36:56,584|94166|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:56,585|94167|SYS_INFO|Not available host
+2015-10-03 14:36:56,585|94167|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:56,585|94167|SYS_INFO|Not available host
+2015-10-03 14:36:56,585|94167|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:56,585|94167|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:56,586|94168|SYS_INFO|Not available host
+2015-10-03 14:36:56,586|94168|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:36:56,586|94168|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:56,586|94168|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:56,586|94168|SYS_INFO|Not available host
+2015-10-03 14:36:58,200|95782|TOTAL_VMS|Total: 10 vms
+2015-10-03 14:36:58,201|95783|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:36:58,201|95783|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:36:58,201|95783|NODE_INFO|node-4.domain.tld: 7 State: up enabled
+2015-10-03 14:36:58,201|95783|SYS_INFO|Sorting hosts overload
+2015-10-03 14:36:58,203|95785|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:36:58,203|95785|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:36:58,203|95785|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:36:58,203|95786|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:58,203|95786|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:58,203|95786|SYS_INFO|Not available host
+2015-10-03 14:36:58,203|95786|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:36:58,204|95786|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:58,204|95786|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:58,204|95786|SYS_INFO|Not available host
+2015-10-03 14:36:58,204|95786|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:36:58,204|95786|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:58,206|95788|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:58,206|95788|SYS_INFO|Not available host
+2015-10-03 14:36:58,206|95788|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:36:58,207|95789|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:36:58,207|95789|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:36:58,207|95789|SYS_INFO|Not available host
+2015-10-03 14:37:01,871|99453|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:37:01,871|99453|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:37:01,871|99453|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: networking
+2015-10-03 14:37:06,174|103756|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:37:06,174|103756|SYS_INFO|New task: block_device_mapping Old task: networking
+2015-10-03 14:37:06,174|103756|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: block_device_mapping
+2015-10-03 14:37:11,512|109094|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:37:11,512|109094|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:37:11,513|109095|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: spawning
+2015-10-03 14:37:12,588|110170|SYS_INFO|Instance: random-2, 1443875748.84 State: active
+2015-10-03 14:37:12,588|110171|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:37:12,588|110171|VM_INFO|Host: node-4 Name: random-2, 1443875748.84 State: active New_task: None
+2015-10-03 14:37:23,496|121078|SYS_INFO|Instance: random-3, 1443875774.05 State: building
+2015-10-03 14:37:23,496|121078|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:37:23,496|121078|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: building New_task: spawning
+2015-10-03 14:37:24,042|121625|SYS_INFO|Instance: random-1, 1443875738.56 State: active
+2015-10-03 14:37:24,042|121625|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:37:24,042|121625|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: active New_task: None
+2015-10-03 14:37:28,805|126388|TOTAL_VMS|Total: 10 vms
+2015-10-03 14:37:28,809|126391|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:37:28,809|126391|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:37:28,809|126391|NODE_INFO|node-4.domain.tld: 7 State: up enabled
+2015-10-03 14:37:28,809|126391|SYS_INFO|Sorting hosts overload
+2015-10-03 14:37:28,809|126391|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:37:28,811|126393|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:37:28,812|126394|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:37:28,812|126394|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,812|126394|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,812|126394|SYS_INFO|Not available host
+2015-10-03 14:37:28,815|126397|SYS_INFO|Found instance to migrate random-2, 1443875748.84
+2015-10-03 14:37:28,815|126397|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,815|126397|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,815|126397|SYS_INFO|Not available host
+2015-10-03 14:37:28,815|126398|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:37:28,815|126398|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,816|126398|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,816|126398|SYS_INFO|Not available host
+2015-10-03 14:37:28,816|126398|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:37:28,816|126398|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,818|126400|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,818|126400|SYS_INFO|Not available host
+2015-10-03 14:37:28,819|126401|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:37:28,819|126401|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,819|126401|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,819|126401|SYS_INFO|Not available host
+2015-10-03 14:37:28,819|126401|SYS_INFO|Found instance to migrate random-1, 1443875738.56
+2015-10-03 14:37:28,819|126401|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:28,819|126401|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:28,821|126403|SYS_INFO|Not available host
+2015-10-03 14:37:49,408|146990|TOTAL_VMS|Total: 10 vms
+2015-10-03 14:37:49,410|146992|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:37:49,410|146992|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:37:49,410|146992|NODE_INFO|node-4.domain.tld: 7 State: up enabled
+2015-10-03 14:37:49,411|146993|SYS_INFO|Sorting hosts overload
+2015-10-03 14:37:49,411|146993|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:37:49,411|146993|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:37:49,411|146993|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:37:49,411|146993|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,411|146993|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,411|146993|SYS_INFO|Not available host
+2015-10-03 14:37:49,411|146993|SYS_INFO|Found instance to migrate random-2, 1443875748.84
+2015-10-03 14:37:49,411|146993|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,411|146993|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,413|146995|SYS_INFO|Not available host
+2015-10-03 14:37:49,413|146995|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,414|146996|SYS_INFO|Not available host
+2015-10-03 14:37:49,414|146996|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,414|146996|SYS_INFO|Not available host
+2015-10-03 14:37:49,414|146996|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,414|146996|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,415|146997|SYS_INFO|Not available host
+2015-10-03 14:37:49,415|146997|SYS_INFO|Found instance to migrate random-1, 1443875738.56
+2015-10-03 14:37:49,415|146997|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:37:49,415|146997|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:37:49,415|146997|SYS_INFO|Not available host
+2015-10-03 14:37:59,582|157164|SYS_INFO|Instance: random-3, 1443875774.05 State: active
+2015-10-03 14:37:59,584|157166|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:37:59,584|157166|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: active New_task: None
+2015-10-03 14:38:48,823|206405|TOTAL_VMS|Total: 10 vms
+2015-10-03 14:38:48,825|206407|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:38:48,825|206407|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:38:48,825|206407|NODE_INFO|node-4.domain.tld: 7 State: up enabled
+2015-10-03 14:38:48,825|206407|SYS_INFO|Sorting hosts overload
+2015-10-03 14:38:48,825|206407|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:38:48,825|206407|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:38:48,825|206407|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:38:48,825|206407|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,825|206407|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,825|206407|SYS_INFO|Not available host
+2015-10-03 14:38:48,826|206408|SYS_INFO|Found instance to migrate random-2, 1443875748.84
+2015-10-03 14:38:48,826|206408|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,826|206408|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,826|206408|SYS_INFO|Not available host
+2015-10-03 14:38:48,826|206408|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:38:48,826|206408|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,828|206410|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,828|206410|SYS_INFO|Not available host
+2015-10-03 14:38:48,828|206410|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:38:48,828|206410|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,828|206410|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,828|206410|SYS_INFO|Not available host
+2015-10-03 14:38:48,828|206411|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:38:48,828|206411|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,828|206411|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,828|206411|SYS_INFO|Not available host
+2015-10-03 14:38:48,828|206411|SYS_INFO|Found instance to migrate random-3, 1443875774.05
+2015-10-03 14:38:48,829|206411|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,829|206411|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,829|206411|SYS_INFO|Not available host
+2015-10-03 14:38:48,829|206411|SYS_INFO|Found instance to migrate random-1, 1443875738.56
+2015-10-03 14:38:48,829|206411|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:38:48,831|206413|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:38:48,831|206413|SYS_INFO|Not available host
+2015-10-03 14:38:51,028|208610|SYS_INFO|Instance: random-3, 1443875774.05 State: active
+2015-10-03 14:38:51,028|208610|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:38:51,028|208610|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: active New_task: deleting
+2015-10-03 14:39:02,089|219671|SYS_INFO|Instance: random-3, 1443875774.05 State: active
+2015-10-03 14:39:02,091|219673|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:39:02,091|219673|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: active New_task: deleting
+2015-10-03 14:39:14,250|231832|SYS_INFO|Instance: random-2, 1443875748.84 State: active
+2015-10-03 14:39:14,250|231832|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:39:14,250|231832|VM_INFO|Host: node-4 Name: random-2, 1443875748.84 State: active New_task: deleting
+2015-10-03 14:39:19,505|237087|SYS_INFO|Instance: random-3, 1443875774.05 State: deleted
+2015-10-03 14:39:19,505|237087|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:39:19,506|237088|VM_INFO|Host: node-4 Name: random-3, 1443875774.05 State: deleted New_task: None
+2015-10-03 14:39:26,240|243822|SYS_INFO|Instance: random-1, 1443875738.56 State: active
+2015-10-03 14:39:26,240|243822|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:39:26,242|243824|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: active New_task: deleting
+2015-10-03 14:39:27,509|245092|TOTAL_VMS|Total: 9 vms
+2015-10-03 14:39:27,509|245092|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:39:27,509|245092|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:39:27,509|245092|NODE_INFO|node-4.domain.tld: 6 State: up enabled
+2015-10-03 14:39:27,509|245092|SYS_INFO|Sorting hosts overload
+2015-10-03 14:39:27,510|245092|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:39:27,510|245092|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:39:27,510|245092|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:39:27,510|245092|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:39:27,510|245092|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:39:27,512|245094|SYS_INFO|Not available host
+2015-10-03 14:39:27,512|245094|SYS_INFO|Found instance to migrate random-1, 1443784076.13
+2015-10-03 14:39:27,512|245094|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:39:27,512|245094|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:39:27,512|245094|SYS_INFO|Not available host
+2015-10-03 14:39:27,513|245095|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:39:27,513|245095|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:39:27,513|245095|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:39:27,513|245095|SYS_INFO|Not available host
+2015-10-03 14:39:27,513|245095|SYS_INFO|Found instance to migrate random-0, 1443875730.74
+2015-10-03 14:39:27,513|245095|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:39:27,513|245095|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:39:27,515|245097|SYS_INFO|Not available host
+2015-10-03 14:39:32,752|250334|SYS_INFO|Instance: random-2, 1443875748.84 State: active
+2015-10-03 14:39:32,752|250334|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:39:32,753|250335|VM_INFO|Host: node-4 Name: random-2, 1443875748.84 State: active New_task: deleting
+2015-10-03 14:39:32,868|250450|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 14:39:32,884|250467|SYS_INFO|Collecting information about compute nodes
+2015-10-03 14:39:43,470|261052|SYS_INFO|Collecting information about services
+2015-10-03 14:39:55,269|272851|SYS_INFO|Collecting information about VMs
+2015-10-03 14:40:17,803|295385|SYS_INFO|Processing collected data
+2015-10-03 14:40:17,812|295394|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:40:17,812|295394|SYS_INFO|New task: None Old task: None
+2015-10-03 14:40:17,812|295394|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: None
+2015-10-03 14:40:17,812|295394|SYS_INFO|Instance: random-1, 1443784076.13 State: active
+2015-10-03 14:40:17,815|295398|SYS_INFO|New task: deleting Old task: None
+2015-10-03 14:40:17,815|295398|VM_INFO|Host: node-4 Name: random-1, 1443784076.13 State: active New_task: deleting
+2015-10-03 14:40:17,815|295398|SYS_INFO|Instance: random 01443771998.4 State: active
+2015-10-03 14:40:17,816|295398|SYS_INFO|New task: None Old task: None
+2015-10-03 14:40:17,816|295398|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 14:40:17,816|295398|SYS_INFO|Instance: random 01443772221.06 State: active
+2015-10-03 14:40:17,816|295398|SYS_INFO|New task: None Old task: None
+2015-10-03 14:40:17,818|295400|VM_INFO|Host: node-4 Name: random 01443772221.06 State: active New_task: None
+2015-10-03 14:40:17,818|295400|SYS_INFO|Instance: random-0, 1443875730.74 State: active
+2015-10-03 14:40:17,818|295400|SYS_INFO|New task: deleting Old task: spawning
+2015-10-03 14:40:17,818|295400|VM_INFO|Host: node-4 Name: random-0, 1443875730.74 State: active New_task: deleting
+2015-10-03 14:40:17,819|295401|SYS_INFO|Instance: random-0, 1443783433.09 State: active
+2015-10-03 14:40:17,819|295401|SYS_INFO|New task: None Old task: None
+2015-10-03 14:40:17,819|295401|VM_INFO|Host: node-2 Name: random-0, 1443783433.09 State: active New_task: None
+2015-10-03 14:40:17,819|295401|SYS_INFO|Instance: random-1, 1443875738.56 State: active
+2015-10-03 14:40:17,819|295401|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:17,819|295401|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: active New_task: deleting
+2015-10-03 14:40:17,819|295401|SYS_INFO|Instance: random-2, 1443782088.4 State: active
+2015-10-03 14:40:17,819|295401|SYS_INFO|New task: None Old task: None
+2015-10-03 14:40:17,819|295401|VM_INFO|Host: node-2 Name: random-2, 1443782088.4 State: active New_task: None
+2015-10-03 14:40:17,819|295401|TOTAL_VMS|Total: 8 vms
+2015-10-03 14:40:17,819|295401|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:17,821|295403|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:17,821|295403|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:40:17,821|295403|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:17,822|295404|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 14:40:17,822|295404|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:17,823|295405|SYS_INFO|Not available host
+2015-10-03 14:40:17,839|295421|SYS_INFO|Instance: random-0, 1443875730.74 State: active
+2015-10-03 14:40:17,839|295421|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:17,841|295423|VM_INFO|Host: node-4 Name: random-0, 1443875730.74 State: active New_task: deleting
+2015-10-03 14:40:17,851|295434|SYS_INFO|Instance: random-1, 1443875738.56 State: active
+2015-10-03 14:40:17,854|295436|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:17,854|295436|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: active New_task: deleting
+2015-10-03 14:40:17,855|295437|SYS_INFO|Instance: random-2, 1443875748.84 State: deleted
+2015-10-03 14:40:17,855|295437|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:40:17,855|295437|VM_INFO|Host: node-4 Name: random-2, 1443875748.84 State: deleted New_task: None
+2015-10-03 14:40:17,907|295489|SYS_INFO|Instance: random-0, 1443875730.74 State: active
+2015-10-03 14:40:17,907|295490|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:17,907|295490|VM_INFO|Host: node-4 Name: random-0, 1443875730.74 State: active New_task: deleting
+2015-10-03 14:40:17,911|295493|TOTAL_VMS|Total: 8 vms
+2015-10-03 14:40:17,911|295493|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:17,911|295493|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:17,911|295493|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:40:17,911|295493|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:17,911|295493|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:17,913|295495|SYS_INFO|Not available host
+2015-10-03 14:40:17,951|295533|TOTAL_VMS|Total: 8 vms
+2015-10-03 14:40:17,951|295533|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:17,953|295535|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:17,953|295535|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:40:17,953|295535|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:17,953|295535|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:17,953|295535|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:40:17,953|295536|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:40:17,953|295536|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:40:17,953|295536|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:40:17,953|295536|SYS_INFO|Not available host
+2015-10-03 14:40:17,954|295536|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:40:17,954|295536|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:40:17,954|295536|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:40:17,954|295536|SYS_INFO|Not available host
+2015-10-03 14:40:18,029|295611|SYS_INFO|Instance: random-1, 1443784076.13 State: active
+2015-10-03 14:40:18,032|295615|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:18,032|295615|VM_INFO|Host: node-4 Name: random-1, 1443784076.13 State: active New_task: deleting
+2015-10-03 14:40:18,033|295615|SYS_INFO|Instance: random-1, 1443875738.56 State: deleted
+2015-10-03 14:40:18,033|295615|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:40:18,033|295615|VM_INFO|Host: node-4 Name: random-1, 1443875738.56 State: deleted New_task: None
+2015-10-03 14:40:18,040|295622|TOTAL_VMS|Total: 7 vms
+2015-10-03 14:40:18,040|295622|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:18,040|295622|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:18,042|295624|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:40:18,042|295624|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:18,042|295624|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:18,042|295624|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:40:18,042|295625|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:40:18,042|295625|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:40:18,042|295625|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:40:18,042|295625|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:18,042|295625|SYS_INFO|Not available host
+2015-10-03 14:40:18,043|295625|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:40:18,043|295625|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:40:18,043|295625|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:40:18,043|295625|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:18,043|295625|SYS_INFO|Not available host
+2015-10-03 14:40:27,186|304768|SYS_INFO|Instance: random-0, 1443875730.74 State: deleted
+2015-10-03 14:40:27,187|304769|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:40:27,187|304769|VM_INFO|Host: node-4 Name: random-0, 1443875730.74 State: deleted New_task: None
+2015-10-03 14:40:27,447|305029|SYS_INFO|Instance: random-1, 1443784076.13 State: active
+2015-10-03 14:40:27,447|305029|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:27,447|305029|VM_INFO|Host: node-4 Name: random-1, 1443784076.13 State: active New_task: deleting
+2015-10-03 14:40:28,101|305684|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:40:28,101|305684|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:28,101|305684|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:28,102|305684|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:40:28,102|305684|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:28,102|305684|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:28,102|305684|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:40:28,102|305684|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:40:28,104|305686|SYS_INFO|Not available host
+2015-10-03 14:40:28,104|305686|SYS_INFO|Found instance to migrate random-0, 1443783433.09
+2015-10-03 14:40:28,104|305686|SYS_INFO|Not available host
+2015-10-03 14:40:28,104|305686|SYS_INFO|Found instance to migrate random-2, 1443782088.4
+2015-10-03 14:40:28,104|305686|SYS_INFO|Not available host
+2015-10-03 14:40:38,150|315732|SYS_INFO|Instance: random-1, 1443784076.13 State: deleted
+2015-10-03 14:40:38,150|315732|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:40:38,150|315732|VM_INFO|Host: node-4 Name: random-1, 1443784076.13 State: deleted New_task: None
+2015-10-03 14:40:38,528|316110|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:40:38,528|316110|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:38,528|316110|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:38,529|316111|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:40:38,529|316111|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:38,529|316111|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:38,529|316111|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:40:38,529|316111|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:40:38,529|316111|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:38,529|316111|SYS_INFO|Not available host
+2015-10-03 14:40:38,529|316111|SYS_INFO|Found instance to migrate random-0, 1443783433.09
+2015-10-03 14:40:38,530|316112|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:38,530|316112|SYS_INFO|Not available host
+2015-10-03 14:40:38,530|316112|SYS_INFO|Found instance to migrate random-2, 1443782088.4
+2015-10-03 14:40:38,530|316112|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:38,530|316112|SYS_INFO|Not available host
+2015-10-03 14:40:44,434|322016|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:40:44,434|322016|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:40:44,436|322018|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:40:44,436|322018|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:40:44,436|322018|SYS_INFO|Sorting hosts overload
+2015-10-03 14:40:44,436|322018|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:40:44,437|322019|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:40:44,437|322019|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:40:44,437|322019|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:44,437|322019|SYS_INFO|Not available host
+2015-10-03 14:40:44,437|322019|SYS_INFO|Found instance to migrate random-0, 1443783433.09
+2015-10-03 14:40:44,437|322019|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:44,437|322019|SYS_INFO|Not available host
+2015-10-03 14:40:44,437|322019|SYS_INFO|Found instance to migrate random-2, 1443782088.4
+2015-10-03 14:40:44,437|322019|SYS_INFO|Migration will have no effect
+2015-10-03 14:40:44,437|322019|SYS_INFO|Not available host
+2015-10-03 14:40:53,520|331102|SYS_INFO|Instance: random-0, 1443783433.09 State: active
+2015-10-03 14:40:53,520|331102|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:53,520|331102|VM_INFO|Host: node-2 Name: random-0, 1443783433.09 State: active New_task: deleting
+2015-10-03 14:40:58,145|335727|SYS_INFO|Instance: random-2, 1443782088.4 State: active
+2015-10-03 14:40:58,145|335727|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:58,145|335727|VM_INFO|Host: node-2 Name: random-2, 1443782088.4 State: active New_task: deleting
+2015-10-03 14:40:58,604|336186|SYS_INFO|Instance: random-0, 1443783433.09 State: active
+2015-10-03 14:40:58,604|336186|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:40:58,605|336187|VM_INFO|Host: node-2 Name: random-0, 1443783433.09 State: active New_task: deleting
+2015-10-03 14:41:03,901|341483|SYS_INFO|Instance: random-2, 1443782088.4 State: active
+2015-10-03 14:41:03,901|341483|SYS_INFO|New task: deleting Old task: deleting
+2015-10-03 14:41:03,901|341483|VM_INFO|Host: node-2 Name: random-2, 1443782088.4 State: active New_task: deleting
+2015-10-03 14:41:06,184|343766|SYS_INFO|Instance: random-0, 1443783433.09 State: deleted
+2015-10-03 14:41:06,184|343766|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:41:06,184|343766|VM_INFO|Host: node-2 Name: random-0, 1443783433.09 State: deleted New_task: None
+2015-10-03 14:41:06,533|344115|TOTAL_VMS|Total: 4 vms
+2015-10-03 14:41:06,533|344115|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:41:06,535|344117|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:41:06,535|344117|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:41:06,535|344117|SYS_INFO|Sorting hosts overload
+2015-10-03 14:41:06,535|344117|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:41:06,536|344118|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:41:06,536|344118|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:41:06,536|344118|SYS_INFO|Not available host
+2015-10-03 14:41:13,615|351197|SYS_INFO|Instance: random-2, 1443782088.4 State: deleted
+2015-10-03 14:41:13,615|351197|SYS_INFO|New task: None Old task: deleting
+2015-10-03 14:41:13,615|351197|VM_INFO|Host: node-2 Name: random-2, 1443782088.4 State: deleted New_task: None
+2015-10-03 14:41:13,740|351322|TOTAL_VMS|Total: 3 vms
+2015-10-03 14:41:13,743|351325|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:41:13,743|351325|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:41:13,743|351325|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:41:13,743|351325|SYS_INFO|Sorting hosts overload
+2015-10-03 14:41:13,743|351325|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:41:13,747|351329|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:41:13,749|351331|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:41:13,749|351331|SYS_INFO|Migration will have no effect
+2015-10-03 14:41:13,750|351332|SYS_INFO|Not available host
+2015-10-03 14:41:13,750|351332|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:41:13,750|351332|SYS_INFO|Migration will have no effect
+2015-10-03 14:41:13,750|351332|SYS_INFO|Not available host
+2015-10-03 14:41:18,058|355640|TOTAL_VMS|Total: 3 vms
+2015-10-03 14:41:18,058|355640|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:41:18,059|355641|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:41:18,059|355641|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:41:18,059|355641|SYS_INFO|Sorting hosts overload
+2015-10-03 14:41:18,059|355641|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:41:18,059|355641|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:41:18,059|355641|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:41:18,059|355641|SYS_INFO|Migration will have no effect
+2015-10-03 14:41:18,059|355641|SYS_INFO|Not available host
+2015-10-03 14:41:18,059|355641|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:41:18,061|355643|SYS_INFO|Migration will have no effect
+2015-10-03 14:41:18,061|355643|SYS_INFO|Not available host
+2015-10-03 14:43:17,822|475404|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 14:43:17,828|475411|SYS_INFO|Collecting information about compute nodes
+2015-10-03 14:43:18,882|476464|SYS_INFO|Collecting information about services
+2015-10-03 14:43:19,821|477403|SYS_INFO|Collecting information about VMs
+2015-10-03 14:43:22,013|479595|SYS_INFO|Processing collected data
+2015-10-03 14:43:22,016|479598|SYS_INFO|Instance: random 01443771998.4 State: active
+2015-10-03 14:43:22,016|479598|SYS_INFO|New task: None Old task: None
+2015-10-03 14:43:22,016|479598|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 14:43:22,016|479598|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:43:22,017|479599|SYS_INFO|New task: None Old task: None
+2015-10-03 14:43:22,017|479599|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: None
+2015-10-03 14:43:22,017|479599|SYS_INFO|Instance: random 01443772221.06 State: active
+2015-10-03 14:43:22,017|479599|SYS_INFO|New task: None Old task: None
+2015-10-03 14:43:22,017|479599|VM_INFO|Host: node-4 Name: random 01443772221.06 State: active New_task: None
+2015-10-03 14:43:22,019|479601|TOTAL_VMS|Total: 3 vms
+2015-10-03 14:43:22,019|479601|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:43:22,019|479601|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:43:22,019|479601|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 14:43:22,020|479602|SYS_INFO|Sorting hosts overload
+2015-10-03 14:43:22,020|479602|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:43:22,020|479602|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:43:22,020|479602|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:43:22,022|479604|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 14:43:22,022|479604|SYS_INFO|Migration will have no effect
+2015-10-03 14:43:22,023|479605|SYS_INFO|Not available host
+2015-10-03 14:43:22,023|479605|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:43:22,023|479605|SYS_INFO|Migration will have no effect
+2015-10-03 14:43:22,023|479605|SYS_INFO|Not available host
+2015-10-03 14:45:53,013|630595|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:45:53,013|630595|SYS_INFO|New task: scheduling Old task: scheduling
+2015-10-03 14:45:53,013|630595|VM_INFO|Host: None Name: random-0, 1443876347.67 State: building New_task: scheduling
+2015-10-03 14:45:55,913|633495|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:45:55,913|633495|SYS_INFO|New task: None Old task: scheduling
+2015-10-03 14:45:55,914|633496|VM_INFO|Host: None Name: random-0, 1443876347.67 State: building New_task: None
+2015-10-03 14:45:56,437|634019|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:45:56,437|634019|SYS_INFO|New task: scheduling Old task: scheduling
+2015-10-03 14:45:56,437|634019|VM_INFO|Host: None Name: random-1, 1443876353.19 State: building New_task: scheduling
+2015-10-03 14:45:56,617|634199|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:45:56,617|634199|SYS_INFO|New task: None Old task: None
+2015-10-03 14:45:56,617|634199|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: None
+2015-10-03 14:45:57,025|634607|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:45:57,025|634607|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:45:57,025|634607|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:45:57,026|634608|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:45:57,026|634608|SYS_INFO|Sorting hosts overload
+2015-10-03 14:45:57,026|634608|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:45:57,026|634608|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:45:57,026|634608|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:45:57,026|634608|SYS_INFO|Weight with: 144.45115810674724 Weight without: 144.45115810674724
+2015-10-03 14:45:57,028|634610|SYS_INFO|Scheduled migrate
+2015-10-03 14:45:58,206|635788|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:45:58,206|635788|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:45:58,206|635788|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: networking
+2015-10-03 14:45:59,007|636589|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:45:59,009|636591|SYS_INFO|New task: None Old task: scheduling
+2015-10-03 14:45:59,009|636591|VM_INFO|Host: None Name: random-1, 1443876353.19 State: building New_task: None
+2015-10-03 14:45:59,651|637233|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:45:59,651|637233|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:45:59,651|637233|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:45:59,651|637233|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:45:59,651|637233|SYS_INFO|Sorting hosts overload
+2015-10-03 14:45:59,651|637233|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:45:59,651|637233|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:45:59,651|637233|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:45:59,651|637233|SYS_INFO|Weight with: 144.45115810674724 Weight without: 144.45115810674724
+2015-10-03 14:45:59,653|637235|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:00,180|637763|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:46:00,181|637763|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:00,181|637763|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:00,181|637763|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:46:00,181|637763|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:00,183|637765|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:00,183|637765|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:46:00,183|637765|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:46:00,183|637765|SYS_INFO|Weight with: 144.45115810674724 Weight without: 144.45115810674724
+2015-10-03 14:46:00,183|637765|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:01,677|639259|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:46:01,678|639260|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:46:01,678|639260|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: networking
+2015-10-03 14:46:03,538|641120|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:03,539|641121|SYS_INFO|New task: None Old task: None
+2015-10-03 14:46:03,539|641121|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: None
+2015-10-03 14:46:03,780|641362|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:46:03,782|641364|SYS_INFO|New task: block_device_mapping Old task: networking
+2015-10-03 14:46:03,782|641364|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: block_device_mapping
+2015-10-03 14:46:03,947|641529|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:46:03,947|641529|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:03,947|641529|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:03,947|641529|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:46:03,947|641529|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:03,947|641529|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:03,947|641529|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:46:03,948|641530|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:46:03,948|641530|SYS_INFO|Weight with: 144.45115810674724 Weight without: 190.89627391742195
+2015-10-03 14:46:03,948|641530|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:04,821|642403|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:46:04,822|642404|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:04,822|642404|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: spawning
+2015-10-03 14:46:05,367|642949|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:05,367|642949|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:46:05,367|642949|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: networking
+2015-10-03 14:46:05,688|643270|TOTAL_VMS|Total: 5 vms
+2015-10-03 14:46:05,688|643270|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:05,688|643270|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:05,688|643270|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:46:05,690|643272|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:05,690|643272|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:05,690|643272|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:46:05,690|643272|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:46:05,690|643272|SYS_INFO|Weight with: 144.45115810674724 Weight without: 190.89627391742195
+2015-10-03 14:46:05,690|643273|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:07,039|644621|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:07,039|644621|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:46:07,039|644621|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: networking
+2015-10-03 14:46:07,470|645052|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:07,471|645053|SYS_INFO|New task: scheduling Old task: scheduling
+2015-10-03 14:46:07,471|645053|VM_INFO|Host: None Name: random-2, 1443876356.52 State: building New_task: scheduling
+2015-10-03 14:46:09,230|646812|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:09,230|646812|SYS_INFO|New task: block_device_mapping Old task: networking
+2015-10-03 14:46:09,230|646812|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: block_device_mapping
+2015-10-03 14:46:10,157|647739|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:10,157|647740|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:10,157|647740|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: spawning
+2015-10-03 14:46:10,884|648467|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:10,885|648467|SYS_INFO|New task: None Old task: scheduling
+2015-10-03 14:46:10,885|648467|VM_INFO|Host: None Name: random-2, 1443876356.52 State: building New_task: None
+2015-10-03 14:46:12,059|649641|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:12,059|649641|SYS_INFO|New task: None Old task: None
+2015-10-03 14:46:12,059|649641|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: None
+2015-10-03 14:46:12,367|649949|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:12,368|649950|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:12,368|649950|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:12,368|649950|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:12,368|649950|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:12,368|649950|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:12,368|649950|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:46:12,368|649950|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:46:12,368|649950|SYS_INFO|Weight with: 144.45115810674724 Weight without: 237.34138972809666
+2015-10-03 14:46:12,368|649950|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:13,966|651548|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:13,966|651548|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:46:13,966|651548|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: networking
+2015-10-03 14:46:14,140|651722|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:14,140|651722|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:14,141|651723|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:14,141|651723|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:14,141|651723|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:14,141|651723|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:14,141|651723|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:46:14,141|651723|SYS_INFO|Found instance to migrate random-0, 1443784067.18
+2015-10-03 14:46:14,141|651723|SYS_INFO|Weight with: 144.45115810674724 Weight without: 237.34138972809666
+2015-10-03 14:46:14,141|651723|SYS_INFO|Failed to schedule migrate, task already exists
+2015-10-03 14:46:14,823|652405|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:14,823|652405|SYS_INFO|New task: networking Old task: networking
+2015-10-03 14:46:14,823|652405|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: networking
+2015-10-03 14:46:15,921|653503|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:15,921|653503|SYS_INFO|New task: block_device_mapping Old task: networking
+2015-10-03 14:46:15,921|653503|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: block_device_mapping
+2015-10-03 14:46:17,117|654699|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:17,117|654699|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:17,117|654699|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: spawning
+2015-10-03 14:46:17,957|655539|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:17,957|655539|SYS_INFO|New task: resize_prep Old task: resize_prep
+2015-10-03 14:46:17,957|655539|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: resize_prep
+2015-10-03 14:46:20,084|657666|SYS_INFO|Scheduled migration of server random-0, 1443784067.18 ID: 49cd2bfe-5d29-4f52-9878-613435427990
+2015-10-03 14:46:22,020|659602|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 14:46:22,030|659612|SYS_INFO|Collecting information about compute nodes
+2015-10-03 14:46:25,154|662736|SYS_INFO|Collecting information about services
+2015-10-03 14:46:30,329|667911|SYS_INFO|Collecting information about VMs
+2015-10-03 14:46:38,305|675888|SYS_INFO|Processing collected data
+2015-10-03 14:46:38,309|675891|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:38,311|675893|SYS_INFO|New task: resize_prep Old task: resize_prep
+2015-10-03 14:46:38,311|675893|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: resize_prep
+2015-10-03 14:46:38,311|675893|SYS_INFO|Instance: random 01443771998.4 State: active
+2015-10-03 14:46:38,311|675893|SYS_INFO|New task: None Old task: None
+2015-10-03 14:46:38,311|675893|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 14:46:38,312|675894|SYS_INFO|Instance: random 01443772221.06 State: active
+2015-10-03 14:46:38,312|675894|SYS_INFO|New task: None Old task: None
+2015-10-03 14:46:38,312|675894|VM_INFO|Host: node-4 Name: random 01443772221.06 State: active New_task: None
+2015-10-03 14:46:38,312|675894|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:38,312|675894|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:38,313|675895|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: spawning
+2015-10-03 14:46:38,313|675895|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:46:38,313|675895|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:38,315|675897|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: spawning
+2015-10-03 14:46:38,315|675897|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:38,315|675898|SYS_INFO|New task: spawning Old task: block_device_mapping
+2015-10-03 14:46:38,315|675898|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: spawning
+2015-10-03 14:46:38,315|675898|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,316|675898|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,318|675900|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,318|675900|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,321|675903|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,322|675904|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 14:46:38,323|675905|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,328|675910|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,328|675911|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,328|675911|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,329|675911|SYS_INFO|Not available host
+2015-10-03 14:46:38,335|675917|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:38,335|675917|SYS_INFO|New task: resize_prep Old task: resize_prep
+2015-10-03 14:46:38,335|675917|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: resize_prep
+2015-10-03 14:46:38,338|675920|SYS_INFO|Instance: random-0, 1443876347.67 State: building
+2015-10-03 14:46:38,338|675920|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:46:38,338|675921|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: building New_task: spawning
+2015-10-03 14:46:38,342|675924|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,342|675924|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,342|675924|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,342|675924|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,342|675924|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,342|675924|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,342|675924|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,342|675924|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,344|675926|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,344|675926|SYS_INFO|Not available host
+2015-10-03 14:46:38,348|675930|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,348|675930|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,348|675930|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,348|675930|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,348|675930|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,348|675930|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,348|675930|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,349|675931|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,349|675931|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,349|675931|SYS_INFO|Not available host
+2015-10-03 14:46:38,351|675933|SYS_INFO|Instance: random-1, 1443876353.19 State: building
+2015-10-03 14:46:38,351|675933|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:46:38,351|675933|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: building New_task: spawning
+2015-10-03 14:46:38,355|675937|SYS_INFO|Instance: random-2, 1443876356.52 State: building
+2015-10-03 14:46:38,355|675937|SYS_INFO|New task: spawning Old task: spawning
+2015-10-03 14:46:38,355|675937|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: building New_task: spawning
+2015-10-03 14:46:38,355|675937|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,355|675937|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,357|675939|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,357|675939|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,357|675939|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,357|675939|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,357|675939|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,358|675940|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,358|675940|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,358|675940|SYS_INFO|Not available host
+2015-10-03 14:46:38,362|675944|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,362|675944|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,364|675946|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,364|675946|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,364|675946|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,364|675946|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,365|675947|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,365|675947|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,365|675947|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,365|675947|SYS_INFO|Not available host
+2015-10-03 14:46:38,378|675960|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:46:38,378|675960|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:46:38,378|675960|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 14:46:38,378|675960|NODE_INFO|node-4.domain.tld: 5 State: up enabled
+2015-10-03 14:46:38,378|675960|SYS_INFO|Sorting hosts overload
+2015-10-03 14:46:38,380|675962|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:46:38,380|675962|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:46:38,380|675962|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:46:38,380|675962|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:46:38,380|675962|SYS_INFO|Not available host
+2015-10-03 14:46:39,375|676957|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:39,375|676957|SYS_INFO|New task: resize_migrating Old task: resize_prep
+2015-10-03 14:46:39,375|676957|VM_INFO|Host: node-4 Name: random-0, 1443784067.18 State: active New_task: resize_migrating
+2015-10-03 14:46:39,377|676959|MIGRATION_STARTED|Host: node-4 Instance: random-0, 1443784067.18
+2015-10-03 14:46:49,671|687253|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:46:49,671|687253|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:46:49,671|687253|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: active New_task: None
+2015-10-03 14:46:52,750|690332|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:52,750|690332|SYS_INFO|New task: resize_migrated Old task: resize_migrating
+2015-10-03 14:46:52,750|690332|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: active New_task: resize_migrated
+2015-10-03 14:46:59,765|697347|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:46:59,765|697347|SYS_INFO|New task: resize_finish Old task: resize_migrated
+2015-10-03 14:46:59,766|697348|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: active New_task: resize_finish
+2015-10-03 14:47:06,183|703765|SYS_INFO|Instance: random-1, 1443876353.19 State: active
+2015-10-03 14:47:06,184|703766|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:47:06,184|703766|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: active New_task: None
+2015-10-03 14:47:07,651|705233|SYS_INFO|Instance: random-2, 1443876356.52 State: active
+2015-10-03 14:47:07,651|705233|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:47:07,651|705233|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: active New_task: None
+2015-10-03 14:47:39,434|737016|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:47:39,434|737016|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:47:39,434|737016|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:47:39,436|737018|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:47:39,436|737018|SYS_INFO|Sorting hosts overload
+2015-10-03 14:47:39,436|737018|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:47:39,436|737018|SYS_INFO|Not available host
+2015-10-03 14:47:42,502|740084|SYS_INFO|Instance: random-0, 1443784067.18 State: resized
+2015-10-03 14:47:42,502|740084|SYS_INFO|New task: None Old task: resize_finish
+2015-10-03 14:47:42,502|740084|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: resized New_task: None
+2015-10-03 14:47:48,092|745674|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:47:48,092|745674|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:47:48,092|745674|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:47:48,092|745674|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:47:48,092|745674|SYS_INFO|Sorting hosts overload
+2015-10-03 14:47:48,092|745674|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:47:48,094|745676|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:47:48,094|745676|SYS_INFO|Found instance to migrate random-0, 1443876347.67
+2015-10-03 14:47:48,094|745676|SYS_INFO|Weight with: 190.89627391742195 Weight without: 237.34138972809666
+2015-10-03 14:47:48,099|745681|SYS_INFO|Scheduled migrate
+2015-10-03 14:48:26,404|783986|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:48:26,405|783987|SYS_INFO|New task: resize_prep Old task: resize_prep
+2015-10-03 14:48:26,405|783987|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: active New_task: resize_prep
+2015-10-03 14:48:26,482|784064|SYS_INFO|Confirmed migration of server random-0, 1443784067.18 ID: 49cd2bfe-5d29-4f52-9878-613435427990
+2015-10-03 14:48:26,483|784065|SYS_INFO|Deleted migrate task ID 49cd2bfe-5d29-4f52-9878-613435427990
+2015-10-03 14:48:30,474|788056|SYS_INFO|Instance: random-0, 1443784067.18 State: resized
+2015-10-03 14:48:30,474|788056|SYS_INFO|New task: None Old task: None
+2015-10-03 14:48:30,476|788058|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: resized New_task: None
+2015-10-03 14:48:45,634|803216|SYS_INFO|Scheduled migration of server random-0, 1443876347.67 ID: c822b99b-00ef-49ab-81d8-c23e979779ac
+2015-10-03 14:48:47,621|805203|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:48:47,622|805204|SYS_INFO|New task: resize_prep Old task: resize_prep
+2015-10-03 14:48:47,622|805204|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: active New_task: resize_prep
+2015-10-03 14:48:48,565|806148|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:48:48,565|806148|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:48:48,565|806148|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:48:48,565|806148|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:48:48,566|806148|SYS_INFO|Sorting hosts overload
+2015-10-03 14:48:48,566|806148|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:48:48,566|806148|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:48:48,568|806150|SYS_INFO|Skipping host node-2.domain.tld , it has migrating instances
+2015-10-03 14:48:48,568|806150|SYS_INFO|Not available host
+2015-10-03 14:49:00,698|818280|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:49:00,698|818280|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:49:00,698|818280|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:49:00,700|818282|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:49:00,700|818282|SYS_INFO|Sorting hosts overload
+2015-10-03 14:49:00,700|818282|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:49:00,700|818282|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:49:00,700|818282|SYS_INFO|Skipping host node-2.domain.tld , it has migrating instances
+2015-10-03 14:49:00,700|818282|SYS_INFO|Not available host
+2015-10-03 14:49:01,961|819543|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:49:01,963|819545|SYS_INFO|New task: None Old task: None
+2015-10-03 14:49:01,963|819545|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: active New_task: None
+2015-10-03 14:49:01,963|819545|MIGRATION_CONFIRMED|Host: node-2 Instance: random-0, 1443784067.18
+2015-10-03 14:49:01,963|819545|SYS_INFO|Deleted confirm task ID 49cd2bfe-5d29-4f52-9878-613435427990
+2015-10-03 14:49:04,625|822207|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:49:04,625|822207|SYS_INFO|New task: resize_migrating Old task: resize_prep
+2015-10-03 14:49:04,625|822207|VM_INFO|Host: node-4 Name: random-0, 1443876347.67 State: active New_task: resize_migrating
+2015-10-03 14:49:04,625|822207|MIGRATION_STARTED|Host: node-4 Instance: random-0, 1443876347.67
+2015-10-03 14:49:09,032|826615|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:49:09,033|826615|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:49:09,033|826615|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 14:49:09,033|826615|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 14:49:09,033|826615|SYS_INFO|Sorting hosts overload
+2015-10-03 14:49:09,035|826617|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:49:09,035|826617|SYS_INFO|Skipping host node-4.domain.tld , it has migrating instances
+2015-10-03 14:49:09,035|826617|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:49:09,035|826617|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:49:09,035|826617|SYS_INFO|Not available host
+2015-10-03 14:49:15,109|832691|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:49:15,109|832691|SYS_INFO|New task: resize_migrated Old task: resize_migrating
+2015-10-03 14:49:15,109|832691|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: active New_task: resize_migrated
+2015-10-03 14:49:24,335|841917|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:49:24,336|841918|SYS_INFO|New task: resize_finish Old task: resize_migrated
+2015-10-03 14:49:24,336|841918|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: active New_task: resize_finish
+2015-10-03 14:49:34,561|852143|SYS_INFO|Instance: random-0, 1443876347.67 State: resized
+2015-10-03 14:49:34,561|852143|SYS_INFO|New task: None Old task: resize_finish
+2015-10-03 14:49:34,562|852144|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: resized New_task: None
+2015-10-03 14:49:38,322|855904|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 14:49:38,331|855913|SYS_INFO|Collecting information about compute nodes
+2015-10-03 14:50:10,869|888451|SYS_INFO|Collecting information about services
+2015-10-03 14:50:20,789|898371|SYS_INFO|Collecting information about VMs
+2015-10-03 14:50:32,141|909723|SYS_INFO|Processing collected data
+2015-10-03 14:50:32,147|909729|SYS_INFO|Instance: random-0, 1443784067.18 State: active
+2015-10-03 14:50:32,147|909729|SYS_INFO|New task: None Old task: None
+2015-10-03 14:50:32,147|909729|VM_INFO|Host: node-2 Name: random-0, 1443784067.18 State: active New_task: None
+2015-10-03 14:50:32,147|909729|MIGRATION_CONFIRMED|Host: node-2 Instance: random-0, 1443784067.18
+2015-10-03 14:50:32,147|909729|SYS_INFO|Instance: random 01443771998.4 State: active
+2015-10-03 14:50:32,148|909730|SYS_INFO|New task: None Old task: None
+2015-10-03 14:50:32,148|909730|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 14:50:32,148|909730|SYS_INFO|Instance: random 01443772221.06 State: active
+2015-10-03 14:50:32,148|909730|SYS_INFO|New task: None Old task: None
+2015-10-03 14:50:32,148|909730|VM_INFO|Host: node-4 Name: random 01443772221.06 State: active New_task: None
+2015-10-03 14:50:32,148|909730|SYS_INFO|Instance: random-1, 1443876353.19 State: active
+2015-10-03 14:50:32,148|909730|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:50:32,150|909732|VM_INFO|Host: node-4 Name: random-1, 1443876353.19 State: active New_task: None
+2015-10-03 14:50:32,150|909732|SYS_INFO|Instance: random-0, 1443876347.67 State: resized
+2015-10-03 14:50:32,150|909732|SYS_INFO|New task: None Old task: resize_finish
+2015-10-03 14:50:32,150|909732|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: resized New_task: None
+2015-10-03 14:50:32,150|909732|SYS_INFO|Instance: random-2, 1443876356.52 State: active
+2015-10-03 14:50:32,151|909733|SYS_INFO|New task: None Old task: spawning
+2015-10-03 14:50:32,151|909733|VM_INFO|Host: node-4 Name: random-2, 1443876356.52 State: active New_task: None
+2015-10-03 14:50:32,151|909733|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:50:32,151|909733|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:50:32,151|909733|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,151|909733|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,153|909735|SYS_INFO|Sorting hosts overload
+2015-10-03 14:50:32,154|909736|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 14:50:32,157|909739|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:50:32,157|909739|SYS_INFO|Not available host
+2015-10-03 14:50:32,164|909746|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:50:32,164|909746|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:50:32,164|909746|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,164|909746|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,164|909746|SYS_INFO|Sorting hosts overload
+2015-10-03 14:50:32,165|909747|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:50:32,165|909747|SYS_INFO|Not available host
+2015-10-03 14:50:32,187|909769|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:50:32,188|909770|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:50:32,188|909770|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,188|909770|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:50:32,188|909770|SYS_INFO|Sorting hosts overload
+2015-10-03 14:50:32,190|909772|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:50:32,190|909772|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:50:32,190|909772|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:50:32,190|909772|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:50:32,190|909772|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:50:32,190|909773|SYS_INFO|Migration will have no effect
+2015-10-03 14:50:32,190|909773|SYS_INFO|Not available host
+2015-10-03 14:50:32,190|909773|SYS_INFO|Found instance to migrate random-2, 1443876356.52
+2015-10-03 14:50:32,190|909773|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:50:32,190|909773|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:50:32,190|909773|SYS_INFO|Migration will have no effect
+2015-10-03 14:50:32,191|909773|SYS_INFO|Not available host
+2015-10-03 14:50:32,191|909773|SYS_INFO|Found instance to migrate random-1, 1443876353.19
+2015-10-03 14:50:32,191|909773|SYS_INFO|Host node-2.domain.tld doesn't have enough VCPU-s. Required 1 VCPU, available 0 VCPU
+2015-10-03 14:50:32,191|909773|SYS_INFO|Host node-2.domain.tld doesn't have enough resources 
+2015-10-03 14:50:32,191|909773|SYS_INFO|Migration will have no effect
+2015-10-03 14:50:32,191|909773|SYS_INFO|Not available host
+2015-10-03 14:50:59,315|936898|SYS_INFO|Confirmed migration of server random-0, 1443876347.67 ID: c822b99b-00ef-49ab-81d8-c23e979779ac
+2015-10-03 14:50:59,315|936898|SYS_INFO|Deleted migrate task ID c822b99b-00ef-49ab-81d8-c23e979779ac
+2015-10-03 14:51:03,914|941496|SYS_INFO|Instance: random-0, 1443876347.67 State: resized
+2015-10-03 14:51:03,914|941496|SYS_INFO|New task: None Old task: None
+2015-10-03 14:51:03,914|941496|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: resized New_task: None
+2015-10-03 14:51:08,730|946312|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:51:08,730|946312|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:51:08,732|946314|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:51:08,732|946314|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:51:08,732|946314|SYS_INFO|Sorting hosts overload
+2015-10-03 14:51:08,732|946314|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:51:08,732|946314|SYS_INFO|Skipping host node-2.domain.tld , it has migrating instances
+2015-10-03 14:51:08,733|946315|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 14:51:08,733|946315|SYS_INFO|Found instance to migrate random 01443772221.06
+2015-10-03 14:51:08,733|946315|SYS_INFO|Not available host
+2015-10-03 14:51:08,733|946315|SYS_INFO|Found instance to migrate random-2, 1443876356.52
+2015-10-03 14:51:08,733|946315|SYS_INFO|Not available host
+2015-10-03 14:51:08,733|946315|SYS_INFO|Found instance to migrate random-1, 1443876353.19
+2015-10-03 14:51:08,733|946315|SYS_INFO|Not available host
+2015-10-03 14:51:10,089|947671|SYS_INFO|Instance: random-0, 1443876347.67 State: active
+2015-10-03 14:51:10,089|947671|SYS_INFO|New task: None Old task: None
+2015-10-03 14:51:10,089|947671|VM_INFO|Host: node-2 Name: random-0, 1443876347.67 State: active New_task: None
+2015-10-03 14:51:10,091|947673|MIGRATION_CONFIRMED|Host: node-2 Instance: random-0, 1443876347.67
+2015-10-03 14:51:10,091|947673|SYS_INFO|Deleted confirm task ID c822b99b-00ef-49ab-81d8-c23e979779ac
+2015-10-03 14:51:13,078|950661|TOTAL_VMS|Total: 6 vms
+2015-10-03 14:51:13,078|950661|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 14:51:13,079|950661|NODE_INFO|node-2.domain.tld: 3 State: up enabled
+2015-10-03 14:51:13,079|950661|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 14:51:13,079|950661|SYS_INFO|Sorting hosts overload
+2015-10-03 14:51:13,079|950661|SYS_INFO|Searching for the most overloaded host
+2015-10-03 14:51:13,079|950661|SYS_INFO|Found host node-2.domain.tld
+2015-10-03 14:51:13,081|950663|SYS_INFO|Found instance to migrate random 01443771998.4
+2015-10-03 14:51:13,081|950663|SYS_INFO|Not available host
+2015-10-03 14:51:38,144|975726|SYS_INFO|Connection closed

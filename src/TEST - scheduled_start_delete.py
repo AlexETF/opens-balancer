@@ -1,25 +1,26 @@
 import random
 import sys
 from time import time
+from config import test_config
 from config import credentials
 from services.auth_service import AuthService
-from novaclient.v2 import Client
+from novaclient import client
 from threading import Timer
 
 """ Configure paramteres """
 
-start_interval  = 10 * 60   #interval (10min)
-delete_interval = 15 * 60   #interval (15min)
+start_interval  = test_config.scheduled_times['start_interval']
+delete_interval = test_config.scheduled_times['delete_interval']
 
-deviation = 60
+deviation = test_config.scheduled_times['deviation']
 
-flavor_name = 'm1.micro'
-image_name = 'TestVM'
-availability_zone = 'nova'
-host_to_start_instances = 'node-5'
-host_to_delete_instances = 'node-4'
+flavor_name = test_config.instance_properties['flavor_name']
+image_name = test_config.instance_properties['image_name']
+availability_zone = test_config.instance_properties['availability_zone']
+host_to_start_instances =  test_config.instance_properties['hosts']['host_to_start']
+host_to_delete_instances = test_config.instance_properties['hosts']['host_to_delete']
 
-max_instances = 7
+max_instances = test_config.instance_properties['max_instances']
 
 
 def start_timer_start():
@@ -43,48 +44,54 @@ user_domain_name = credentials.keystone_cfg['user_domain_name']
 project_name = credentials.keystone_cfg['project_name']
 project_domain_name =  credentials.keystone_cfg['project_domain_name']
 
-auth_service = AuthService(keystone_url=keystone_url,
-                           username=username,
+VERSION = credentials.keystone_cfg['nova_api_version']
+
+auth_service = AuthService(keystone_url = keystone_url,
+                           username = username,
                            password = password,
                            user_domain_name = user_domain_name,
-                           project_name=project_name,
-                           project_domain_name=project_domain_name)
+                           project_name = project_name,
+                           project_domain_name = project_domain_name,
+                           nova_api_version = VERSION)
 
 print('Authenticating, waiting server to respond')
-client = Client(session = auth_service.get_session())
+novaclient = client.Client(VERSION, session = auth_service.get_session())
 print('Getting desired flavor %s' % flavor_name)
-flavor = client.flavors.find(name = flavor_name)
+flavor = novaclient.flavors.find(name = flavor_name)
 print('Getting desired image %s' % image_name)
-image = client.images.find(name = image_name)
+image = novaclient.images.find(name = image_name)
 print('Getting network list')
-networks = client.networks.list()
+networks = novaclient.networks.list()
 print('Creating nic')
 nics = [{'net-id' : networks[0].id}]
 
 def start_instances():
    """ Scheduled task for starting random number of instances """
-   client = Client(session = auth_service.get_session())
-   servers  = client.servers.list()
+   novaclient = client.Client(auth_service.get_nova_api_version(), session = auth_service.get_session())
+   servers  = novaclient.servers.list()
    if len(servers) >= max_instances:
        print('INFO: Already too much servers')
        start_timer_start()
        return
    random_num = random.randrange(3) + 1
+   if (len(servers) + random_num) > max_instances:
+       random_num = max_instances - random_num
+
    for i in range(random_num):
        name = 'random-' + str(i) + ', ' + str(time())
        print('Starting %s' % name)
-       server = client.servers.create(name = name,
-                                      image = image.id,
-                                      flavor = flavor.id,
-                                      nics = nics,
-                                      availability_zone = availability_zone + ':' + host_to_start_instances)
+       server = novaclient.servers.create(name = name,
+                                          image = image.id,
+                                          flavor = flavor.id,
+                                          nics = nics,
+                                          availability_zone = availability_zone + ':' + host_to_start_instances)
    start_timer_start()
 
 
 def delete_instances():
     """ Scheduled task for deleting random number of instances """
-    client = Client(session = auth_service.get_session())
-    servers = client.servers.list()
+    novaclient = client.Client(auth_service.get_nova_api_version(), session = auth_service.get_session())
+    servers = novaclient.servers.list()
     filtered_servers = []
     for server in servers:
         if server.to_dict()['OS-EXT-SRV-ATTR:host'] == host_to_delete_instances:
@@ -95,19 +102,18 @@ def delete_instances():
         print('INFO: No servers to delete')
         start_timer_delete()
         return
-    index = random.randrange(num_of_instances + 1)
+    index = random.randrange(num_of_instances) + 1
     if index == num_of_instances:
         index = index - 1
     print('INFO: Number of servers to delete %d ' % (index))
     for i in range(index):
         print('INFO: Deleting server %s' % servers[i].name)
-        client.servers.delete(servers[i])
+        novaclient.servers.delete(servers[i])
 
     start_timer_delete()
 
 start_timer_start()
 start_timer_delete()
-
 
 while True:
     command = raw_input()

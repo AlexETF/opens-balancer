@@ -1,0 +1,45 @@
+2015-10-03 16:09:38,417|1023|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-03 16:09:38,500|1105|SYS_INFO|Collecting information about compute nodes
+2015-10-03 16:09:39,779|2384|SYS_INFO|Collecting information about services
+2015-10-03 16:09:40,480|3085|SYS_INFO|Collecting information about VMs
+2015-10-03 16:09:42,039|4644|SYS_INFO|Processing collected data
+2015-10-03 16:09:55,332|17937|VM_INFO|Host: node-4 Name: random-1, 1443880602.31 State: active New_task: None
+2015-10-03 16:09:55,334|17939|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,334|17939|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,335|17940|NODE_INFO|node-2.domain.tld: 0 State: up enabled
+2015-10-03 16:09:55,335|17940|NODE_INFO|node-4.domain.tld: 0 State: up enabled
+2015-10-03 16:09:55,335|17940|VM_INFO|Host: node-2 Name: random 01443771998.4 State: active New_task: None
+2015-10-03 16:09:55,335|17940|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,335|17940|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,335|17940|NODE_INFO|node-2.domain.tld: 0 State: up enabled
+2015-10-03 16:09:55,335|17940|NODE_INFO|node-4.domain.tld: 1 State: up enabled
+2015-10-03 16:09:55,336|17941|VM_INFO|Host: node-2 Name: random-2, 1443880614.37 State: resized New_task: None
+2015-10-03 16:09:55,336|17941|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,336|17941|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,336|17941|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-03 16:09:55,336|17941|NODE_INFO|node-4.domain.tld: 1 State: up enabled
+2015-10-03 16:09:55,338|17943|VM_INFO|Host: node-4 Name: random-0, 1443878841.37 State: active New_task: None
+2015-10-03 16:09:55,338|17943|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,338|17944|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,338|17944|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 16:09:55,339|17944|NODE_INFO|node-4.domain.tld: 1 State: up enabled
+2015-10-03 16:09:55,341|17946|VM_INFO|Host: node-4 Name: random-0, 1443880584.46 State: active New_task: None
+2015-10-03 16:09:55,341|17946|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,342|17947|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,342|17947|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 16:09:55,344|17949|NODE_INFO|node-4.domain.tld: 2 State: up enabled
+2015-10-03 16:09:55,345|17950|VM_INFO|Host: node-4 Name: random-0, 1443879483.02 State: active New_task: None
+2015-10-03 16:09:55,345|17950|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,348|17953|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,349|17954|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 16:09:55,351|17957|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-03 16:09:55,352|17957|TOTAL_VMS|Total: 6 vms
+2015-10-03 16:09:55,354|17959|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-03 16:09:55,355|17960|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-03 16:09:55,355|17960|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-03 16:09:55,357|17962|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-03 16:09:56,506|19111|SYS_INFO|Sorting hosts overload
+2015-10-03 16:09:56,506|19111|SYS_INFO|Searching for the most overloaded host
+2015-10-03 16:09:56,506|19111|SYS_INFO|Found host node-4.domain.tld
+2015-10-03 16:09:56,506|19111|SYS_INFO|Found instance to migrate random-0, 1443880584.46
+2015-10-03 16:09:56,507|19112|SYS_INFO|Weight with: 190.89627391742195 Weight without: 237.34138972809666

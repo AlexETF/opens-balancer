@@ -1,17 +1,17 @@
 import sys
 import random
 from time import time
-from config import credentials
+from config import credentials, test_config
 from services.auth_service import AuthService
-from novaclient.v2 import Client
+from novaclient import client
 
 def main():
 
-    flavor_name = 'm1.micro'
-    image_name = 'TestVM'
-    availability_zone = 'nova'
+    flavor_name = test_config.instance_properties['flavor_name']
+    image_name = test_config.instance_properties['image_name']
+    availability_zone = test_config.instance_properties['availability_zone']
 
-    DEFAULT = 2
+    DEFAULT = test_config.instance_properties['default_number_of_intances']
 
     if len(sys.argv) < 2:
         print('INFO: Number of instances is not passed, using DEFAULT = %d' % DEFAULT)
@@ -31,35 +31,41 @@ def main():
     project_name = credentials.keystone_cfg['project_name']
     project_domain_name =  credentials.keystone_cfg['project_domain_name']
 
+    VERSION = credentials.keystone_cfg['nova_api_version']
+
     auth_service = AuthService(keystone_url=keystone_url,
-                               username=username,
+                               username = username,
                                password = password,
                                user_domain_name = user_domain_name,
-                               project_name=project_name,
-                               project_domain_name=project_domain_name)
+                               project_name = project_name,
+                               project_domain_name = project_domain_name,
+                               nova_api_version = VERSION)
 
-    print('Authenticating, waiting server to respond')
-    client = Client(session = auth_service.get_session())
-    print('Getting desired flavor %s' % flavor_name)
-    flavor = client.flavors.find(name = flavor_name)
-    print('Getting desired image %s' % image_name)
-    image = client.images.find(name = image_name)
-    print('Getting network list')
-    networks = client.networks.list()
-    print('Creating nic with network id %s' % networks[0].id)
-    nics = [{'net-id' : networks[0].id}]
+    try:
+        print('Authenticating, waiting server to respond')
+        nova = client.Client(VERSION, session=auth_service.get_session())
+        print('Getting desired flavor %s' % flavor_name)
+        flavor = nova.flavors.find(name = flavor_name)
+        print('Getting desired image %s' % image_name)
+        image = nova.images.find(name = image_name)
+        print('Getting network list')
+        networks = nova.networks.list()
+        print('Creating nic with network id %s' % networks[0].id)
+        nics = [{'net-id' : networks[0].id}]
 
+        for i in range(num_instances):
+            name = 'random ' + str(i) + str(time())
+            print('Starting server %s' % name)
+            server = nova.servers.create(name = name,
+                                            image = image.id,
+                                            flavor = flavor.id,
+                                            nics = nics,
+                                            availability_zone = availability_zone)
 
-    for i in range(num_instances):
-        name = 'random ' + str(i) + str(time())
-        print('Starting server %s' % name)
-        server = client.servers.create(name = name,
-                                        image = image.id,
-                                        flavor = flavor.id,
-                                        nics = nics,
-                                        availability_zone = availability_zone)
+        print 'Finished ...'
 
-    print 'Finished ...'
+    except Exception as e:
+        print e
 
 if __name__ == '__main__':
     main()

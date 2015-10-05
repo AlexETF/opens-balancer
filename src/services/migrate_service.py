@@ -1,7 +1,7 @@
 
 import sys
 import logging
-from novaclient.v2 import client
+from novaclient import client
 from keystoneclient import session
 from threading import Thread
 from threading import Lock
@@ -44,7 +44,7 @@ class MigrateService(object):
             self.__confirm_tasks.remove(server_id)
             self.logger.debug('Deleted confirm task ID %s' % server_id)
 
-    def schedule_migrate(self, server_id, node):
+    def schedule_migration(self, server_id):
         self.__lock.acquire()
         if self.__check_if_task_exists(server_id) == True:
             self.__lock.release()
@@ -95,11 +95,11 @@ class MigrationThread(Thread):
     def run(self):
         try:
             sess = self.__migrate_service.auth_service.get_session()
-            nova_client = client.Client(session = sess)
-            server = nova_client.servers.find(id=self.__server_id)
-            nova_client.servers.migrate(server = server)
+            version = self.__migrate_service.auth_service.get_nova_api_version()
+            novaclient = client.Client(version, session = sess)
+            server = novaclient.servers.find(id=self.__server_id)
+            novaclient.servers.migrate(server = server)
             self.logger.info('Scheduled migration of server %s ID: %s' % (server.name, server.id))
-
         except Exception as e:
             self.logger.error('Failed to migrate server ID: %s' % (self.__server_id))
             self.logger.exception(e)
@@ -113,7 +113,7 @@ class MigrationThread(Thread):
 class LiveBlockMigrationThread(Thread):
 
         def __init__(self, server_id, host, migrate_service, logger = None):
-            Thread.__init(self)
+            Thread.__init__(self)
             self.__server_id = server_id
             self.__host = host
             self.__migrate_service = migrate_service
@@ -123,9 +123,10 @@ class LiveBlockMigrationThread(Thread):
         def run(self):
             try:
                 sess = self.__migrate_service.auth_service.get_session()
-                nova_client = client.Client(session = sess)
-                server = nova_client.servers.find(id = self.__server_id)
-                nova_client.servers.live_migrate(server = server, host = self.__host, block_migration = True)
+                version = self.__migrate_service.auth_service.get_nova_api_version()
+                novaclient = client.Client(version, session = sess)
+                server = novaclient.servers.find(id = self.__server_id)
+                novaclient.servers.live_migrate(server = server, host = self.__host, block_migration = True, disk_over_commit = False)
                 self.logger.info('Scheduled live migration of server %s ID: %s' % (server.name, server.id))
                 self.__migrate_service.task_done(self.__server_id)
             except Exception as e:
@@ -147,10 +148,11 @@ class ConfirmThread(Thread):
         def run(self):
             try:
                 sess = self.__migrate_service.auth_service.get_session()
-                nova_client = client.Client(session = sess)
-                server = nova_client.servers.find(id = self.__server_id)
+                version = self.__migrate_service.auth_service.get_nova_api_version()
+                novaclient = client.Client(version, session = sess)
+                server = novaclient.servers.find(id = self.__server_id)
                 if server.status == CONFIRM_RESIZE_STATE:
-                    nova_client.servers.confirm_resize(server = server)
+                    novaclient.servers.confirm_resize(server = server)
                     self.logger.info('Confirmed migration of server %s ID: %s' % (server.name, server.id))
                     self.__migrate_service.task_done(self.__server_id)
             except Exception as e:

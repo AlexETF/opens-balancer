@@ -29,16 +29,19 @@ class RamFilter(filters.BaseFilter):
 
     def weight_host(self, host):
         """ Return Weight of host based on his parameter """
-        return host.memory_mb_used * self.ram_weight
+        ram_ratio = (host.memory_mb_used * 100.0) / host.memory_mb
+        return ram_ratio * self.ram_weight
 
     def weight_host_without_vm(self, host, vm):
         if vm.id in host.vm_instances.keys():
-            return (host.memory_mb_used - vm.memory_mb) * self.ram_weight
+            ram_ratio = ((host.memory_mb_used - vm.memory_mb) * 100.0) / host.memory_mb
         else:
-            return host.memory_mb_used *  self.ram_weight
+            ram_ratio = (host.memory_mb_used * 100.0) / host.memory_mb
+        return ram_ratio * self.ram_weight
 
     def weight_host_with_vm(self, host, vm):
-        return (host.memory_mb_used + vm.memory_mb) * self.ram_weight
+        ram_ratio = ((host.memory_mb_used + vm.memory_mb) * 100.0)/ host.memory_mb
+        return ram_ratio * self.ram_weight
 
     def get_weight(self):
         """ Return Weight parameter """

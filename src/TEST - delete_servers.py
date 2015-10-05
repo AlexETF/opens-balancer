@@ -1,12 +1,12 @@
 import sys
-from config import credentials
+from config import credentials, test_config
 from services.auth_service import AuthService
-from novaclient.v2 import Client
+from novaclient import client
 
 
 def main():
 
-    DEFAULT = 2
+    DEFAULT = test_config.instance_properties['default_number_of_intances']
 
     if len(sys.argv) < 2:
         print('INFO: Number of instances to delete is not passed, using DEFAULT = %d' % DEFAULT)
@@ -26,17 +26,20 @@ def main():
     project_name = credentials.keystone_cfg['project_name']
     project_domain_name =  credentials.keystone_cfg['project_domain_name']
 
+    VERSION = credentials.keystone_cfg['nova_api_version']
+
     auth_service = AuthService(keystone_url=keystone_url,
                                username=username,
                                password = password,
                                user_domain_name = user_domain_name,
                                project_name=project_name,
-                               project_domain_name=project_domain_name)
+                               project_domain_name=project_domain_name,
+                               nova_api_version = VERSION)
 
     print('Authenticating, waiting server to respond')
-    client = Client(session = auth_service.get_session())
+    novaclient = client.Client(VERSION, session = auth_service.get_session())
     print('Waiting for server list ')
-    servers  = client.servers.list()
+    servers  = novaclient.servers.list()
     total_num = len(servers)
 
     print('Total number of servers %d' % total_num)
@@ -46,7 +49,7 @@ def main():
 
     for i in range(num_instances):
         print('Deleting server %s ' % servers[i].name)
-        client.servers.delete(servers[i])
+        novaclient.servers.delete(servers[i])
 
     print 'Finished ...'
 

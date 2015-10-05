@@ -5,11 +5,14 @@ import operator
 from time import time
 import logging
 from config import config
-from novaclient.v2 import Client
+from novaclient import client
 from services.migrate_service import MigrateService
 from threading import Lock, Timer
 from services.filters import core_filter, ram_filter, disk_filter
 from novaclient.exceptions import from_response
+
+ALLOW_MIGRATE_TIME = config.migrate_time
+
 
 class RabbitMQMessageService(object):
 
@@ -33,6 +36,7 @@ class RabbitMQMessageService(object):
         # Logger object
         self.logger = logger or logging.getLogger(__name__)
 
+
     def stop_periodic_check(self):
         if self.__task != None:
             self.logger.info('Periodic collectiong of data canceled')
@@ -44,19 +48,19 @@ class RabbitMQMessageService(object):
         self.__task = Timer(config.periodic_check_interval, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
-        self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
+        self.logger.info('Scheduled periodic check for %d sec' % config.periodic_check_interval)
 
     def initialize(self):
         self.__lock.acquire()
         try:
-            self.logger.info('Initializing RabbitMQMessageService')
-            client = Client(session=self.__auth_service.get_session())
+            self.logger.sys_info('Initializing RabbitMQMessageService')
+            novaclient = client.Client(self.__auth_service.get_nova_api_version(), session=self.__auth_service.get_session())
             self.logger.info('Collecting information about compute nodes')
-            hypervisors  = client.hypervisors.list(detailed=True)
+            hypervisors  = novaclient.hypervisors.list(detailed=True)
             self.logger.info('Collecting information about services')
-            services = client.services.list()
+            services = novaclient.services.list()
             self.logger.info('Collecting information about VMs')
-            servers  = client.servers.list(detailed=True)
+            servers  = novaclient.servers.list(detailed=True)
             self.logger.info('Processing collected data')
         except from_response as e:
             self.logger.error('Failed to collect data, request requires authentification (HTTP 401)')
@@ -134,7 +138,7 @@ class RabbitMQMessageService(object):
                 vm_instance.user_id = server['user_id']
 
                 vm_instance.instance_flavor_id = server['flavor']['id']
-                flavor = client.flavors.get(flavor = vm_instance.instance_flavor_id)
+                flavor = novaclient.flavors.get(flavor = vm_instance.instance_flavor_id)
                 flavor = flavor.to_dict()
                 vm_instance.instance_flavor = flavor['name']
                 vm_instance.disk_gb = flavor['disk']
@@ -142,7 +146,7 @@ class RabbitMQMessageService(object):
                 vm_instance.vcpus = flavor['vcpus']
                 vm_instance.memory_mb = flavor['ram']
 
-                image_meta = client.images.get(image = server['image']['id'])
+                image_meta = novaclient.images.get(image = server['image']['id'])
                 image_meta = image_meta.to_dict()
                 vm_instance.image_meta.min_disk = image_meta['minDisk']
                 vm_instance.image_meta.min_ram = image_meta['minRam']
@@ -154,6 +158,8 @@ class RabbitMQMessageService(object):
         self.__vm_instances = init_vm_instances
         for instance in self.__vm_instances.values():
             self.__process_vm_instance(vm_instance = instance)
+
+        self.print_short_info()
 
         self.__check_overload = True
         self.__lock.release()
@@ -224,9 +230,11 @@ class RabbitMQMessageService(object):
                 self.__lock.release()
                 return
             hosts.sort(key = operator.attrgetter('metrics_weight'))
-            for vm in node.vm_instances.values():
+            vms = node.vm_instances.values()
+            vms.sort(key = operator.attrgetter('memory_mb'))
+            for vm in vms:
                 mig_time = vm.last_migrate_time
-                if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > config.migrate_time)):
+                if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > ALLOW_MIGRATE_TIME)):
                     self.logger.debug('Found instance to migrate %s' % vm.display_name)
                     for available_node in hosts:
                         if available_node.id == node.id or available_node.metrics_weight == node.metrics_weight:
@@ -241,15 +249,13 @@ class RabbitMQMessageService(object):
                             weight_without += filt.weight_host_without_vm(host = node, vm = vm)
                         if passes and weight_without >= weight_with:
                             self.logger.info('Weight with: %r Weight without: %r' % (weight_with, weight_without))
-                            if self.__migrate_service.schedule_migrate(vm.id, node):
-                                self.logger.debug('Scheduled migrate')
+                            if self.__migrate_service.schedule_live_migration(vm.id, available_node):
+                                self.logger.debug('Scheduled migrate to %s' % available_node.hypervisor_hostname)
                             else:
                                 self.logger.debug('Failed to schedule migrate, task already exists')
                             self.__check_overload = False
                             self.__lock.release()
                             return
-                        if not passes:
-                            self.logger.debug("Host %s doesn't have enough resources " % available_node.hypervisor_hostname)
                         if not weight_without >= weight_with:
                             self.logger.debug('Migration will have no effect')
             self.__check_overload = False
@@ -301,11 +307,9 @@ class RabbitMQMessageService(object):
             service.print_info()
 
     def print_short_info(self):
-        # print('Total compute nodes: %d' % len(self.__compute_nodes))
-        # print('Total services: %d' % len(self.__services))
-        self.logger.info('Total vms: %d' % len(self.__vm_instances))
+        self.logger.total_info('Total: %d vms' % len(self.__vm_instances))
         for node in self.__compute_nodes.values():
-            self.logger.info('Node %s: %d State: %s, %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
+            self.logger.node_info('%s: %d State: %s %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
 
     def __calculate_node_overload_and_weight(self, node):
         weight = 0
@@ -347,6 +351,8 @@ class RabbitMQMessageService(object):
             self.__compute_nodes[node.id] = node
 
             self.__check_overload = True
+
+            self.print_short_info()
 
         elif method == 'service_update':
             parsed_json = message
@@ -411,48 +417,48 @@ class RabbitMQMessageService(object):
             self.__process_vm_instance(vm_instance)
 
     def __process_vm_instance(self, vm_instance):
-        self.logger.debug('Instance %s State: %s' % (vm_instance.display_name, vm_instance.state))
-        self.logger.debug('New task: %s Old task: %s' % (vm_instance.new_task_state, vm_instance.old_task_state))
+        # self.logger.debug('Instance: %s State: %s' % (vm_instance.display_name, vm_instance.state))
+        # self.logger.debug('New task: %s Old task: %s' % (vm_instance.new_task_state, vm_instance.old_task_state))
+
+        self.logger.vm_info('Host: %s Name: %s State: %s New_task: %s'% (vm_instance.host, vm_instance.display_name, vm_instance.state, vm_instance.new_task_state))
+
+        self.print_short_info()
 
         if vm_instance.needs_to_verify_migrate():
             self.__migrate_service.schedule_confirm(vm_instance.id)
-            if vm_instance.compute_node is not None:
-                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-            self.add_vm_instance_to_node(vm_instance)
 
         elif vm_instance.is_active():
-            if vm_instance.is_verified_migrate():
+            if vm_instance.is_started_to_migrate():
+                self.logger.migration_started('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
                 vm_instance.last_migrate_time = time()
+            elif vm_instance.is_verified_migrate():
+                vm_instance.last_migrate_time = time()
+                self.logger.migration_confirmed('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
                 self.__migrate_service.confirm_task_done(vm_instance.id)
-
-            if vm_instance.compute_node is not None:
-                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-            self.add_vm_instance_to_node(vm_instance)
 
         elif vm_instance.is_deleted():
             if vm_instance.id in self.__vm_instances.keys():
                 del self.__vm_instances[vm_instance.id]
-                if vm_instance.compute_node is not None:
-                    vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
+            if vm_instance.compute_node is not None:
+                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
 
         elif vm_instance.is_in_error_state():
             self.logger.warning('Instance %s is in error state' % (vm_instance.display_name))
-            if vm_instance.compute_node is not None:
-                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
-            self.add_vm_instance_to_node(vm_instance)
             if vm_instance.compute_node is None:
                 self.logger.warning('Instance %s is not spawned on any node' % (vm_instance.display_name))
-        else:
-            if vm_instance.compute_node is not None:
-                vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
+
+        if vm_instance.compute_node is not None:
+            vm_instance.compute_node.remove_from_vm_instances(vm_instance.id)
+
+        if not vm_instance.is_deleted():
             self.add_vm_instance_to_node(vm_instance)
 
     def __periodic_check(self):
         self.initialize()
-        self.__task = Timer(config.periodic_check_interval * 60, self.__periodic_check)
+        self.__task = Timer(config.periodic_check_interval, self.__periodic_check)
         self.__task.setDaemon(True)
         self.__task.start()
-        self.logger.info('Scheduled periodic check for %d min' % config.periodic_check_interval)
+        self.logger.info('Scheduled periodic check for %d sec' % config.periodic_check_interval)
 
 #
 #   Class that holds system information about servers running
@@ -597,6 +603,14 @@ class VMInstance(object):
         if self.state == 'building':
             return True
         elif self.new_task_state in states:
+            return True
+        else:
+            return False
+
+    def is_started_to_migrate(self):
+        if self.new_task_state == 'resize_migrating' and self.old_task_state == 'resize_prep':
+            return True
+        elif self.new_task_state == 'migrating' and self.old_task_state == None:
             return True
         else:
             return False
