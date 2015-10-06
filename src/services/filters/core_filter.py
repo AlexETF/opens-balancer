@@ -31,15 +31,8 @@ class CoreFilter(filters.BaseFilter):
         core_ratio = (host.vcpus_used * 100.0) / host.vcpus
         return core_ratio * self.vcpu_weight
 
-    def weight_host_without_vm(self, host, vm):
-        if vm.id in host.vm_instances.keys():
-            core_ratio = ((host.vcpus_used - vm.vcpus) * 100.0) / host.vcpus
-        else:
-            core_ration = (host.vcpus_used * 100.0) / host.vcpus
-        return core_ratio * self.vcpu_weight
-
-    def weight_host_with_vm(self, host, vm):
-        core_ratio = ((host.vcpus_used + vm.vcpus) * 100.0) / host.vcpus
+    def weight_instance_on_host(self, host, vm):
+        core_ratio = (vm.vcpus * 100.0) / host.vcpus
         return core_ratio * self.vcpu_weight
 
     def get_weight(self):

@@ -12,7 +12,7 @@ class MigrateService(object):
 
     def __init__(self, auth_service, logger = None):
         self.__lock = Lock()
-        self.__migrating_tasks = []
+        self.__migrating_tasks = {}
         self.__confirm_tasks = []
         self.__auth_service = auth_service
 
@@ -23,7 +23,7 @@ class MigrateService(object):
         return self.__auth_service
 
     def __check_if_task_exists(self, server_id):
-        if server_id in self.__migrating_tasks:
+        if server_id in self.__migrating_tasks.keys():
             return  True
         return False
 
@@ -34,8 +34,8 @@ class MigrateService(object):
 
     def task_done(self,server_id):
         self.__lock.acquire()
-        if server_id in self.__migrating_tasks:
-            self.__migrating_tasks.remove(server_id)
+        if server_id in self.__migrating_tasks.keys():
+            del self.__migrating_tasks[server_id]
             self.logger.debug('Deleted migrate task ID %s' % server_id)
         self.__lock.release()
 
@@ -44,6 +44,14 @@ class MigrateService(object):
             self.__confirm_tasks.remove(server_id)
             self.logger.debug('Deleted confirm task ID %s' % server_id)
 
+    def get_migrating_vms_to_host(self, node_id):
+        result = []
+        for server_id in self.__migrating_tasks.keys():
+            if self.__migrating_tasks[server_id] == node_id:
+                result.append(server_id)
+        return result
+
+
     def schedule_migration(self, server_id):
         self.__lock.acquire()
         if self.__check_if_task_exists(server_id) == True:
@@ -51,7 +59,7 @@ class MigrateService(object):
             return False
         else:
             worker = MigrationThread(server_id = server_id, migrate_service = self, logger = self.logger)
-            self.__migrating_tasks.append(server_id)
+            self.__migrating_tasks[server_id] = worker
             worker.setDaemon(True)
             worker.start()
             self.__lock.release()
@@ -64,7 +72,7 @@ class MigrateService(object):
             return False
         else:
             worker = LiveBlockMigrationThread(server_id = server_id, host = node.host, migrate_service = self, logger = self.logger)
-            self.__migrating_tasks.append(server_id)
+            self.__migrating_tasks[server_id] = node.id
             worker.setDaemon(True)
             worker.start()
             self.__lock.release()
@@ -128,7 +136,6 @@ class LiveBlockMigrationThread(Thread):
                 server = novaclient.servers.find(id = self.__server_id)
                 novaclient.servers.live_migrate(server = server, host = self.__host, block_migration = True, disk_over_commit = False)
                 self.logger.info('Scheduled live migration of server %s ID: %s' % (server.name, server.id))
-                self.__migrate_service.task_done(self.__server_id)
             except Exception as e:
                 self.logger.error('Failed live migration of server ID: %s' % (self.__server_id))
                 self.logger.exception(e)

@@ -1,0 +1,225 @@
+2015-10-06 01:50:32,503|1506|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-06 01:50:32,631|1633|SYS_INFO|Collecting information about compute nodes
+2015-10-06 01:50:34,927|3929|SYS_INFO|Collecting information about services
+2015-10-06 01:50:35,677|4680|SYS_INFO|Collecting information about VMs
+2015-10-06 01:50:37,829|6832|SYS_INFO|Processing collected data
+2015-10-06 01:50:37,832|6834|SYS_INFO|node-3.domain.tld MW: 330.231621349 MWMI: 330.231621349
+2015-10-06 01:50:37,832|6834|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:50:37,834|6836|SYS_INFO|node-4.domain.tld MW: 190.896273917 MWMI: 190.896273917
+2015-10-06 01:50:56,678|25680|VM_INFO|Host: node-2 Name: random 01444086873.36 State: active New_task: None
+2015-10-06 01:50:56,678|25680|VM_INFO|Host: node-2 Name: random 01444075822.89 State: active New_task: None
+2015-10-06 01:50:56,678|25680|VM_INFO|Host: node-4 Name: random-0, 1444087211.36 State: active New_task: None
+2015-10-06 01:50:56,680|25682|VM_INFO|Host: node-4 Name: random-2, 1444087226.55 State: active New_task: None
+2015-10-06 01:50:56,680|25682|VM_INFO|Host: node-4 Name: random 11444075826.74 State: active New_task: None
+2015-10-06 01:50:56,680|25682|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:50:56,680|25682|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:50:56,680|25682|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:50:56,680|25683|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-06 01:50:56,680|25683|SYS_INFO|Sorting hosts overload
+2015-10-06 01:50:56,680|25683|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:50:56,680|25683|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:50:56,680|25683|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:50:56,681|25684|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:50:56,681|25684|SYS_INFO|AV: 167.673716012 WW: 190.896273917 WO: 144.451158107
+2015-10-06 01:50:56,681|25684|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:50:56,683|25685|SYS_INFO|AV: 167.673716012 WW: 190.896273917 WO: 144.451158107
+2015-10-06 01:50:56,683|25685|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:50:56,683|25685|SYS_INFO|AV: 167.673716012 WW: 190.896273917 WO: 144.451158107
+2015-10-06 01:50:56,684|25686|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-06 01:51:41,897|70899|VM_INFO|Host: None Name: random 01444089098.49 State: building New_task: scheduling
+2015-10-06 01:51:41,897|70899|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:41,897|70899|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:41,897|70899|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:41,898|70900|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-06 01:51:44,921|73923|VM_INFO|Host: None Name: random 01444089098.49 State: building New_task: None
+2015-10-06 01:51:44,921|73923|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:44,921|73923|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:44,921|73923|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:44,921|73924|NODE_INFO|node-4.domain.tld: 3 State: up enabled
+2015-10-06 01:51:45,187|74189|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: None
+2015-10-06 01:51:45,187|74189|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:45,187|74189|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:45,187|74189|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:45,187|74190|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:45,282|74284|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:51:45,282|74285|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:45,282|74285|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:45,282|74285|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:45,282|74285|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:45,283|74286|SYS_INFO|Sorting hosts overload
+2015-10-06 01:51:45,283|74286|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:51:45,285|74287|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:51:45,285|74287|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:51:45,285|74287|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:51:45,285|74287|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:45,286|74288|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:51:45,286|74288|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:45,286|74288|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:51:45,286|74288|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:45,536|74539|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: networking
+2015-10-06 01:51:45,536|74539|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:45,538|74540|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:45,538|74540|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:45,538|74540|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:45,674|74676|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:51:45,674|74676|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:45,674|74676|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:45,674|74677|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:45,674|74677|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:45,674|74677|SYS_INFO|Sorting hosts overload
+2015-10-06 01:51:45,674|74677|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:51:45,674|74677|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:51:45,676|74678|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:51:45,676|74678|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:51:45,676|74678|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:45,676|74678|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:51:45,676|74678|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:45,676|74678|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:51:45,677|74679|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:46,523|75525|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: networking
+2015-10-06 01:51:46,523|75525|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:46,523|75525|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:46,523|75526|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:46,523|75526|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:47,184|76187|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: block_device_mapping
+2015-10-06 01:51:47,186|76188|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:47,186|76188|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:47,186|76188|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:47,186|76188|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:47,512|76514|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: spawning
+2015-10-06 01:51:47,513|76515|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:47,513|76515|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:47,513|76515|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:47,513|76515|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:55,186|84188|VM_INFO|Host: node-4 Name: random 01444089098.49 State: building New_task: spawning
+2015-10-06 01:51:55,186|84188|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:55,186|84188|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:55,187|84189|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:55,187|84189|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:55,440|84443|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:51:55,440|84443|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:51:55,440|84443|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:51:55,440|84443|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:51:55,440|84443|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:51:55,440|84443|SYS_INFO|Sorting hosts overload
+2015-10-06 01:51:55,441|84444|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:51:55,441|84444|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:51:55,441|84444|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:51:55,441|84444|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:51:55,441|84444|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:55,441|84444|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:51:55,443|84445|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:51:55,443|84445|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:51:55,443|84445|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:52:06,127|95129|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:52:06,127|95129|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:52:06,127|95129|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:52:06,127|95129|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:52:06,128|95130|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:52:06,128|95130|SYS_INFO|Sorting hosts overload
+2015-10-06 01:52:06,128|95130|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:52:06,128|95130|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:52:06,128|95131|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:52:06,128|95131|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:52:06,128|95131|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:52:06,128|95131|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:52:06,128|95131|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:52:06,128|95131|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:52:06,130|95132|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:52:18,546|107548|VM_INFO|Host: node-4 Name: random 01444089098.49 State: active New_task: None
+2015-10-06 01:52:18,546|107549|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:52:18,546|107549|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:52:18,546|107549|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:52:18,546|107549|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:53:08,653|157655|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:53:08,653|157655|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:53:08,654|157656|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:53:08,654|157656|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:53:08,654|157656|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:53:08,654|157656|SYS_INFO|Sorting hosts overload
+2015-10-06 01:53:08,654|157656|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:53:08,654|157657|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:53:08,654|157657|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:53:08,654|157657|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:53:08,654|157657|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:53:08,654|157657|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:53:08,655|157657|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:53:08,655|157657|SYS_INFO|Found instance to migrate random 01444089098.49
+2015-10-06 01:53:08,655|157657|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:53:08,655|157657|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:53:08,655|157657|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:53:56,684|205686|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-06 01:53:56,694|205696|SYS_INFO|Collecting information about compute nodes
+2015-10-06 01:53:59,559|208562|SYS_INFO|Collecting information about services
+2015-10-06 01:54:00,854|209856|SYS_INFO|Collecting information about VMs
+2015-10-06 01:54:04,759|213761|SYS_INFO|Processing collected data
+2015-10-06 01:54:04,759|213762|SYS_INFO|node-3.domain.tld MW: 330.231621349 MWMI: 330.231621349
+2015-10-06 01:54:04,759|213762|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:54:04,760|213763|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:54:04,763|213766|VM_INFO|Host: node-2 Name: random 01444075822.89 State: active New_task: None
+2015-10-06 01:54:04,763|213766|VM_INFO|Host: node-4 Name: random-0, 1444087211.36 State: active New_task: None
+2015-10-06 01:54:04,765|213767|VM_INFO|Host: node-4 Name: random-2, 1444087226.55 State: active New_task: None
+2015-10-06 01:54:04,765|213767|VM_INFO|Host: node-4 Name: random 11444075826.74 State: active New_task: None
+2015-10-06 01:54:04,765|213767|VM_INFO|Host: node-2 Name: random 01444086873.36 State: active New_task: None
+2015-10-06 01:54:04,765|213767|VM_INFO|Host: node-4 Name: random 01444089098.49 State: active New_task: None
+2015-10-06 01:54:04,766|213768|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:54:04,766|213768|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:04,766|213768|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:54:04,766|213768|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:04,766|213768|SYS_INFO|Sorting hosts overload
+2015-10-06 01:54:04,766|213769|SYS_INFO|Scheduled periodic check for 180 sec
+2015-10-06 01:54:04,766|213769|SYS_INFO|node-2.domain.tld MW: 144.451158107 MWMI: 144.451158107
+2015-10-06 01:54:04,767|213769|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:54:04,767|213769|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:54:04,767|213769|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:54:04,769|213771|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:54:04,769|213771|SYS_INFO|Found instance to migrate random-2, 1444087226.55
+2015-10-06 01:54:04,769|213771|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:54:04,769|213771|SYS_INFO|Found instance to migrate random 01444089098.49
+2015-10-06 01:54:04,769|213772|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:54:04,769|213772|SYS_INFO|Found instance to migrate random 11444075826.74
+2015-10-06 01:54:04,769|213772|SYS_INFO|AV: 190.896273917 WW: 190.896273917 WO: 190.896273917
+2015-10-06 01:54:27,275|236277|VM_INFO|Host: node-2 Name: random 01444086873.36 State: active New_task: deleting
+2015-10-06 01:54:27,276|236278|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:54:27,276|236278|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:27,276|236278|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:54:27,276|236278|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:29,322|238325|VM_INFO|Host: node-2 Name: random 01444086873.36 State: active New_task: deleting
+2015-10-06 01:54:29,323|238325|TOTAL_VMS|Total: 6 vms
+2015-10-06 01:54:29,323|238325|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:29,323|238325|NODE_INFO|node-2.domain.tld: 2 State: up enabled
+2015-10-06 01:54:29,323|238325|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:40,119|249121|VM_INFO|Host: node-2 Name: random 01444086873.36 State: deleted New_task: None
+2015-10-06 01:54:40,119|249121|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:54:40,121|249123|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:40,121|249123|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-06 01:54:40,121|249123|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:40,358|249361|SYS_INFO|node-2.domain.tld MW: 98.0060422961 MWMI: 98.0060422961
+2015-10-06 01:54:40,358|249361|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:54:40,359|249361|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:40,359|249361|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-06 01:54:40,359|249361|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:40,359|249361|SYS_INFO|Sorting hosts overload
+2015-10-06 01:54:40,359|249361|SYS_INFO|node-2.domain.tld MW: 98.0060422961 MWMI: 98.0060422961
+2015-10-06 01:54:40,361|249363|SYS_INFO|Searching for the most overloaded host
+2015-10-06 01:54:40,361|249363|SYS_INFO|Found host node-4.domain.tld
+2015-10-06 01:54:40,361|249363|SYS_INFO|Found instance to migrate random-0, 1444087211.36
+2015-10-06 01:54:40,361|249363|SYS_INFO|AV: 167.673716012 WW: 144.451158107 WO: 190.896273917
+2015-10-06 01:54:40,362|249365|SYS_INFO|Migrate scheduling passed 
+2015-10-06 01:54:53,723|262726|VM_INFO|Host: node-4 Name: random-0, 1444087211.36 State: active New_task: migrating
+2015-10-06 01:54:53,724|262726|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:54:53,724|262726|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:54:53,724|262726|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-06 01:54:53,724|262726|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:54:55,131|264134|SYS_INFO|Scheduled live migration of server random-0, 1444087211.36 ID: cd42c9b6-816a-4ee2-aa0b-48d844d4f2e8
+2015-10-06 01:55:11,367|280369|VM_INFO|Host: node-4 Name: random-0, 1444087211.36 State: active New_task: migrating
+2015-10-06 01:55:11,367|280369|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:55:11,367|280369|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:55:11,368|280370|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-06 01:55:11,368|280370|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:55:15,016|284018|SYS_INFO|node-4.domain.tld MW: 237.341389728 MWMI: 237.341389728
+2015-10-06 01:55:15,016|284018|TOTAL_VMS|Total: 5 vms
+2015-10-06 01:55:15,016|284018|NODE_INFO|node-3.domain.tld: 0 State: down disabled
+2015-10-06 01:55:15,016|284018|NODE_INFO|node-2.domain.tld: 1 State: up enabled
+2015-10-06 01:55:15,016|284018|NODE_INFO|node-4.domain.tld: 4 State: up enabled
+2015-10-06 01:55:15,016|284019|SYS_INFO|Sorting hosts overload

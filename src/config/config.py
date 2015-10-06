@@ -27,7 +27,7 @@ log_tags = {
             'node_info'       : 'NODE_INFO',                # broj vm na jednom cvoru
             'vm_info'         : 'VM_INFO',                  # status virtuelne masine
             'migration_started' : 'MIGRATION_STARTED',      # migracija pokrenuta
-            'migration_confirmed' : 'MIGRATION_CONFIRMED'   # migracija potvrdjena
+            'migration_ended' : 'MIGRATION_ENDED'           # migracija potvrdjena
 
 }
 log_tag_separator = '|'

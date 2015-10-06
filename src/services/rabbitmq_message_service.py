@@ -215,10 +215,13 @@ class RabbitMQMessageService(object):
             return
         else:
             self.logger.debug('Sorting hosts overload')
-            hosts = self.__get_hosts_ordered()
+            values = self.__get_hosts_ordered()
+            average_weight = float("{0:.2f}".format(values[0]))
+            overloaded = values[1]
+            underloaded = values[2]
             node = None
             self.logger.debug('Searching for the most overloaded host')
-            for host in hosts:
+            for host in overloaded:
                 if host.is_free_to_migrate_instances():
                     node = host
                     self.logger.debug('Found host %s' % (host.hypervisor_hostname))
@@ -229,51 +232,56 @@ class RabbitMQMessageService(object):
                 self.__check_overload = False
                 self.__lock.release()
                 return
-            hosts.sort(key = operator.attrgetter('metrics_weight'))
             vms = node.vm_instances.values()
             vms.sort(key = operator.attrgetter('memory_mb'))
+
+            overloaded_weight = node.metrics_weight
+
             for vm in vms:
                 mig_time = vm.last_migrate_time
                 if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > ALLOW_MIGRATE_TIME)):
                     self.logger.debug('Found instance to migrate %s' % vm.display_name)
-                    for available_node in hosts:
-                        if available_node.id == node.id or available_node.metrics_weight == node.metrics_weight:
-                            self.logger.debug('Not available host')
-                            break
-                        passes = True
-                        weight_with = 0
-                        weight_without = 0
+                    for migrate_node in underloaded:
+                        vm_weight = 0
                         for filt in self.__filters.values():
-                            passes = passes and filt.filter_one(host = available_node, vm = vm)
-                            weight_with += filt.weight_host_with_vm(host = available_node, vm = vm)
-                            weight_without += filt.weight_host_without_vm(host = node, vm = vm)
-                        if passes and weight_without >= weight_with:
-                            self.logger.info('Weight with: %r Weight without: %r' % (weight_with, weight_without))
-                            if self.__migrate_service.schedule_live_migration(vm.id, available_node):
-                                self.logger.debug('Scheduled migrate to %s' % available_node.hypervisor_hostname)
-                            else:
-                                self.logger.debug('Failed to schedule migrate, task already exists')
-                            self.__check_overload = False
-                            self.__lock.release()
-                            return
-                        if not weight_without >= weight_with:
-                            self.logger.debug('Migration will have no effect')
+                            vm_weight += filt.weight_instance_on_host(migrate_node, vm)
+                        total_weight = float("{0:.2f}".format(migrate_node.metrics_with_migrating_vms + vm_weight))
+                        check_weight = float("{0:.2f}".format(overloaded_weight - vm_weight))
+                        self.logger.sys_info('AV: %s WW: %s WO: %s' % (average_weight, total_weight, check_weight))
+                        if total_weight <= average_weight and check_weight >= average_weight:
+                            scheduled = self.__migrate_service.schedule_live_migration(vm.id, migrate_node)
+                            if scheduled == True:
+                                self.logger.sys_info('Migrate scheduling passed ')
+                                migrate_node.metrics_with_migrating_vms = total_weight
+                                self.__check_overload = False
+                                self.__lock.release()
+                                return
+
             self.__check_overload = False
             self.__lock.release()
 
 
     def __get_hosts_ordered(self):
-        if len(self.__compute_nodes) < 2:
-            return []
         hosts = []
+        average_weight = 0
         for node in self.__compute_nodes.values():
-            if node.is_running() and node.are_data_synced():
+            if node.is_running():
                 hosts.append(node)
-        if len(hosts) > 1:
-            hosts.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
-        else:
-            hosts = []
-        return hosts
+                average_weight += node.metrics_weight
+        average_weight = (average_weight * 1.0) / len(hosts)
+        overloaded = []
+        underloaded = []
+        for host in hosts:
+            if host.are_data_synced():
+                if host.metrics_weight > average_weight:
+                    overloaded.append(host)
+                else:
+                    self.__calculate_node_overload_and_weight(host)
+                    underloaded.append(host)
+        overloaded.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
+        underloaded.sort(key = operator.attrgetter('metrics_with_migrating_vms'))
+
+        return (average_weight, overloaded, underloaded)
 
     @property
     def migrate_service(self):
@@ -319,6 +327,15 @@ class RabbitMQMessageService(object):
             overloaded = overloaded or filt.overloaded(host = node)
         node.metrics_weight = weight
         node.overloaded = overloaded
+        node.metrics_with_migrating_vms = node.metrics_weight
+        migrating_vm_ids = self.__migrate_service.get_migrating_vms_to_host(node.id)
+        for vm_id in migrating_vm_ids:
+            vm = self.__vm_instances[vm_id]
+            vm_weight = 0
+            for filt in self.__filters.values():
+                vm_weight += filt.weight_instance_on_host(host = node, vm = vm)
+            node.metrics_with_migrating_vms += vm_weight
+        self.logger.sys_info('%s MW: %s MWMI: %s' % (node.hypervisor_hostname, node.metrics_weight, node.metrics_with_migrating_vms))
 
     def __parse_conductor_message(self, message):
         parsed_json = message
@@ -416,13 +433,13 @@ class RabbitMQMessageService(object):
 
             self.__process_vm_instance(vm_instance)
 
+            self.print_short_info()
+
     def __process_vm_instance(self, vm_instance):
         # self.logger.debug('Instance: %s State: %s' % (vm_instance.display_name, vm_instance.state))
         # self.logger.debug('New task: %s Old task: %s' % (vm_instance.new_task_state, vm_instance.old_task_state))
 
         self.logger.vm_info('Host: %s Name: %s State: %s New_task: %s'% (vm_instance.host, vm_instance.display_name, vm_instance.state, vm_instance.new_task_state))
-
-        self.print_short_info()
 
         if vm_instance.needs_to_verify_migrate():
             self.__migrate_service.schedule_confirm(vm_instance.id)
@@ -431,6 +448,7 @@ class RabbitMQMessageService(object):
             if vm_instance.is_started_to_migrate():
                 self.logger.migration_started('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
                 vm_instance.last_migrate_time = time()
+
             elif vm_instance.is_verified_migrate():
                 vm_instance.last_migrate_time = time()
                 self.logger.migration_confirmed('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
@@ -452,6 +470,9 @@ class RabbitMQMessageService(object):
 
         if not vm_instance.is_deleted():
             self.add_vm_instance_to_node(vm_instance)
+
+        if vm_instance.has_migrated():
+            self.__migrate_service.task_done(vm_instance.id)
 
     def __periodic_check(self):
         self.initialize()
@@ -491,7 +512,9 @@ class ComputeNode(object):
         self.status = None  #enabled and disabled
 
         self.overloaded = None
-        self.metrics_weight = None
+        self.metrics_weight = 0
+        self.metrics_with_migrating_vms = 0
+
 
     def are_data_synced(self):
         if len(self.vm_instances) == self.running_vms:
@@ -586,11 +609,7 @@ class VMInstance(object):
 
         self.compute_node = None
         self.last_migrate_time = None
-    #
-    #   Method that will check if vm instance is overloaded
-    #   If overload is detected vm needs to be migrated to another
-    #   compute node
-    #
+
     def check_for_overload(self):
         print('TO DO: Not yet implemented !')
 
@@ -641,6 +660,11 @@ class VMInstance(object):
 
     def is_deleted(self):
         if self.state == 'deleted':
+            return True
+        return False
+
+    def has_migrated(self):
+        if self.new_task_state != 'migrating' and self.old_task_state == 'migrating':
             return True
         return False
 

@@ -48,5 +48,5 @@ class CloudLogger(logging.Logger):
     def migration_started(self, message):
         super(CloudLogger, self).info(LOG_TAGS['migration_started'] + SEPARATOR + message)
 
-    def migration_confirmed(self, message):
-        super(CloudLogger, self).info(LOG_TAGS['migration_confirmed'] + SEPARATOR + message)
+    def migration_ended(self, message):
+        super(CloudLogger, self).info(LOG_TAGS['migration_ended'] + SEPARATOR + message)

@@ -32,15 +32,8 @@ class RamFilter(filters.BaseFilter):
         ram_ratio = (host.memory_mb_used * 100.0) / host.memory_mb
         return ram_ratio * self.ram_weight
 
-    def weight_host_without_vm(self, host, vm):
-        if vm.id in host.vm_instances.keys():
-            ram_ratio = ((host.memory_mb_used - vm.memory_mb) * 100.0) / host.memory_mb
-        else:
-            ram_ratio = (host.memory_mb_used * 100.0) / host.memory_mb
-        return ram_ratio * self.ram_weight
-
-    def weight_host_with_vm(self, host, vm):
-        ram_ratio = ((host.memory_mb_used + vm.memory_mb) * 100.0)/ host.memory_mb
+    def weight_instance_on_host(self, host, vm):
+        ram_ratio = (vm.memory_mb * 100.0) / host.memory_mb
         return ram_ratio * self.ram_weight
 
     def get_weight(self):

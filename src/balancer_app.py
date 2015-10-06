@@ -54,7 +54,7 @@ def main():
 
     if rabbitmq_service.initialize() == False:
         print('Failed to authenticate, check the log file for more details')
-        sys.exit(1)
+        return 1
 
     rabbitmq_service.check_overload()
     rabbitmq_service.start_periodic_check()
@@ -93,6 +93,8 @@ def main():
         logger.info('Connection closed')
         print('Program exited ...')
 
+    return 0
+
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

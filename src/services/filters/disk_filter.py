@@ -32,17 +32,9 @@ class DiskFilter(filters.BaseFilter):
         disk_ratio = (host.local_gb_used * 100.0) / host.local_gb
         return disk_ratio * self.disk_weight
 
-    def weight_host_without_vm(self, host, vm):
-        if vm.id in host.vm_instances.keys():
-            disk_gb = vm.disk_gb + vm.ephemeral_gb
-            disk_ratio =  ((host.local_gb_used - disk_gb) * 100.0) / host.local_gb
-        else:
-            disk_ratio = (host.local_gb_used * 100.0) / host.local_gb
-        return disk_ratio * self.disk_weight
-
-    def weight_host_with_vm(self, host, vm):
+    def weight_instance_on_host(self, host, vm):
         disk_gb = vm.disk_gb + vm.ephemeral_gb
-        disk_ratio = ((host.local_gb_used + disk_gb) * 100.0) / host.local_gb
+        disk_ratio =  (disk_gb * 100.0) / host.local_gb
         return disk_ratio * self.disk_weight
 
     def get_weight(self, host):
