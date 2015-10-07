@@ -11,7 +11,7 @@ def main():
     image_name = test_config.instance_properties['image_name']
     availability_zone = test_config.instance_properties['availability_zone']
 
-    DEFAULT = test_config.instance_properties['default_number_of_intances']
+    DEFAULT = test_config.instance_properties['default_number_of_instances']
 
     if len(sys.argv) < 2:
         print('INFO: Number of instances is not passed, using DEFAULT = %d' % DEFAULT)
@@ -61,11 +61,10 @@ def main():
                                             flavor = flavor.id,
                                             nics = nics,
                                             availability_zone = availability_zone)
-
-        print 'Finished ...'
-
     except Exception as e:
         print e
+
+    print 'Finished ...'
 
 if __name__ == '__main__':
     main()

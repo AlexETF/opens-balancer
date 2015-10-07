@@ -6,7 +6,7 @@ from novaclient import client
 
 def main():
 
-    DEFAULT = test_config.instance_properties['default_number_of_intances']
+    DEFAULT = test_config.instance_properties['default_number_of_instances']
 
     if len(sys.argv) < 2:
         print('INFO: Number of instances to delete is not passed, using DEFAULT = %d' % DEFAULT)
@@ -36,20 +36,23 @@ def main():
                                project_domain_name=project_domain_name,
                                nova_api_version = VERSION)
 
-    print('Authenticating, waiting server to respond')
-    novaclient = client.Client(VERSION, session = auth_service.get_session())
-    print('Waiting for server list ')
-    servers  = novaclient.servers.list()
-    total_num = len(servers)
+    try:
+        print('Authenticating, waiting server to respond')
+        novaclient = client.Client(VERSION, session = auth_service.get_session())
+        print('Waiting for server list ')
+        servers  = novaclient.servers.list()
+        total_num = len(servers)
 
-    print('Total number of servers %d' % total_num)
-    if total_num < num_instances:
-        num_instances = total_num
-    print('Number of instances to delete %d' % num_instances)
+        print('Total number of servers %d' % total_num)
+        if total_num < num_instances:
+            num_instances = total_num
+        print('Number of instances to delete %d' % num_instances)
 
-    for i in range(num_instances):
-        print('Deleting server %s ' % servers[i].name)
-        novaclient.servers.delete(servers[i])
+        for i in range(num_instances):
+            print('Deleting server %s ' % servers[i].name)
+            novaclient.servers.delete(servers[i])
+    except Exception as e:
+        print e
 
     print 'Finished ...'
 
