@@ -1,0 +1,3 @@
+2015-10-07 10:02:07,263|1099|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-07 10:02:07,345|1181|SYS_INFO|Collecting information about compute nodes
+2015-10-07 10:02:07,433|1269|SYS_INFO|The request you have made requires authentication. (HTTP 401)

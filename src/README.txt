@@ -1,58 +1,57 @@
-﻿Before using application change configuration parameters according to your OpenStack cloud setup.
+Prije početka korištenja same aplikacije potrebno je konfigurisati parametre aplikacije.
 
-Configuration files are found in config/ directory.
-There are two configuration files:
+Konfiguracioni fajlovi se nalaze u config/ direktorijumu.
+Postoje glavna tri konfiguraciona fajla:
 
-credentials.py	-	Openstack Keystone service url and credentials
-			RabbitMQ service url and credentials
+credentials.py	-	Kredencijali i parametri
+									za Keystone i RabbitMQ servis
 
+config.py	-	Težine za parametre na osnovu kojih se izračunava opterećenje hosta
+						Vrijeme nakon koje će se periodično pokretati prikupljanje podataka
+						Minimalno vrijeme nakon kojeg će se instanca moći ponovo migrirati
+						Parametri za logovanje
 
-config.py	-	Weights for parameters that are used for weighing compute node workload
-			Time after periodic collecting of cloud data will occur (in minutes)
-			Minimum time after intance can be migrated again (in minutes)
-			Logging options
+test_config.py - Parametri koje koriste skripte za testiranje
+								 Image, flavor, zona za instance koje će se pokretati
+								 Definišu se hostovi na kojima će se instance pokretati
+								 i brisati
 
-
-After configuration start balancer_app.py
-
-
-
-For testing we recommend using scripts:
-
-"TEST - delete_servers.py"	   -	used for quick deletion of servers in cloud. Pass to script number of servers to delete,
-						otherwise default number is 2.
-
-"TEST - start_servers.py"	   -	used for starting servers in cloud. Pass the script number of servers to start,
-					otherwise default number is 2. Default settings:
-
-					flavor_name = 'm1.micro'	# RAM = 64 MB, Disk = 0 GB, Ephemeral disk = 0 GB, VCPUs = 1
-					image_name = 'TestVM'	  	# cirros image
-					availability_zone = 'nova'
-
-					To change defualt settings, edit lines 10, 11 and 12 in script.
-
-"TEST - scheduled_start_delete.py" -	used for scheduled start and delete tasks of servers. Default time for starting
-				      	servers is 10 minutes and for deleting is 15 minutes.
-				      	To change that edit lines 9 and 10 in script:
-
-							start_interval  = 10 * 60   #interval (10min)
-							delete_interval = 15 * 60   #interval (15min)
-
-					Instances will be spawned with settings:
-
-						flavor_name = 'm1.micro'	# RAM = 64 MB, Disk = 0 GB, Ephemeral disk = 0 GB, VCPUs = 1
-						image_name = 'TestVM'		# cirros image
-						availability_zone = 'nova'
-
-					To change defualt settings, edit lines 12, 13 and 14 in script.
-
-					There is also limit for number of instances in the cloud.
-					Edit line 15 to change default limit.
-
-							max_instances = 7
+Nakon konfigurisanja pokrenuti skriptu balancer_app.py
 
 
-logs/	-	default directory for storing log files of application
+Za testiranje koriste se sledeće skripte:
+
+"TEST - delete_servers.py" - koristi se za brisanje instanci. Skripti se proslijedjuje
+ 														 broj instanci koji se briše, inače koristi se default vrijednost
+														 definisana u test_config.py
+
+"TEST - start_servers.py" - koristi se za pokretanje instanci. Skripti se proslijeđuje
+ 														broj instanci koji se briše, inače koristi se default vrijednost
+														definisana u test_config.py
+
+"TEST - scheduled_start_delete.py" - koristi se za periodično pokretanje i brisanje
+																	   instanci u cloudu. Vremena pokretanja i hostovi
+																		 na kojima će se instance pokretati i brisati su
+																		 definisani u test_config.py
+
+logs/	-	default direktorijum za log fajlove
+
+
+parse_log.py - pomoćna skripta za parsiranje log fajlova i prikaz statističkih podataka
+							 Podaci se prikazuju na graficima.
+
+
+POTREBNE BIBLIOTEKE:
+	python-novaclient				- Klijent za Openstack Nova	compute servis
+	python-keystoneclient		-	Klijent za Openstack Keystone servis
+	pika										- Koristi se za rad sa RabbitMQ servisom
+	matplotlib							- Koristi se za iscrtavanje grafika.
+														Za rad ove biblioteke potrebni su još sledeći
+														moduli:
+															- numpy
+															- dateutil
+															- pytz
+															- six
 
 
 ************************************

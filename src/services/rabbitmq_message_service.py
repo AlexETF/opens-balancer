@@ -62,109 +62,110 @@ class RabbitMQMessageService(object):
             self.logger.info('Collecting information about VMs')
             servers  = novaclient.servers.list(detailed=True)
             self.logger.info('Processing collected data')
+
+
+            init_services = {}
+            init_compute_nodes = {}
+            init_vm_instances = {}
+
+            for service in services:
+                service = service.to_dict()
+                service_node = Service()
+                service_node.id = service['id']
+                service_node.binary = service['binary']
+                service_node.created_at = service['updated_at']
+                service_node.disabled = service['status']
+                service_node.host = service['host']
+                service_node.topic = service['binary']
+
+                init_services[service_node.id] = service_node
+
+            for hypervisor in hypervisors:
+                hypervisor = hypervisor.to_dict()
+                node = ComputeNode()
+                node.id = hypervisor['id']
+                node.free_disk_gb = hypervisor['free_disk_gb']
+                node.free_ram_mb = hypervisor['free_ram_mb']
+                node.host_ip = hypervisor['host_ip']
+                node.hypervisor_hostname = hypervisor['hypervisor_hostname']
+                node.hypervisor_type = hypervisor['hypervisor_type']
+                node.local_gb = hypervisor['local_gb']
+                node.local_gb_used = hypervisor['local_gb_used']
+                node.memory_mb = hypervisor['memory_mb']
+                node.memory_mb_used = hypervisor['memory_mb_used']
+                node.running_vms = hypervisor['running_vms']
+                node.service_id = hypervisor['service']['id']
+                node.host = hypervisor['service']['host']
+                node.vcpus = hypervisor['vcpus']
+                node.vcpus_used = hypervisor['vcpus_used']
+
+                node.state = hypervisor['state']
+                node.status = hypervisor['status']
+
+                self.__calculate_node_overload_and_weight(node)
+                init_compute_nodes[node.id] = node
+
+            for server in servers:
+                server = server.to_dict()
+                vm_id = server['id']
+                if vm_id in self.__vm_instances.keys():
+                    vm_instance = self.__vm_instances[vm_id]
+                    vm_instance.hostname = server['name']
+                    vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
+                    vm_instance.new_task_state = server['OS-EXT-STS:task_state']
+                    vm_instance.state = server['OS-EXT-STS:vm_state']
+                    vm_instance.host = server['OS-EXT-SRV-ATTR:host']
+                else:
+                    vm_instance = VMInstance()
+                    vm_instance.id = vm_id
+                    vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
+                    vm_instance.created_at = server['OS-SRV-USG:launched_at']
+                    vm_instance.display_name = server['name']
+                    vm_instance.host = server['OS-EXT-SRV-ATTR:host']
+                    vm_instance.hostname = server['name']
+                    vm_instance.new_task_state = server['OS-EXT-STS:task_state']
+                    vm_instance.state = server['OS-EXT-STS:vm_state']
+                    vm_instance.tenant_id = server['tenant_id']
+                    vm_instance.user_id = server['user_id']
+
+                    vm_instance.instance_flavor_id = server['flavor']['id']
+                    flavor = novaclient.flavors.get(flavor = vm_instance.instance_flavor_id)
+                    flavor = flavor.to_dict()
+                    vm_instance.instance_flavor = flavor['name']
+                    vm_instance.disk_gb = flavor['disk']
+                    vm_instance.ephemeral_gb = flavor['OS-FLV-EXT-DATA:ephemeral']
+                    vm_instance.vcpus = flavor['vcpus']
+                    vm_instance.memory_mb = flavor['ram']
+
+                    image_meta = novaclient.images.get(image = server['image']['id'])
+                    image_meta = image_meta.to_dict()
+                    vm_instance.image_meta.min_disk = image_meta['minDisk']
+                    vm_instance.image_meta.min_ram = image_meta['minRam']
+
+                init_vm_instances[vm_instance.id] = vm_instance
+
+            self.__services = init_services
+            self.__compute_nodes = init_compute_nodes
+            self.__vm_instances = init_vm_instances
+            for instance in self.__vm_instances.values():
+                self.__process_vm_instance(vm_instance = instance)
+
+            self.print_short_info()
+
+            self.__check_overload = True
+            self.__lock.release()
+            return True
+
         except from_response as e:
-            self.logger.error('Failed to collect data, request requires authentification (HTTP 401)')
+            self.logger.error(e)
             self.logger.exception(e)
             self.__lock.release()
             return False
         except Exception as e:
+            self.logger.error(e)
             self.logger.exception(e)
             self.__lock.release()
             return False
-
-
-        init_services = {}
-        init_compute_nodes = {}
-        init_vm_instances = {}
-
-        for service in services:
-            service = service.to_dict()
-            service_node = Service()
-            service_node.id = service['id']
-            service_node.binary = service['binary']
-            service_node.created_at = service['updated_at']
-            service_node.disabled = service['status']
-            service_node.host = service['host']
-            service_node.topic = service['binary']
-
-            init_services[service_node.id] = service_node
-
-        for hypervisor in hypervisors:
-            hypervisor = hypervisor.to_dict()
-            node = ComputeNode()
-            node.id = hypervisor['id']
-            node.free_disk_gb = hypervisor['free_disk_gb']
-            node.free_ram_mb = hypervisor['free_ram_mb']
-            node.host_ip = hypervisor['host_ip']
-            node.hypervisor_hostname = hypervisor['hypervisor_hostname']
-            node.hypervisor_type = hypervisor['hypervisor_type']
-            node.local_gb = hypervisor['local_gb']
-            node.local_gb_used = hypervisor['local_gb_used']
-            node.memory_mb = hypervisor['memory_mb']
-            node.memory_mb_used = hypervisor['memory_mb_used']
-            node.running_vms = hypervisor['running_vms']
-            node.service_id = hypervisor['service']['id']
-            node.host = hypervisor['service']['host']
-            node.vcpus = hypervisor['vcpus']
-            node.vcpus_used = hypervisor['vcpus_used']
-
-            node.state = hypervisor['state']
-            node.status = hypervisor['status']
-
-            self.__calculate_node_overload_and_weight(node)
-            init_compute_nodes[node.id] = node
-
-        for server in servers:
-            server = server.to_dict()
-            vm_id = server['id']
-            if vm_id in self.__vm_instances.keys():
-                vm_instance = self.__vm_instances[vm_id]
-                vm_instance.hostname = server['name']
-                vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
-                vm_instance.new_task_state = server['OS-EXT-STS:task_state']
-                vm_instance.state = server['OS-EXT-STS:vm_state']
-                vm_instance.host = server['OS-EXT-SRV-ATTR:host']
-            else:
-                vm_instance = VMInstance()
-                vm_instance.id = vm_id
-                vm_instance.availability_zone = server['OS-EXT-AZ:availability_zone']
-                vm_instance.created_at = server['OS-SRV-USG:launched_at']
-                vm_instance.display_name = server['name']
-                vm_instance.host = server['OS-EXT-SRV-ATTR:host']
-                vm_instance.hostname = server['name']
-                vm_instance.new_task_state = server['OS-EXT-STS:task_state']
-                vm_instance.state = server['OS-EXT-STS:vm_state']
-                vm_instance.tenant_id = server['tenant_id']
-                vm_instance.user_id = server['user_id']
-
-                vm_instance.instance_flavor_id = server['flavor']['id']
-                flavor = novaclient.flavors.get(flavor = vm_instance.instance_flavor_id)
-                flavor = flavor.to_dict()
-                vm_instance.instance_flavor = flavor['name']
-                vm_instance.disk_gb = flavor['disk']
-                vm_instance.ephemeral_gb = flavor['OS-FLV-EXT-DATA:ephemeral']
-                vm_instance.vcpus = flavor['vcpus']
-                vm_instance.memory_mb = flavor['ram']
-
-                image_meta = novaclient.images.get(image = server['image']['id'])
-                image_meta = image_meta.to_dict()
-                vm_instance.image_meta.min_disk = image_meta['minDisk']
-                vm_instance.image_meta.min_ram = image_meta['minRam']
-
-            init_vm_instances[vm_instance.id] = vm_instance
-
-        self.__services = init_services
-        self.__compute_nodes = init_compute_nodes
-        self.__vm_instances = init_vm_instances
-        for instance in self.__vm_instances.values():
-            self.__process_vm_instance(vm_instance = instance)
-
-        self.print_short_info()
-
-        self.__check_overload = True
-        self.__lock.release()
-
-        return True
 
     def parse_message(self, routing_key, message):
         self.__lock.acquire()
@@ -268,6 +269,8 @@ class RabbitMQMessageService(object):
             if node.is_running():
                 hosts.append(node)
                 average_weight += node.metrics_weight
+        if len(hosts) == 0:
+            return (0, [], [])
         average_weight = (average_weight * 1.0) / len(hosts)
         overloaded = []
         underloaded = []

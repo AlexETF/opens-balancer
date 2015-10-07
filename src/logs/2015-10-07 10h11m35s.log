@@ -1,0 +1,40 @@
+2015-10-07 10:11:35,980|1101|SYS_INFO|Initializing RabbitMQMessageService
+2015-10-07 10:11:36,042|1164|SYS_INFO|Collecting information about compute nodes
+2015-10-07 10:11:36,107|1229|SYS_INFO|The request you have made requires authentication. (HTTP 401)
+2015-10-07 10:11:36,107|1229|SYS_INFO|The request you have made requires authentication. (HTTP 401)
+Traceback (most recent call last):
+  File "C:\ETF\DIPLOMSKI\workspace\OpenStack Project\src\services\rabbitmq_message_service.py", line 59, in initialize
+    hypervisors  = novaclient.hypervisors.list(detailed=True)
+  File "C:\Python27\lib\site-packages\novaclient\v2\hypervisors.py", line 43, in list
+    return self._list('/os-hypervisors%s' % detail, 'hypervisors')
+  File "C:\Python27\lib\site-packages\novaclient\base.py", line 72, in _list
+    _resp, body = self.api.client.get(url)
+  File "C:\Python27\lib\site-packages\keystoneclient\adapter.py", line 170, in get
+    return self.request(url, 'GET', **kwargs)
+  File "C:\Python27\lib\site-packages\novaclient\client.py", line 91, in request
+    **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\adapter.py", line 206, in request
+    resp = super(LegacyJsonAdapter, self).request(*args, **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\adapter.py", line 95, in request
+    return self.session.request(url, method, **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\utils.py", line 337, in inner
+    return func(*args, **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\session.py", line 304, in request
+    auth_headers = self.get_auth_headers(auth)
+  File "C:\Python27\lib\site-packages\keystoneclient\session.py", line 617, in get_auth_headers
+    return auth.get_headers(self, **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\auth\base.py", line 142, in get_headers
+    token = self.get_token(session)
+  File "C:\Python27\lib\site-packages\keystoneclient\auth\identity\base.py", line 200, in get_token
+    return self.get_access(session).auth_token
+  File "C:\Python27\lib\site-packages\keystoneclient\auth\identity\base.py", line 240, in get_access
+    self.auth_ref = self.get_auth_ref(session)
+  File "C:\Python27\lib\site-packages\keystoneclient\auth\identity\v3\base.py", line 190, in get_auth_ref
+    authenticated=False, log=False, **rkwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\session.py", line 501, in post
+    return self.request(url, 'POST', **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\utils.py", line 337, in inner
+    return func(*args, **kwargs)
+  File "C:\Python27\lib\site-packages\keystoneclient\session.py", line 401, in request
+    raise exceptions.from_response(resp, method, url)
+Unauthorized: The request you have made requires authentication. (HTTP 401)

@@ -1,11 +1,11 @@
 #
 #
-#       CONFIGURATION FILE FOR WEIGHTS
+#       KONFIGURACIONI FAJL ZA FILTERE I LOGER
 #
-#       Filters use the weights for weighting host
-#       based upon host parameter
+#       Filteri koriste tezine da bi odredili tezinu hosta
+#       na osnovu odgovarajuceg parametra
 #
-#       IMPORTANT: Weights need to be a POSITIVE REAL NUMBER
+#       VAZNO: Ove vrijednosti moraju biti pozitivni realni brojevi 
 #
 #
 weights = {
@@ -22,10 +22,10 @@ migrate_time = 5 * 60                   # minimalno vrijeme nakon kojeg virtueln
 
 log_directory = './logs/'               # putanja do foldera gdje ce biti skladisteni log fajlovi
 log_tags = {
-            'sys_info'        : 'SYS_INFO',                 # informacije o tome sta sistem trenutno radi
+            'sys_info'         : 'SYS_INFO',                 # informacije o tome sta sistem trenutno radi
             'total_info'       : 'TOTAL_VMS',                # ukupan broj masina
-            'node_info'       : 'NODE_INFO',                # broj vm na jednom cvoru
-            'vm_info'         : 'VM_INFO',                  # status virtuelne masine
+            'node_info'        : 'NODE_INFO',                # broj vm na jednom cvoru
+            'vm_info'          : 'VM_INFO',                  # status virtuelne masine
             'migration_started' : 'MIGRATION_STARTED',      # migracija pokrenuta
             'migration_ended' : 'MIGRATION_ENDED'           # migracija potvrdjena
 

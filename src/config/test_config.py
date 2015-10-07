@@ -1,5 +1,5 @@
 #
-#    Konfiguracioni fajl za testnu skriptu TEST - scheduled_start_delete.py
+#    Konfiguracioni fajl za testne skripte 
 #
 #
 scheduled_times = {
@@ -17,6 +17,6 @@ instance_properties = {
                                     'host_to_delete'   :   'node-2'
                                  },
                         'max_instances' :   6,
-                        'default_number_of_intances' : 2
+                        'default_number_of_instances' : 2
 
 }
