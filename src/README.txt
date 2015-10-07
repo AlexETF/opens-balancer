@@ -1,9 +1,10 @@
-﻿Prije početka korištenja same aplikacije potrebno je konfigurisati parametre aplikacije.
+Prije početka korištenja same aplikacije potrebno je konfigurisati parametre aplikacije.
 
 Konfiguracioni fajlovi se nalaze u config/ direktorijumu.
 Postoje glavna tri konfiguraciona fajla:
 
 credentials.py	-	Kredencijali i parametri
+
 			za Keystone i RabbitMQ servis
 
 config.py	-	Težine za parametre na osnovu kojih se izračunava opterećenje hosta
