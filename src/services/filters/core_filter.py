@@ -10,7 +10,7 @@ class CoreFilter(filters.BaseFilter):
         self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
-        """Return True if it passes the filter, False otherwise. """
+        """ Vraca True ako host ima dovoljno VCPU-a za instancu vm, inace vraca False """
         free_vcpus = host.vcpus - host.vcpus_used
         required_vcpus = vm.vcpus
         if  required_vcpus > free_vcpus:
@@ -20,21 +20,22 @@ class CoreFilter(filters.BaseFilter):
         return True
 
     def overloaded(self, host):
-        """ Return True is host is overloaded, False otherwise """
+        """ Vraca True ako host ima slobodnih VCPU-a, inace False """
         free_vcpus = host.vcpus - host.vcpus_used
         if free_vcpus >= 0:
             return False
         return True
 
     def weight_host(self, host):
-        """ Return Weight of host based on his parameter """
+        """ Racuna i vraca opterecenje hosta """
         core_ratio = (host.vcpus_used * 100.0) / host.vcpus
         return core_ratio * self.vcpu_weight
 
     def weight_instance_on_host(self, host, vm):
+        """ Racuna i vraca opterecenje instance na hostu """
         core_ratio = (vm.vcpus * 100.0) / host.vcpus
         return core_ratio * self.vcpu_weight
 
     def get_weight(self):
-        """ Return Weight parameter """
+        """ Vraca faktor tezine za VCPU """
         return self.vcpu_weight

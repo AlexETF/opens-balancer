@@ -1,10 +1,10 @@
 #
-#    Konfiguracioni fajl za testne skripte 
+#    Konfiguracioni fajl za testne skripte
 #
 #
 scheduled_times = {
-                    'start_interval' : 10 * 60,
-                    'delete_interval' : 15 * 60,
+                    'start_interval' : 5 * 60,
+                    'delete_interval' : 8 * 60,
                     'deviation'       : 60
                   }
 
@@ -13,8 +13,8 @@ instance_properties = {
                        'image_name'  :   'TestVM',
                        'availability_zone'   :   'nova',
                        'hosts' : {
-                                    'host_to_start' :   'node-4',
-                                    'host_to_delete'   :   'node-2'
+                                    'host_to_start' :   'node-2',
+                                    'host_to_delete'   :   'node-3'
                                  },
                         'max_instances' :   6,
                         'default_number_of_instances' : 2

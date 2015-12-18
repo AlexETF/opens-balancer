@@ -24,6 +24,7 @@ max_instances = test_config.instance_properties['max_instances']
 
 
 def start_timer_start():
+    """ Metoda za pokretanje tajmera koji ce pozvati metodu za pokretanje instanci """
     start_time  = random.gauss(start_interval, deviation)
     timer = Timer(start_time, start_instances)
     timer.setDaemon(True)
@@ -31,6 +32,7 @@ def start_timer_start():
     print('Scheduled start timer task %d sec' % (start_time))
 
 def start_timer_delete():
+    """ Metoda za pokretanje tajmera koji ce pozvati metodu za brisanje instanci """
     delete_time = random.gauss(delete_interval, deviation)
     timer = Timer(delete_time, delete_instances)
     timer.setDaemon(True)

@@ -18,7 +18,7 @@ rabbitmq_cfg =  {
                 'server_endpoint' : '10.20.0.3',
                 'port'      :  5672,
                 'username'  : 'nova',
-                'password'  : 'SwCSdL00',
+                'password'  : 'dsFSwOFY',
                 'virtual_host' : '/',
                 'listening_options' : {
                                         'exchange_name' : 'nova',

@@ -5,14 +5,20 @@
 #       Filteri koriste tezine da bi odredili tezinu hosta
 #       na osnovu odgovarajuceg parametra
 #
-#       VAZNO: Ove vrijednosti moraju biti pozitivni realni brojevi 
+#       VAZNO: Ove vrijednosti moraju biti pozitivni realni brojevi
 #
 #
+
+live_migrate_opts = {
+                     'block_migration' : True,
+                     'disk_over_commit' : True
+}
+
 weights = {
            'vcpu' : 1.2,
            'ram'  : 1.0,
            'disk' : 1.0
-          }
+}
 
 periodic_check_interval = 3 * 60        # vrijeme za koje ce biti pokrenuto periodicno prikupljanje
                                         # informacija o stanju clouda

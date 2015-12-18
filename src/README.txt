@@ -1,4 +1,4 @@
-Prije početka korištenja same aplikacije potrebno je konfigurisati parametre aplikacije.
+﻿Prije početka korištenja same aplikacije potrebno je konfigurisati parametre aplikacije.
 
 Konfiguracioni fajlovi se nalaze u config/ direktorijumu.
 Postoje glavna tri konfiguraciona fajla:
@@ -22,18 +22,18 @@ Nakon konfigurisanja pokrenuti skriptu balancer_app.py
 
 Za testiranje koriste se sledeće skripte:
 
-"TEST - delete_servers.py" - koristi se za brisanje instanci. Skripti se proslijedjuje
-   			     broj instanci koji se briše, inače koristi se default vrijednost
-		             definisana u test_config.py
+test_delete_servers.py - koristi se za brisanje instanci. Skripti se proslijedjuje
+   			 broj instanci koji se briše, inače koristi se default vrijednost
+		         definisana u test_config.py
 
-"TEST - start_servers.py" - koristi se za pokretanje instanci. Skripti se proslijeđuje
- 			    broj instanci koji se briše, inače koristi se default vrijednost
-			    definisana u test_config.py
+test_start_servers.py - koristi se za pokretanje instanci. Skripti se proslijeđuje
+ 			broj instanci koji se briše, inače koristi se default vrijednost
+			definisana u test_config.py
 
-"TEST - scheduled_start_delete.py" - koristi se za periodično pokretanje i brisanje
-				     instanci u cloudu. Vremena pokretanja i hostovi
-				     na kojima će se instance pokretati i brisati su
-			   	     definisani u test_config.py
+test_scheduled_start_delete.py - koristi se za periodično pokretanje i brisanje
+				 instanci u cloudu. Vremena pokretanja i hostovi
+				 na kojima će se instance pokretati i brisati su
+			   	 definisani u test_config.py
 
 logs/	-	default direktorijum za log fajlove
 
@@ -56,6 +56,6 @@ POTREBNE BIBLIOTEKE:
 
 
 ************************************
-Author: Aleksandar Vukotić
+Autor: Aleksandar Vukotić
 
 Elektrotehnički fakultet, Banja Luka

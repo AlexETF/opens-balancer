@@ -8,6 +8,7 @@ LOG_DIRECTORY = config.log_directory
 SEPARATOR = config.log_tag_separator
 
 class CloudLogger(logging.Logger):
+    """ Custom klasa za upis u log fajlove"""
 
     def __init__(self, name, level = logging.DEBUG):
         logging.Logger.__init__(self, name, level)

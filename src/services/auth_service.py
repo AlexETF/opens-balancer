@@ -3,7 +3,10 @@ from keystoneclient import session
 from keystoneclient.auth.identity import v3
 
 class AuthService(object):
-
+    """ Klasa zaduzena za rad sa Session objektom.
+        Vraca Session objekat za odredjene korisnicke kredencijale.
+        Session objekat je potreban za kreiranje Nova klijentskog objekta
+    """
     def __init__(self, keystone_url, username, password, user_domain_name, project_name, project_domain_name,
                  nova_api_version, logger = None):
         self.__keystone_url = keystone_url

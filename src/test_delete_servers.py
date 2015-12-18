@@ -5,7 +5,7 @@ from novaclient import client
 
 
 def main():
-
+    
     DEFAULT = test_config.instance_properties['default_number_of_instances']
 
     if len(sys.argv) < 2:

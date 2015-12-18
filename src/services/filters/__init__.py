@@ -3,38 +3,37 @@
 class BaseFilter(object):
 
     def filter_one(self, host, vm):
-        """ Return True if it passes the filter, False otherwise.
-            Override this in a subclass.
+        """ Vraca True ako host ima resursa za instancu vm, inace vraca False.
+            Redefinisati u podklasi.
         """
         return True
 
     def overloaded(self, host):
-        """ Return True if it passes the filter, False otherwise.
-            Override this in a subclass.
+        """ Vraca True ako host ima resursa, inace False.
+            Redefinisati u podklasi
         """
         return True
 
     def weight_host(self, host):
-        """ Return Weight of host based on his parameter
-            Override this in a subclass.
+        """ Racuna i vraca tezinu hosta.
+            Redefinisati u podklasi.
         """
         return 0
 
     def weight_instance_on_host(self, host, vm):
-        """ Return Weight of host based on his parameter without vms running on host
-            Override this in a subclass.
+        """ Racuna i vraca tezinu instance na hostu.
+            Redefinisati u podklasi.
         """
         return 0
 
-    def get_weight(self, host):
-        """ Return Weight parameter
-            Override this in a subclass.
+    def get_weight(self):
+        """ Vraca fator tezine
+            Redefinisati u podklasi.
         """
         return 0
 
     def filter_all(self, filter_host_list, vm):
-        """Returns list of filtered hosts
-        """
+        """ Vraca listu hostova koji imaju dovoljno resursa za instancu vm """
         filtered = []
         for host in filter_obj_list:
             if self.filter_one(host = host, vm = vm):

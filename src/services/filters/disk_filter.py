@@ -11,7 +11,7 @@ class DiskFilter(filters.BaseFilter):
         self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
-        """ Return True if it passes the filter, False otherwise. """
+        """ Vraca True ako host ima dovoljno slobodnog diska u GB za instancu vm, inace vraca False  """
         free_disk_gb = host.free_disk_gb
         required_disk_gb = vm.disk_gb + vm.ephemeral_gb
         if required_disk_gb > free_disk_gb:
@@ -21,22 +21,23 @@ class DiskFilter(filters.BaseFilter):
         return True
 
     def overloaded(self, host):
-        """ Return True if host is overloaded, False otherwise """
+        """ Vraca True ako host nema vise slobodnog disk prostora, inacec False """
         free_disk_gb = host.free_disk_gb
         if free_disk_gb > 0:
             return False
         return True
 
     def weight_host(self, host):
-        """ Return Weight of host based on his parameter """
+        """ Racuna opterecenje hosta  """
         disk_ratio = (host.local_gb_used * 100.0) / host.local_gb
         return disk_ratio * self.disk_weight
 
     def weight_instance_on_host(self, host, vm):
+        """" Racuna opterecenje instance na hostu """
         disk_gb = vm.disk_gb + vm.ephemeral_gb
         disk_ratio =  (disk_gb * 100.0) / host.local_gb
         return disk_ratio * self.disk_weight
 
     def get_weight(self, host):
-        """ Return Weight parameter """
+        """ Vraca faktor tezine za disk """
         return self.disk_weight

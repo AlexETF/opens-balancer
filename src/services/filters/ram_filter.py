@@ -11,7 +11,7 @@ class RamFilter(filters.BaseFilter):
         self.logger = logger or logging.getLogger(__name__)
 
     def filter_one(self, host, vm):
-        """Return True if it passes the filter, False otherwise. """
+        """ Vraca True ako host ima dovoljno RAM memorije za instancu, inace False """
         free_ram_mb = host.free_ram_mb
         required_ram_mb = vm.memory_mb
         if required_ram_mb > free_ram_mb:
@@ -21,21 +21,22 @@ class RamFilter(filters.BaseFilter):
         return True
 
     def overloaded(self, host):
-        """ Return True if host is overloaded, False otherwise """
+        """ Vraca True ako host nema vise slobodne RAM memorije, inace False """
         free_ram_mb = host.free_ram_mb
         if free_ram_mb > 0:
             return False
         return True
 
     def weight_host(self, host):
-        """ Return Weight of host based on his parameter """
+        """ Racuna opterecenje hosta """
         ram_ratio = (host.memory_mb_used * 100.0) / host.memory_mb
         return ram_ratio * self.ram_weight
 
     def weight_instance_on_host(self, host, vm):
+        """" Racuna opterecenje koje instanca pravi na hostu """
         ram_ratio = (vm.memory_mb * 100.0) / host.memory_mb
         return ram_ratio * self.ram_weight
 
     def get_weight(self):
-        """ Return Weight parameter """
+        """ Vraca faktor tezine za RAM memoriju """
         return self.ram_weight

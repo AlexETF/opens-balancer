@@ -15,7 +15,10 @@ ALLOW_MIGRATE_TIME = config.migrate_time
 
 
 class RabbitMQMessageService(object):
+    """ Klasa zaduzena za parsiranje poruka, cuvanje informacija i detekciju opterecenja cvorova.
+        Cuvaju se informacije o compute cvorovima, instancama i servisima.
 
+    """
     def __init__(self, auth_service, logger = None):
         self.__compute_nodes = {}
         self.__vm_instances = {}
@@ -23,27 +26,29 @@ class RabbitMQMessageService(object):
         self.__auth_service = auth_service
         self.__migrate_service = MigrateService(auth_service = auth_service, logger = logger)
 
-        #   Filters used for filtering hosts
+        #   Filteri koji sluze za racunanje opterecenja
         self.__filters = {'ram'  : ram_filter.RamFilter(logger = logger),
                           'vcpu' : core_filter.CoreFilter(logger = logger),
                           'disk' : disk_filter.DiskFilter(logger = logger)
                          }
 
-        #   Variable that indicates if this service needs to check for overload
+        #   Fleg koji govori da li je potrebno izvrsiti algoritam za detekciju opterecenja
         self.__check_overload = False
         self.__task = None
         self.__lock = Lock()
-        # Logger object
+        # objekat za upis u log fajl
         self.logger = logger or logging.getLogger(__name__)
 
 
     def stop_periodic_check(self):
+        """ Zaustavlja periodicno prikupljane informacija slanjem zahtjeva API serveru """
         if self.__task != None:
             self.logger.info('Periodic collectiong of data canceled')
             self.__task.cancel()
             self.__task = None
 
     def start_periodic_check(self):
+        """ Pokrece periodicno prikupljane informacija slanjem zahtjeva API serveru """
         self.stop_periodic_check()
         self.__task = Timer(config.periodic_check_interval, self.__periodic_check)
         self.__task.setDaemon(True)
@@ -51,6 +56,7 @@ class RabbitMQMessageService(object):
         self.logger.info('Scheduled periodic check for %d sec' % config.periodic_check_interval)
 
     def initialize(self):
+        """ Metoda za prikupljanje informacija slanjem zahtjeav API serveru """
         self.__lock.acquire()
         try:
             self.logger.sys_info('Initializing RabbitMQMessageService')
@@ -62,7 +68,6 @@ class RabbitMQMessageService(object):
             self.logger.info('Collecting information about VMs')
             servers  = novaclient.servers.list(detailed=True)
             self.logger.info('Processing collected data')
-
 
             init_services = {}
             init_compute_nodes = {}
@@ -168,12 +173,12 @@ class RabbitMQMessageService(object):
             return False
 
     def parse_message(self, routing_key, message):
+        """ Metoda za parsiranje poruka """
         self.__lock.acquire()
-        #remove wrapper oslo.message in json
+        #uklanja wrapper oslo.message in json
         message = json.loads(message)
         while 'oslo.message' in message:
             message = json.loads(message['oslo.message'])
-        #print json.dumps(message, indent=4, sort_keys=4, separators=(',', ': '))
         if routing_key == 'conductor':
             self.__parse_conductor_message(message)
         elif routing_key == 'notifications.info':
@@ -200,6 +205,7 @@ class RabbitMQMessageService(object):
         return None
 
     def add_vm_instance_to_node(self, vm_instance):
+        """ Pronalazi cvor i dodaje instancu u njegovu listu instanci """
         service = self.find_service_by_host(vm_instance.host)
         if service is not None:
             node = self.find_node_by_service_id(service.id)
@@ -210,6 +216,7 @@ class RabbitMQMessageService(object):
         return False
 
     def check_overload(self):
+        """ Metoda za detekciju opterecenja """
         self.__lock.acquire()
         if self.__check_overload == False or len(self.__compute_nodes) == 0:
             self.__lock.release()
@@ -217,9 +224,8 @@ class RabbitMQMessageService(object):
         else:
             self.logger.debug('Sorting hosts overload')
             values = self.__get_hosts_ordered()
-            average_weight = float("{0:.2f}".format(values[0]))
-            overloaded = values[1]
-            underloaded = values[2]
+            overloaded = values[0]
+            underloaded = values[1]
             node = None
             self.logger.debug('Searching for the most overloaded host')
             for host in overloaded:
@@ -233,6 +239,7 @@ class RabbitMQMessageService(object):
                 self.__check_overload = False
                 self.__lock.release()
                 return
+
             vms = node.vm_instances.values()
             vms.sort(key = operator.attrgetter('memory_mb'))
 
@@ -243,26 +250,32 @@ class RabbitMQMessageService(object):
                 if vm.is_ready_for_migrating() and (mig_time == None or ((time() - mig_time) > ALLOW_MIGRATE_TIME)):
                     self.logger.debug('Found instance to migrate %s' % vm.display_name)
                     for migrate_node in underloaded:
-                        vm_weight = 0
+                        vm_weight_on_migrate = 0
+                        vm_weight_on_overloaded = 0
+                        passes = True
                         for filt in self.__filters.values():
-                            vm_weight += filt.weight_instance_on_host(migrate_node, vm)
-                        total_weight = float("{0:.2f}".format(migrate_node.metrics_with_migrating_vms + vm_weight))
-                        check_weight = float("{0:.2f}".format(overloaded_weight - vm_weight))
-                        self.logger.sys_info('AV: %s WW: %s WO: %s' % (average_weight, total_weight, check_weight))
-                        if total_weight <= average_weight and check_weight >= average_weight:
-                            scheduled = self.__migrate_service.schedule_live_migration(vm.id, migrate_node)
-                            if scheduled == True:
-                                self.logger.sys_info('Migrate scheduling passed ')
-                                migrate_node.metrics_with_migrating_vms = total_weight
-                                self.__check_overload = False
-                                self.__lock.release()
-                                return
+                            vm_weight_on_migrate += filt.weight_instance_on_host(migrate_node, vm)
+                            vm_weight_on_overloaded += filt.weight_instance_on_host(node, vm)
+                            passes = passes and filt.filter_one(migrate_node, vm)
+                        if passes == True:
+                            total_weight = float("{0:.2f}".format(migrate_node.metrics_with_migrating_vms + vm_weight_on_migrate))
+                            check_weight = float("{0:.2f}".format(overloaded_weight - vm_weight_on_overloaded))
+                            self.logger.sys_info('WW: %s WO: %s' % (total_weight, check_weight))
+                            if total_weight <= check_weight:
+                                scheduled = self.__migrate_service.schedule_live_migration(vm.id, migrate_node)
+                                if scheduled == True:
+                                    self.logger.sys_info('Migrate scheduling passed ')
+                                    migrate_node.metrics_with_migrating_vms = total_weight
+                                    self.__check_overload = False
+                                    self.__lock.release()
+                                    return
 
             self.__check_overload = False
             self.__lock.release()
 
 
     def __get_hosts_ordered(self):
+        """ Racuna srednju vrijednost opterecenja i sortira hostove u odgovarajucim listama """
         hosts = []
         average_weight = 0
         for node in self.__compute_nodes.values():
@@ -270,7 +283,7 @@ class RabbitMQMessageService(object):
                 hosts.append(node)
                 average_weight += node.metrics_weight
         if len(hosts) == 0:
-            return (0, [], [])
+            return ([], [])
         average_weight = (average_weight * 1.0) / len(hosts)
         overloaded = []
         underloaded = []
@@ -284,7 +297,7 @@ class RabbitMQMessageService(object):
         overloaded.sort(key = operator.attrgetter('metrics_weight'), reverse = True)
         underloaded.sort(key = operator.attrgetter('metrics_with_migrating_vms'))
 
-        return (average_weight, overloaded, underloaded)
+        return (overloaded, underloaded)
 
     @property
     def migrate_service(self):
@@ -323,6 +336,7 @@ class RabbitMQMessageService(object):
             self.logger.node_info('%s: %d State: %s %s' % (node.hypervisor_hostname, len(node.vm_instances), node.state, node.status))
 
     def __calculate_node_overload_and_weight(self, node):
+        """ Racuna opterecenje na compute cvorovima """
         weight = 0
         overloaded = False
         for filt in self.__filters.values():
@@ -331,6 +345,7 @@ class RabbitMQMessageService(object):
         node.metrics_weight = weight
         node.overloaded = overloaded
         node.metrics_with_migrating_vms = node.metrics_weight
+        # vraca ID-ove instacni koje se trenutno migriraju na hosta i racuna opterenja
         migrating_vm_ids = self.__migrate_service.get_migrating_vms_to_host(node.id)
         for vm_id in migrating_vm_ids:
             vm = self.__vm_instances[vm_id]
@@ -341,6 +356,9 @@ class RabbitMQMessageService(object):
         self.logger.sys_info('%s MW: %s MWMI: %s' % (node.hypervisor_hostname, node.metrics_weight, node.metrics_with_migrating_vms))
 
     def __parse_conductor_message(self, message):
+        """ Pomocna metoda za parsiranje poruka sa 'conductor' kljucem za rutiranje
+            Postoji vise formata ove poruke. Format poruke se moze razlikovati na osnovu 'method' parametra u poruci.
+        """
         parsed_json = message
         method = parsed_json['method']
         if method == 'compute_node_update':
@@ -392,6 +410,7 @@ class RabbitMQMessageService(object):
             self.__services[service_id] = service_obj
 
     def __parse_notification_info_message(self, message):
+        """ Pomocna metoda za parsiranje poruka sa 'notification.info' kljucem za rutiranje """
         parsed_json = message
         event_type = parsed_json['event_type']
         if event_type == 'compute.instance.update':
@@ -439,23 +458,15 @@ class RabbitMQMessageService(object):
             self.print_short_info()
 
     def __process_vm_instance(self, vm_instance):
-        # self.logger.debug('Instance: %s State: %s' % (vm_instance.display_name, vm_instance.state))
-        # self.logger.debug('New task: %s Old task: %s' % (vm_instance.new_task_state, vm_instance.old_task_state))
-
+        """ Metoda koja izvrsava odgovarajuce akcije u zavisnosti od toga u kakvom je stanju instanca.
+            Poziva se poslije obrade poruke o instanci
+        """
         self.logger.vm_info('Host: %s Name: %s State: %s New_task: %s'% (vm_instance.host, vm_instance.display_name, vm_instance.state, vm_instance.new_task_state))
 
-        if vm_instance.needs_to_verify_migrate():
-            self.__migrate_service.schedule_confirm(vm_instance.id)
-
-        elif vm_instance.is_active():
-            if vm_instance.is_started_to_migrate():
+        if vm_instance.is_active():
+            if vm_instance.has_started_to_migrate():
                 self.logger.migration_started('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
                 vm_instance.last_migrate_time = time()
-
-            elif vm_instance.is_verified_migrate():
-                vm_instance.last_migrate_time = time()
-                self.logger.migration_confirmed('Host: %s Instance: %s' % (vm_instance.host, vm_instance.display_name))
-                self.__migrate_service.confirm_task_done(vm_instance.id)
 
         elif vm_instance.is_deleted():
             if vm_instance.id in self.__vm_instances.keys():
@@ -478,6 +489,7 @@ class RabbitMQMessageService(object):
             self.__migrate_service.task_done(vm_instance.id)
 
     def __periodic_check(self):
+        """ Pomocna metoda koju pokrece tajmer za periodicno prikupljanje informacija  """
         self.initialize()
         self.__task = Timer(config.periodic_check_interval, self.__periodic_check)
         self.__task.setDaemon(True)
@@ -489,6 +501,7 @@ class RabbitMQMessageService(object):
 #   nova-compute service in OpenStack cloud
 #
 class ComputeNode(object):
+    """ Klasa u kojoj se cuvaju informacije o compute cvoru """
 
     def __init__(self):
         self.id = None
@@ -515,8 +528,8 @@ class ComputeNode(object):
         self.status = None  #enabled and disabled
 
         self.overloaded = None
-        self.metrics_weight = 0
-        self.metrics_with_migrating_vms = 0
+        self.metrics_weight = 0                 #  tezina
+        self.metrics_with_migrating_vms = 0     #  tezina koja ukljucuje instance koje se migriraju na cvor
 
 
     def are_data_synced(self):
@@ -564,6 +577,7 @@ class ComputeNode(object):
 
 
 class Service(object):
+    """ Klasa u kojoj se cuvaju informacije o servisima """
 
     def __init__(self):
         self.id = -1
@@ -580,10 +594,9 @@ class Service(object):
         print('Binary: %s   Topic: %s' % (self.binary, self.topic))
         print('--------------------------------------------------------------')
 
-#
-#   Class that holds information of VM running on compute node
-#
+
 class VMInstance(object):
+    """ Klasa u kojoj se cuvaju informacije o virtualnim instancama """
 
     def __init__(self):
         self.id = -1
@@ -629,7 +642,7 @@ class VMInstance(object):
         else:
             return False
 
-    def is_started_to_migrate(self):
+    def has_started_to_migrate(self):
         if self.new_task_state == 'resize_migrating' and self.old_task_state == 'resize_prep':
             return True
         elif self.new_task_state == 'migrating' and self.old_task_state == None:
@@ -693,6 +706,7 @@ class VMInstance(object):
 
 
 class ImageMeta(object):
+    """ Klasa u kojoj se cuvaju informacije o slici koju koristi virtualna instanca """
 
     def __init__(self):
         self.base_image_ref = ''

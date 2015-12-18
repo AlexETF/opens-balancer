@@ -1,5 +1,7 @@
 import dateutil
 import numpy
+import logging
+import math
 import matplotlib.pyplot as plot
 from config import config
 
@@ -7,7 +9,17 @@ LOG_DIRECTORY = config.log_directory
 LOG_TAGS = config.log_tags
 LOG_SEPARATOR = config.log_tag_separator
 
+
 class LogParser(object):
+
+
+    VM_STATES = {
+                    'deleted' : 0,
+                    'building' : 1,
+                    'active'   : 2,
+                    'migrating' : 3,
+                    'error'     : 4
+                }
 
     def __init__(self, logger = None):
         self.__clear_data()
@@ -43,7 +55,6 @@ class LogParser(object):
         try:
             file_obj = open(self.log_filename, 'r')
             self.__clear_data()
-
             for line in file_obj.readlines():
                 self.logger.info(line)
                 splitted_line = line.split(LOG_SEPARATOR)
@@ -86,7 +97,30 @@ class LogParser(object):
 
 
     def __parse_vm_info(self, time, message):
-        print 'TO DO B'
+        """ Pomocna funkcija za parsiranje informacija o virtuelnoj instanci
+            Format u kojem dolazi poruka je sledeci:
+            Host: %s Name: %s State: %s New_task: %s	- naziv hosta, naziv instance, trenutno stanje instace i sta instance trenutno radi
+        """
+        data = message.split()
+        host_name = data[1]
+        i = 3
+        vm_name = data[i]
+        while data[i] != 'State:':
+            vm_name += ' ' + data[i]
+            i += 1
+        state = data[i + 1]
+        new_task_state = data[i + 3]
+        if vm_name not in self.vms:
+            self.vms[vm_name] = {}
+            self.vms[vm_name]['time'] = [0]
+            self.vms[vm_name]['state'] = [LogParser.VM_STATES['deleted']]
+
+        try:
+            self.vms[vm_name]['time'].append(float(time)/1000.0)
+            self.vms[vm_name]['state'] = [LogParser.VM_STATES[state]]
+        except KeyError as e:
+            print('ERROR: State %s unknown in dict VM_STATES' %state)
+
 
 
     def show_graphs(self):
@@ -107,18 +141,28 @@ class LogParser(object):
             self.nodes[node]['value'][0] = self.nodes[node]['value'][1]
             plot.plot(self.nodes[node]['time'], self.nodes[node]['value'], label = node)
 
-        plot.yticks(numpy.arange(0, maximum_num + 1, 1))
+        plot.yticks(numpy.arange(0, maximum_num + 2, 1))
         plot.ylabel('Broj virtuelnih instanci')
         plot.xlabel('Vrijeme u sekundama')
         plot.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         plot.grid()
-        
+
         for node in self.nodes.keys():
             plot.figure(node)
             graph = plot.plot(self.total_vms['time'], self.total_vms['value'], 'r', label = 'Ukupan broj VM')
             plot.setp(graph, color='r', linewidth=2.0)
-            plot.plot(self.nodes[node]['time'], self.nodes[node]['value'], label = node)
-            plot.yticks(numpy.arange(0, maximum_num + 1, 1))
+            average = []
+            for value in self.total_vms['value']:
+                #average.append(value / len(self.nodes.keys()))
+                optimum = value / len(self.nodes.keys())
+                diff = optimum - math.floor(optimum)
+                if diff >= 0.5:
+				    average.append(math.ceil(optimum))
+                else:
+				    average.append(math.floor(optimum))
+            graph = plot.plot(self.total_vms['time'], average, 'g', label = 'Optimalan broj instanci')
+            plot.plot(self.nodes[node]['time'], self.nodes[node]['value'], 'b', label = node)
+            plot.yticks(numpy.arange(0, maximum_num + 2, 1))
             plot.ylabel('Broj virtuelnih instanci')
             plot.xlabel('Vrijeme u sekundama')
             plot.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
@@ -132,7 +176,7 @@ class LogParser(object):
             max_list.append(max(self.nodes[node]['value']))
 
         maximum_num = max(max_list)
-        plot.yticks(numpy.arange(0, maximum_num + 1, 1))
+        plot.yticks(numpy.arange(0, maximum_num + 2, 1))
         plot.ylabel('Broj virtuelnih instanci')
         plot.xlabel('Vrijeme u sekundama')
         plot.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
